@@ -9,17 +9,20 @@ import org.nutz.lang.Streams;
 import org.nutz.lang.segment.CharSegment;
 import org.nutz.lang.segment.Segment;
 import org.nutzx.robot.site.PageRender;
+import org.nutzx.robot.site.SiteRobot;
 import org.nutzx.robot.site.meta.Page;
 
 import static java.lang.String.*;
 
 public class HDJYPageRender implements PageRender {
 
-	private static final String LI = "\t\t\t<li><img href=\"%s\" src=\"%s\"/></li>\n";
+	private static final String LI = "\t\t\t<li><img href=\"%s\" src=\"%s\"/></li>\r\n";
 
 	public void render(Map<String, String> params, File dest, Page page) throws Exception {
 		File base = page.getSource();
-		String dftDetail = file2html(Files.getFile(base, params.get("default-text")));
+		Segment dftDetail = new CharSegment(file2html(Files.getFile(base, params
+				.get("default-text"))));
+
 		String imgSuffix = params.get("img-suffix");
 		// parse index.html as template
 
@@ -48,11 +51,15 @@ public class HDJYPageRender implements PageRender {
 				if (detail.exists())
 					s = file2html(detail);
 				else
-					s = dftDetail;
+					s = dftDetail.born().set("name", pName).toString();
 				// render detail and write new file
 				Segment seg = tpDetail.born();
 				seg.set("name", pName).set("detail", s);
+				seg.set("src", img.getName());
+				
 				File newDetail = new File(target + HREF(img));
+				if (!newDetail.exists())
+					Files.createNewFile(newDetail);
 				Lang.writeAll(Streams.fileOutw(newDetail), seg.toString());
 
 				// copy image
@@ -63,10 +70,17 @@ public class HDJYPageRender implements PageRender {
 			File indexFile = new File(target + "index.html");
 			if (!indexFile.exists())
 				Files.createNewFile(indexFile);
+
 			Segment seg = tpIndex.born();
 			seg.set("name", name).set("list", uls.toString());
+
 			Segment html = page.getSite().getTemplate().clone();
 			html.set(page.getSite().getGasket(), seg.toString());
+			html.set("base", "../../");
+
+			SiteRobot.buildLink(html, page.getSite(), SiteRobot.STYLESHEET, "../../", "css");
+			SiteRobot.buildLink(html, page.getSite(), SiteRobot.SCRIPT, "../../", "js");
+
 			Lang.writeAll(Streams.fileOutw(indexFile), html.toString());
 		}
 	}
