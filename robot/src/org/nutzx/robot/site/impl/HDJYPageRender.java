@@ -1,109 +1,117 @@
 package org.nutzx.robot.site.impl;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
+import org.nutz.json.Json;
 import org.nutz.lang.Files;
-import org.nutz.lang.Lang;
-import org.nutz.lang.Streams;
 import org.nutz.lang.segment.CharSegment;
 import org.nutz.lang.segment.Segment;
 import org.nutzx.robot.site.PageRender;
 import org.nutzx.robot.site.SiteRobot;
 import org.nutzx.robot.site.meta.Page;
+import org.nutzx.robot.site.meta.Site;
 
 import static java.lang.String.*;
 
 public class HDJYPageRender implements PageRender {
 
-	private static final String LI = "\t\t\t<li><img href=\"%s\" src=\"%s\"/></li>\r\n";
+	private Site site;
+	private String outputTo;
 
+	private Segment segIndex;
+	private Segment segDetail;
+	private Map<String, String> map;
+
+	private StringBuilder ulImgs;
+	private StringBuilder ulIndexes;
+
+	@SuppressWarnings("unchecked")
 	public void render(Map<String, String> params, File dest, Page page) throws Exception {
+		this.site = page.getSite();
 		File base = page.getSource();
-		Segment dftDetail = new CharSegment(file2html(Files.getFile(base, params
-				.get("default-text"))));
+		this.outputTo = Files.getFile(dest, base.getName()).getAbsolutePath() + "/";
 
-		String imgSuffix = params.get("img-suffix");
-		// parse index.html as template
+		String modes = params.get("modes");
+		map = Json.fromJson(HashMap.class, modes);
+		segIndex = new CharSegment(Files.read(Files.getFile(base, "index.html")));
+		segDetail = new CharSegment(Files.read(Files.getFile(base, "temp.html")));
 
-		Segment tpIndex = loadTemplate(base, params, "index-template");
-		Segment tpDetail = loadTemplate(base, params, "detail-template");
+		File[] coms = Files.dirs(base);
+		for (File dir : coms)
+			renderCompany(dir);
+	}
 
-		// lets loop each folder
-		for (File dir : Files.dirs(base)) {
-			String name = dir.getName().toLowerCase();
-			String target = targetPath(dest, base, name);
+	private void renderCompany(File dir) throws IOException {
+		String comName = dir.getName();
+		ulImgs = new StringBuilder();
+		ulIndexes = new StringBuilder();
+		/*
+		 * Check each product mode
+		 */
+		File[] modes = Files.dirs(dir);
+		for (File f : modes)
+			renderMode(comName, f);
+		/*
+		 * Write the index file for current product
+		 */
+		Segment comIndex = segIndex.born();
+		comIndex.set("indexes", ulIndexes).set("products", ulImgs);
+		comIndex.set("company", comName);
+		File comFile = new File(outputTo, comName + "/index.html");
 
-			// generate index html
-			/*
-			 * Find all images
-			 */
-			File[] imgs = Files.files(dir, imgSuffix);
-			StringBuilder uls = new StringBuilder();
-			// each products
-			for (File img : imgs) {
-				String pName = Files.getMajorName(img);
-				// for indexes
-				uls.append(format(LI, HREF(img), img.getName()));
-				// load detail
-				File detail = Files.renameSuffix(img, ".html");
-				String s;
-				if (detail.exists())
-					s = file2html(detail);
-				else
-					s = dftDetail.born().set("name", pName).toString();
-				// render detail and write new file
-				Segment seg = tpDetail.born();
-				seg.set("name", pName).set("detail", s);
-				seg.set("src", img.getName());
-				
-				File newDetail = new File(target + HREF(img));
-				if (!newDetail.exists())
-					Files.createNewFile(newDetail);
-				Lang.writeAll(Streams.fileOutw(newDetail), seg.toString());
+		Segment seg = site.getTemplate().born();
+		seg.set("title", site.getTitle() + " : " + comName.toUpperCase());
+		seg.set("base", "../../");
+		seg.set(site.getGasket(), comIndex.toString());
 
-				// copy image
-				File newImg = new File(target + img.getName());
-				Files.copyFile(img, newImg);
-			}
-			// create the index
-			File indexFile = new File(target + "index.html");
-			if (!indexFile.exists())
-				Files.createNewFile(indexFile);
+		SiteRobot.buildLink(seg, site, SiteRobot.STYLESHEET, "../../", "css");
+		SiteRobot.buildLink(seg, site, SiteRobot.SCRIPT, "../../", "js");
 
-			Segment seg = tpIndex.born();
-			seg.set("name", name).set("list", uls.toString());
+		Files.write(comFile, seg);
+	}
 
-			Segment html = page.getSite().getTemplate().clone();
-			html.set(page.getSite().getGasket(), seg.toString());
-			html.set("base", "../../");
+	private static final String LI_MENU = "\t\t\t\t\t<li to='#p_%s'>%s\r\n";
 
-			SiteRobot.buildLink(html, page.getSite(), SiteRobot.STYLESHEET, "../../", "css");
-			SiteRobot.buildLink(html, page.getSite(), SiteRobot.SCRIPT, "../../", "js");
+	private static final String LI_IMG = "\t\t\t\t<li><img href='%s/%s.html' src='%s/%s_thumbnail.jpg'/>\r\n";
 
-			Lang.writeAll(Streams.fileOutw(indexFile), html.toString());
+	private void renderMode(String comName, File dir) throws IOException {
+		String modeName = dir.getName();
+		// Eval mode text
+		String modeText = map.get(modeName);
+		if (null == modeText)
+			modeText = modeName;
+
+		ulIndexes.append(format(LI_MENU, modeName, modeText));
+		ulImgs.append(format("\t\t\t<ul id=p_%s>\r\n", modeName));
+		File[] products = Files.files(dir, "_thumbnail.jpg");
+		for (File f : products) {
+			String fn = f.getName();
+			String proName = fn.substring(0, fn.lastIndexOf('_'));
+			// Eval product text
+			String proText = proName.toUpperCase();
+
+			// Create product HTML file
+			Segment seg = segDetail.born();
+			seg.set("modeText", modeText);
+			seg.set("mode", modeName).set("name", proName).set("text", proText);
+			File html = new File(outputTo, comName + "/" + modeName + "/" + proName + ".html");
+			Files.write(html, seg);
+
+			// Copy thumbnail
+			File newThumbnail = new File(outputTo, comName + "/" + modeName + "/" + f.getName());
+			Files.copyFile(f, newThumbnail);
+
+			// Copy images
+			File img = new File(f.getParent() + "/" + proName + ".jpg");
+			File newLarge = new File(outputTo, comName + "/" + modeName + "/" + proName + ".jpg");
+			Files.copyFile(img, newLarge);
+
+			// Add to UL-LI menu
+			ulImgs.append(format(LI_IMG, modeName, proName, modeName, proName));
 		}
+		ulImgs.append("\t\t\t</ul>\r\n");
 	}
-
-	private String targetPath(File dest, File base, String name) {
-		return dest.getAbsolutePath() + "/" + base.getName() + "/" + name + "/";
-	}
-
-	private Segment loadTemplate(File base, Map<String, String> params, String name) {
-		File f1 = Files.getFile(base, params.get(name));
-		return new CharSegment(Lang.readAll(Streams.fileInr(f1)));
-	}
-
-	private static String HREF(File img) {
-		return Files.getMajorName(img).toLowerCase() + ".html";
-	}
-
-	private String file2html(File f) {
-		// ZDocParser parser = new ZDocParser();
-		// ZDoc doc = parser.parse(Lang.readAll(Streams.fileInr(f)));
-		// HtmlDocRender render = new HtmlDocRender();
-		// return render.render(doc).toString();
-		return Lang.readAll(Streams.fileInr(f));
-	}
-
 }
