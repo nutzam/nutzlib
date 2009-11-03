@@ -1,27 +1,27 @@
 package org.nutz.ioc;
 
 /**
- * Ioc ÈÝÆ÷½Ó¿Ú
+ * Ioc å®¹å™¨æŽ¥å£
  * 
  * @author zozoh(zozohtnt@gmail.com)
  */
 public interface Ioc {
 
 	/**
-	 * ´ÓÈÝÆ÷ÖÐ»ñÈ¡Ò»¸ö¶ÔÏó¡£Í¬Ê±»á´¥·¢¶ÔÏóµÄ fetch ÊÂ¼þ¡£Èç¹ûµÚÒ»´Î¹¹½¨¶ÔÏó Ôò»áÏÈ´¥·¢¶ÔÏó create ÊÂ¼þ
+	 * ä»Žå®¹å™¨ä¸­èŽ·å–ä¸€ä¸ªå¯¹è±¡ã€‚åŒæ—¶ä¼šè§¦å‘å¯¹è±¡çš„ fetch äº‹ä»¶ã€‚å¦‚æžœç¬¬ä¸€æ¬¡æž„å»ºå¯¹è±¡ åˆ™ä¼šå…ˆè§¦å‘å¯¹è±¡ create äº‹ä»¶
 	 * 
 	 * @param <T>
 	 * @param type
-	 *            ¶ÔÏóµÄÀàÐÍ£¬Èç¹ûÎª null£¬ÔÚ¶ÔÏóµÄ×¢ÈëÅäÖÃÖÐ£¬±ÈÈçÉùÃ÷¶ÔÏóµÄÀàÐÍ
-	 *            <br>Èç¹û²»Îªnull¶ÔÏó×¢ÈëÅäÖÃµÄÀàÐÍÓÅÏÈ
+	 *            å¯¹è±¡çš„ç±»åž‹ï¼Œå¦‚æžœä¸º nullï¼Œåœ¨å¯¹è±¡çš„æ³¨å…¥é…ç½®ä¸­ï¼Œæ¯”å¦‚å£°æ˜Žå¯¹è±¡çš„ç±»åž‹
+	 *            <br>å¦‚æžœä¸ä¸ºnullå¯¹è±¡æ³¨å…¥é…ç½®çš„ç±»åž‹ä¼˜å…ˆ
 	 * @param name
-	 *            ¶ÔÏóµÄÃû³Æ
-	 * @return ¶ÔÏó±¾Éí
+	 *            å¯¹è±¡çš„åç§°
+	 * @return å¯¹è±¡æœ¬èº«
 	 */
 	<T> T get(Class<T> type, String name);
 
 	/**
-	 * ÈÝÆ÷ÊÇ·ñ´æÔÚÄ³Ò»ÌØ¶¨¶ÔÏó
+	 * å®¹å™¨æ˜¯å¦å­˜åœ¨æŸä¸€ç‰¹å®šå¯¹è±¡
 	 * 
 	 * @param name
 	 * @return
@@ -30,17 +30,17 @@ public interface Ioc {
 	
 	
 	/**
-	 * @return ËùÓÐÔÚÈÝÆ÷ÖÐ¶¨ÒåÁËµÄ¶ÔÏóÃû³ÆÁÐ±í¡£
+	 * @return æ‰€æœ‰åœ¨å®¹å™¨ä¸­å®šä¹‰äº†çš„å¯¹è±¡åç§°åˆ—è¡¨ã€‚
 	 */
 	String[] getName();
 
 	/**
-	 * ½«ÈÝÆ÷»Ö¸´³É³õÊ¼´´½¨×´Ì¬£¬ËùÓÐµÄ»º´æ¶¼½«±»Çå¿Õ
+	 * å°†å®¹å™¨æ¢å¤æˆåˆå§‹åˆ›å»ºçŠ¶æ€ï¼Œæ‰€æœ‰çš„ç¼“å­˜éƒ½å°†è¢«æ¸…ç©º
 	 */
 	void reset();
 
 	/**
-	 * ½«ÈÝÆ÷×¢Ïú£¬´¥·¢¶ÔÏóµÄ depose ÊÂ¼þ
+	 * å°†å®¹å™¨æ³¨é”€ï¼Œè§¦å‘å¯¹è±¡çš„ depose äº‹ä»¶
 	 */
 	void depose();
 
