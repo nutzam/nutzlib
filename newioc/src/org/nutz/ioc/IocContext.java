@@ -1,22 +1,41 @@
 package org.nutz.ioc;
 
 /**
- * 进行一次对象装配的上下文环境。 随着 Ioc.get 被调用而产生，随着函数返回而消亡
+ * 进行对象装配的上下文环境。
  * 
  * @author zozoh(zozohtnt@gmail.com)
  */
 public interface IocContext {
-	
+
 	/**
-	 * 连接至另外一个上下文对象。本上下文对象发生 save，则会同时调用自己所链接的 context，
-	 * 并将对象计数减 1，对象的初始计数参见  org.nutz.ioc.meta.IocObject.level
+	 * 存储一个对象，根据对象的级别，各个实现类可以决定是否真的存储
 	 * 
-	 * @param context
+	 * @param level
+	 *            对象的级别
+	 * @param name
+	 *            对象的名称
+	 * @param obj
+	 *            对象本身
 	 */
-	void linkTo(IocContext context);
+	boolean save(String level, String name, ObjectProxy obj);
 
-	void save(String key, Object obj);
+	/**
+	 * 根据对象的名称获取上下文环境中的一个对象
+	 * 
+	 * @param name
+	 *            对象的名称
+	 * @return 对象本身或者 null
+	 */
+	ObjectProxy fetch(String name);
 
-	Object fetch(String key);
+	/**
+	 * 清空缓存
+	 */
+	void clear();
+
+	/**
+	 * 销毁当前上下文对象，清空资源
+	 */
+	void depose();
 
 }

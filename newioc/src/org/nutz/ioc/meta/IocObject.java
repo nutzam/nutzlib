@@ -1,5 +1,6 @@
 package org.nutz.ioc.meta;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class IocObject {
@@ -14,13 +15,19 @@ public class IocObject {
 
 	private List<IocField> fields;
 
-	private int level;
+	private String level;
 
-	public int getLevel() {
+	public IocObject() {
+		args = new ArrayList<IocValue>();
+		fields = new ArrayList<IocField>();
+		singleton = true;
+	}
+
+	public String getLevel() {
 		return level;
 	}
 
-	public void setLevel(int level) {
+	public void setLevel(String level) {
 		this.level = level;
 	}
 
