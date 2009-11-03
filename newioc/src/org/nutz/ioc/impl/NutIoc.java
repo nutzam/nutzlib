@@ -30,23 +30,36 @@ public class NutIoc implements Ioc2 {
 
 		// 从上下文缓存中获取对象代理
 		ObjectProxy re = cc.fetch(name);
+
 		// 如果未发现对象
 		if (null == re) {
-			// 读取对象定义
-			IocObject iObj = loader.load(name);
-			if (null == iObj)
-				throw Lang.makeThrow("Undefined object '%s'", name);
+			// 线程同步
+			synchronized (this) {
+				// 再次读取
+				re = cc.fetch(name);
 
-			// 修正对象类型
-			if (null == iObj.getType())
-				iObj.setType(type);
+				// 如果未发现对象
+				if (null == re) {
+					// 读取对象定义
+					IocObject iObj = loader.load(name);
+					if (null == iObj)
+						throw Lang.makeThrow("Undefined object '%s'", name);
 
-			// 根据对象定义，创建对象
-			re = maker.make(cc, iObj);
+					// 修正对象类型
+					if (null == iObj.getType())
+						if (null == type)
+							throw Lang.makeThrow("NULL TYPE object '%s'", name);
+						else
+							iObj.setType(type);
 
-			// 保存至上下文环境
-			if (iObj.isSingleton())
-				cc.save(iObj.getLevel(), name, re);
+					// 根据对象定义，创建对象
+					re = maker.make(cc, iObj);
+
+					// 保存至上下文环境
+					if (iObj.isSingleton())
+						cc.save(iObj.getLevel(), name, re);
+				}
+			}
 		}
 		return re.get(type);
 	}
