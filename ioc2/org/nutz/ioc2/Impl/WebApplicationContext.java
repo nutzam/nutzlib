@@ -4,12 +4,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc2.IContext;
+import org.nutz.ioc2.IIoc;
+import org.nutz.ioc2.IScopeHandler;
 
 public class WebApplicationContext implements IContext {
-
-	public WebApplicationContext() {
-
-	}
 
 	/**
 	 * 至少，应该是
@@ -46,6 +44,10 @@ public class WebApplicationContext implements IContext {
 	 * 
 	 */
 
+	public static final String SCOPENAME_SESSION = "session";
+	
+	public static final String SCOPENAME_REQUEST = "request";
+	
 	private static final ThreadLocal<HttpSession> sessionLocation = new ThreadLocal<HttpSession>() {
 		@Override
 		protected HttpSession initialValue() {
@@ -60,30 +62,39 @@ public class WebApplicationContext implements IContext {
 		}
 	};
 
-	// zzh: 这个 if ... else ... 很丑陋吧，老大。而且很僵硬
-	@Override
-	public Object get(String id, String level) {
+	public WebApplicationContext() {
 
-		if ("session".equals(level))
-			return sessionLocation.get().getAttribute(id);
-
-		// if ("request".equals(level))....
-
-		return null;
 	}
 
-	@Override
-	public void save(String id, Object obj, String level) {
-		if ("session".equals(level)) {
-			sessionLocation.get().getAttribute(id);
-			return;
-		}
+	public void registerSupportedScopeTypes(IIoc ioc) {
+		ioc.registerScopeType(SCOPENAME_SESSION, new IScopeHandler(){
+			
+			@Override
+			public void save(String id, Object obj) {
+				requestLocation.get().setAttribute(id,	obj);
+			}
 
-		// if ("request".equals(level))...
+			@Override
+			public Object get(String id) {
+				return requestLocation.get().getAttribute(id);
+			}
+		});
+		
+		ioc.registerScopeType(SCOPENAME_REQUEST, new IScopeHandler(){
 
-		// throw new Exception("level " + level + " is unknown.");
+			@Override
+			public Object get(String id) {
+				return sessionLocation.get().getAttribute(id);
+			}
+
+			@Override
+			public void save(String id, Object obj) {
+				sessionLocation.get().setAttribute(id, obj);
+			}
+			
+		});
 	}
-
+	
 	public void beginServe(HttpServletRequest request) {
 		sessionLocation.set(request.getSession());
 
