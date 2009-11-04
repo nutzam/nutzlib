@@ -1,7 +1,7 @@
 package org.nutz.ioc2.Impl;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc2.IContext;
 
@@ -11,18 +11,23 @@ public class WebApplicationContext implements IContext {
 		
 	}
 	
-	private static final ThreadLocal<ILocation> sessionLocation = new ThreadLocal<ILocation>() {
-		@Override protected ILocation initialValue() {
+	private static final ThreadLocal<HttpSession> sessionLocation = new ThreadLocal<HttpSession>() {
+		@Override protected HttpSession initialValue() {
 			return null;
 		}
 	};
 	
+	private static final ThreadLocal<HttpServletRequest> requestLocation = new ThreadLocal<HttpServletRequest>() {
+		@Override protected HttpServletRequest initialValue() {
+			return null;
+		}
+	};
 	
 	@Override
 	public Object get(String id, String level) {
 		
 		if ("session".equals(level))
-			return sessionLocation.get().get(id);
+			return sessionLocation.get().getAttribute(id);
 		
 		//if ("request".equals(level))....
 		
@@ -32,7 +37,7 @@ public class WebApplicationContext implements IContext {
 	@Override
 	public void save(String id, Object obj, String level) {
 		if ("session".equals(level)) {
-			sessionLocation.get().get(id);
+			sessionLocation.get().getAttribute(id);
 			return;
 		}
 
@@ -42,7 +47,9 @@ public class WebApplicationContext implements IContext {
 	}
 
 	public void beginServe(HttpServletRequest request) {
-		sessionLocation.set(new SessionLocation(request.getSession()));
+		sessionLocation.set(request.getSession());
+		
+		requestLocation.set(request);
 	}
 	
 	public void afterServe() {
