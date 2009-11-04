@@ -37,7 +37,7 @@ public class DynamicWeaver implements ObjectWeaver {
 	public void deose() {}
 
 	public Object weave(IocContext context) {
-		// 准备构造函数
+		// 准备构造函数参数
 		Object[] args = new Object[this.args.length];
 		for (int i = 0; i < args.length; i++)
 			args[i] = this.args[i].get(context);
