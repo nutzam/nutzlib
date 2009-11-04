@@ -1,46 +1,47 @@
 package org.nutz.ioc;
 
+/**
+ * 每次获取对象时会触发 fetch 事件，销毁时触发 depose 事件。
+ * <p>
+ * 这个对象需要小心被创建和使用。为了防止循环注入的问题，通常，ObjectMaker 需要快速<br>
+ * 创建一个 ObjectProxy， 存入上下文。 然后慢慢的设置它的 weaver 和 fetch。
+ * <p>
+ * 在出现异常的时候，一定要将该对象从上下文中移除掉。
+ * 
+ * @author zozoh(zozohtnt@gmail.com)
+ */
 public class ObjectProxy {
 
 	/**
-	 * 创建一个对象代理，当创建时，会触发 create 事件 <br>
-	 * 每次获取对象时会触发 fetch 事件，销毁时触发 depose 事件。
-	 * 
-	 * @param obj
-	 *            对象本身
-	 * @param create
-	 *            创建时触发器
-	 * @param fetch
-	 *            获取时触发器
-	 * @param depose
-	 *            销毁时触发器
+	 *对象编织方式
 	 */
-	public ObjectProxy(	Object obj,
-						IocEventTrigger create,
-						IocEventTrigger fetch,
-						IocEventTrigger depose) {
-		if (null != create)
-			create.trigger(obj);
-		this.fetch = fetch;
-		this.depose = depose;
-	}
+	private ObjectWeaver weaver;
 
-	private Object obj;
-
+	/**
+	 *获取时触发器
+	 */
 	private IocEventTrigger fetch;
 
-	private IocEventTrigger depose;
+	public ObjectProxy setWeaver(ObjectWeaver weaver) {
+		this.weaver = weaver;
+		return this;
+	}
+
+	public ObjectProxy setFetch(IocEventTrigger fetch) {
+		this.fetch = fetch;
+		return this;
+	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T get(Class<T> classOfT) {
+	public <T> T get(IocContext context, Class<T> classOfT) {
+		Object obj = weaver.weave(context);
 		if (null != fetch)
 			fetch.trigger(obj);
 		return (T) obj;
 	}
 
 	public void depose() {
-		if (null != depose)
-			depose.trigger(obj);
+		weaver.deose();
 	}
 
 }

@@ -1,5 +1,6 @@
 package org.nutz.ioc.impl;
 
+import org.nutz.ioc.Ioc;
 import org.nutz.ioc.IocContext;
 import org.nutz.ioc.ObjectProxy;
 
@@ -13,13 +14,20 @@ public class ComboContext implements IocContext {
 
 	private IocContext[] contexts;
 
+	private Ioc ioc;
+
 	/**
 	 * Context 的获取优先级，以数组的顺序来决定
 	 * 
 	 * @param contexts
 	 */
-	public ComboContext(IocContext... contexts) {
+	public ComboContext(Ioc ioc, IocContext... contexts) {
 		this.contexts = contexts;
+		this.ioc = ioc;
+	}
+
+	public Ioc getIoc() {
+		return ioc;
 	}
 
 	public ObjectProxy fetch(String key) {
@@ -35,6 +43,13 @@ public class ComboContext implements IocContext {
 		boolean re = false;
 		for (IocContext c : contexts)
 			re &= c.save(level, name, obj);
+		return re;
+	}
+
+	public boolean remove(String level, String name) {
+		boolean re = false;
+		for (IocContext c : contexts)
+			re &= c.remove(level, name);
 		return re;
 	}
 

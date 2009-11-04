@@ -16,8 +16,21 @@ public interface IocContext {
 	 *            对象的名称
 	 * @param obj
 	 *            对象本身
+	 * @return true 保存成功。 false 拒绝保存
 	 */
 	boolean save(String level, String name, ObjectProxy obj);
+
+	/**
+	 * 从上下文环境中删一个对象。实现类根据 level 信息来决定是否删除
+	 * 
+	 * @param level
+	 *            对象的级别
+	 * @param name
+	 *            对象的名称
+	 * 
+	 * @return true 删除成功。 false 拒绝删除
+	 */
+	boolean remove(String level, String name);
 
 	/**
 	 * 根据对象的名称获取上下文环境中的一个对象

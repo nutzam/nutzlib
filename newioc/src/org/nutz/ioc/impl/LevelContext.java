@@ -30,7 +30,18 @@ public class LevelContext implements IocContext {
 		if (this.level.equals(level)) {
 			synchronized (this) {
 				if (!objs.containsKey(name)) {
-					objs.put(name, obj);
+					return null != objs.put(name, obj);
+				}
+			}
+		}
+		return false;
+	}
+
+	public boolean remove(String level, String name) {
+		if (this.level.equals(level)) {
+			synchronized (this) {
+				if (!objs.containsKey(name)) {
+					return null != objs.remove(name);
 				}
 			}
 		}

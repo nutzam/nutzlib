@@ -1,5 +1,11 @@
 package org.nutz.ioc;
 
+/**
+ * 容器更高级的方法
+ * 
+ * @author zozoh(zozohtnt@gmail.com)
+ * 
+ */
 public interface Ioc2 extends Ioc {
 
 	/**
@@ -18,4 +24,11 @@ public interface Ioc2 extends Ioc {
 	 */
 	<T> T get(Class<T> type, String name, IocContext context);
 
+	/**
+	 * 增加 ValuePfoxyMaker
+	 * 
+	 * @see org.nutz.ioc.ValueProxy
+	 * @see org.nutz.ioc.ValueProxyMaker
+	 */
+	void addValueProxyMaker(ValueProxyMaker vpm);
 }
