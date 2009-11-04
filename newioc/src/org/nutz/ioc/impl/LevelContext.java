@@ -27,7 +27,7 @@ public class LevelContext implements IocContext {
 	}
 
 	public boolean save(String level, String name, ObjectProxy obj) {
-		if (this.level.equals(level)) {
+		if (accept(level)) {
 			synchronized (this) {
 				if (!objs.containsKey(name)) {
 					return null != objs.put(name, obj);
@@ -37,8 +37,12 @@ public class LevelContext implements IocContext {
 		return false;
 	}
 
+	protected boolean accept(String level) {
+		return null != level && this.level.equals(level);
+	}
+
 	public boolean remove(String level, String name) {
-		if (this.level.equals(level)) {
+		if (accept(level)) {
 			synchronized (this) {
 				if (!objs.containsKey(name)) {
 					return null != objs.remove(name);

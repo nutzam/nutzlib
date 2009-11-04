@@ -9,18 +9,23 @@ import org.nutz.ioc.ValueProxy;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Mirror;
 
-class FieldInjector {
+public class FieldInjector {
 
 	private ValueProxy valueProxy;
 	private DoSet doSet;
 
-	FieldInjector(Mirror<?> mirror, Field field, ValueProxy vp) {
+	public FieldInjector(Mirror<?> mirror, String fieldName, ValueProxy vp) {
 		valueProxy = vp;
 		try {
-			Method setter = mirror.getSetter(field);
-			doSet = new DoSetBySetter(setter);
-		} catch (NoSuchMethodException e) {
-			doSet = new DoSetByField(field);
+			Field field = mirror.getField(fieldName);
+			try {
+				Method setter = mirror.getSetter(field);
+				doSet = new DoSetBySetter(setter);
+			} catch (NoSuchMethodException e) {
+				doSet = new DoSetByField(field);
+			}
+		} catch (NoSuchFieldException e) {
+			throw Lang.wrapThrow(e);
 		}
 	}
 

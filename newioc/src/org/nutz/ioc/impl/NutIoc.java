@@ -10,21 +10,44 @@ import org.nutz.ioc.IocMaking;
 import org.nutz.ioc.ObjectMaker;
 import org.nutz.ioc.ObjectProxy;
 import org.nutz.ioc.ValueProxyMaker;
+import org.nutz.ioc.aop.MirrorFactory;
 import org.nutz.ioc.meta.IocObject;
 import org.nutz.lang.Lang;
+import org.nutz.lang.Strings;
 
 public class NutIoc implements Ioc2 {
+
+	private static final String DEF_LEVEL = "app";
 
 	private IocLoader loader;
 	private IocContext context;
 	private ObjectMaker maker;
 	private List<ValueProxyMaker> vpms;
+	private MirrorFactory mirrors;
+	private String defaultLevel;
 
-	public NutIoc(IocLoader loader, IocContext context, ObjectMaker maker) {
+	public NutIoc(IocLoader loader) {
+		this(loader, new LevelContext(DEF_LEVEL) {
+			protected boolean accept(String level) {
+				return true;
+			}
+		}, DEF_LEVEL);
+	}
+
+	public NutIoc(IocLoader loader, IocContext context, String defaultLevel) {
+		this(new ObjectMakerImpl(), loader, context, defaultLevel);
+	}
+
+	protected NutIoc(ObjectMaker maker, IocLoader loader, IocContext context, String defaultLevel) {
+		this.defaultLevel = defaultLevel;
 		this.loader = loader;
 		this.context = context;
 		this.maker = maker;
 		vpms = new ArrayList<ValueProxyMaker>(5); // 预留五个位置，足够了吧
+
+		// 初始化类工厂， 这是同 AOP 的连接点
+		mirrors = new MirrorFactory();
+		mirrors.init(this, "$aop");
 	}
 
 	public <T> T get(Class<T> type, String name, IocContext context) {
@@ -48,19 +71,23 @@ public class NutIoc implements Ioc2 {
 				// 如果未发现对象
 				if (null == re) {
 					// 读取对象定义
-					IocObject iObj = loader.load(name);
-					if (null == iObj)
+					IocObject iobj = loader.load(name);
+					if (null == iobj)
 						throw Lang.makeThrow("Undefined object '%s'", name);
 
 					// 修正对象类型
-					if (null == iObj.getType())
+					if (null == iobj.getType())
 						if (null == type)
 							throw Lang.makeThrow("NULL TYPE object '%s'", name);
 						else
-							iObj.setType(type);
+							iobj.setType(type);
+					
+					// 检查对象级别
+					if (Strings.isBlank(iobj.getLevel()))
+						iobj.setLevel(defaultLevel);
 
 					// 根据对象定义，创建对象，maker 会自动的缓存对象到 context 中
-					re = maker.make(new IocMaking(this, cntx, name), iObj);
+					re = maker.make(new IocMaking(this, mirrors, cntx, name), iobj);
 				}
 			}
 		}
@@ -89,6 +116,10 @@ public class NutIoc implements Ioc2 {
 
 	public void addValueProxyMaker(ValueProxyMaker vpm) {
 		vpms.add(vpm);
+	}
+
+	public void setMaker(ObjectMaker maker) {
+		this.maker = maker;
 	}
 
 }

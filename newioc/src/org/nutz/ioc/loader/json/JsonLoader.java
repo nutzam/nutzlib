@@ -1,29 +1,28 @@
 package org.nutz.ioc.loader.json;
 
-import org.nutz.ioc.IocLoader;
-import org.nutz.ioc.meta.IocObject;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.nutz.ioc.loader.map.MapLoader;
+import org.nutz.json.Json;
+import org.nutz.lang.Lang;
+import org.nutz.lang.Streams;
 
 /**
  * 从 Json 文件中读取配置信息。 支持 Merge with parent ，利用 MapLoader
  * 
  * @author zozoh(zozohtnt@gmail.com)
  */
-public class JsonLoader implements IocLoader {
+public class JsonLoader extends MapLoader {
 
+	@SuppressWarnings("unchecked")
 	public JsonLoader(String... files) {
-		super();
-	}
-
-	public String[] getName() {
-		return null;
-	}
-
-	public boolean has(String name) {
-		return false;
-	}
-
-	public IocObject load(String name) {
-		return null;
+		Map<String, Map<String, Object>> map = new HashMap<String, Map<String, Object>>();
+		for (String path : files) {
+			String s = Lang.readAll(Streams.fileInr(path));
+			map.putAll((Map<String, Map<String, Object>>) Json.fromJson(Map.class, s));
+		}
+		this.setMap(map);
 	}
 
 }
