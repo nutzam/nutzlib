@@ -2,16 +2,16 @@ package org.nutz.ioc.val;
 
 import org.nutz.ioc.IocMaking;
 import org.nutz.ioc.ValueProxy;
-import org.nutz.ioc.loader.Loaders;
+import org.nutz.ioc.meta.IocValue;
 
 public class ArrayValue implements ValueProxy {
 
 	private ValueProxy[] values;
 
-	public ArrayValue(IocMaking ing, Object[] array) {
+	public ArrayValue(IocMaking ing, IocValue[] array) {
 		values = new ValueProxy[array.length];
 		for (int i = 0; i < values.length; i++)
-			values[i] = ing.makeValue(Loaders.object2value(array[i]));
+			values[i] = ing.makeValue(array[i]);
 	}
 
 	public Object get(IocMaking ing) {

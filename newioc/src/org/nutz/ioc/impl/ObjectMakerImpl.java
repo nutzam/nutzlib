@@ -36,17 +36,15 @@ public class ObjectMakerImpl implements ObjectMaker {
 		if (iobj.isSingleton() && null != ing.getObjectName())
 			ing.getContext().save(iobj.getLevel(), ing.getObjectName(), op);
 
-		// 建立对象的事件触发器
-		IocEventTrigger fetch = createTrigger(mirror, iobj.getEvents().getFetch());
-		IocEventTrigger create = createTrigger(mirror, iobj.getEvents().getCreate());
-		IocEventTrigger depose = createTrigger(mirror, iobj.getEvents().getDepose());
-
-		op.setFetch(fetch);
-
 		// 解析对象的编织方式
 		DynamicWeaver dw = new DynamicWeaver();
-		dw.setCreate(create);
-		dw.setDepose(depose);
+
+		// 建立对象的事件触发器
+		if (null != iobj.getEvents()) {
+			op.setFetch(createTrigger(mirror, iobj.getEvents().getFetch()));
+			dw.setCreate(createTrigger(mirror, iobj.getEvents().getCreate()));
+			dw.setDepose(createTrigger(mirror, iobj.getEvents().getDepose()));
+		}
 
 		// 构造函数参数
 		ValueProxy[] vps = new ValueProxy[Lang.lenght(iobj.getArgs())];
@@ -69,6 +67,7 @@ public class ObjectMakerImpl implements ObjectMaker {
 			ValueProxy vp = ing.makeValue(ifld.getValue());
 			fields[i] = FieldInjector.create(mirror, ifld.getName(), vp);
 		}
+		dw.setFields(fields);
 
 		// 如果对象是 singleton, 那么转变成 static weaver
 		if (iobj.isSingleton())

@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import org.nutz.ioc.IocMaking;
 import org.nutz.ioc.ValueProxy;
-import org.nutz.ioc.loader.Loaders;
+import org.nutz.ioc.meta.IocValue;
 import org.nutz.lang.Lang;
 
 public class CollectionValue implements ValueProxy {
@@ -16,13 +16,13 @@ public class CollectionValue implements ValueProxy {
 
 	@SuppressWarnings("unchecked")
 	public CollectionValue(	IocMaking ing,
-							Collection<?> col,
+							Collection<IocValue> col,
 							Class<? extends Collection<Object>> type) {
 		this.type = (Class<? extends Collection<Object>>) (null == type ? ArrayList.class : type);
 		values = new ValueProxy[col.size()];
 		int i = 0;
-		for (Object obj : col)
-			values[i++] = ing.makeValue(Loaders.object2value(obj));
+		for (IocValue iv : col)
+			values[i++] = ing.makeValue(iv);
 	}
 
 	public Object get(IocMaking ing) {

@@ -1,5 +1,6 @@
 package org.nutz.ioc;
 
+import org.nutz.ioc.loader.ObjectLoadException;
 import org.nutz.ioc.meta.IocObject;
 
 public interface IocLoader {
@@ -14,8 +15,9 @@ public interface IocLoader {
 	 * 
 	 * @param name
 	 * @return
+	 * @throws ObjectLoadException
 	 */
-	IocObject load(String name);
+	IocObject load(String name) throws ObjectLoadException;
 
 	/**
 	 * @param name

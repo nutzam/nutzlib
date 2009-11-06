@@ -1,6 +1,5 @@
 package org.nutz.ioc;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.nutz.ioc.aop.MirrorFactory;
@@ -12,7 +11,7 @@ public class IocMaking {
 
 	private String objectName;
 
-	private ObjectMaker objectMake;
+	private ObjectMaker objectMaker;
 
 	private Ioc ioc;
 
@@ -26,12 +25,13 @@ public class IocMaking {
 						MirrorFactory mirrors,
 						IocContext context,
 						ObjectMaker maker,
+						List<ValueProxyMaker> vpms,
 						String objName) {
 		this.objectName = objName;
-		this.objectMake = maker;
+		this.objectMaker = maker;
 		this.ioc = ioc;
 		this.context = context;
-		this.vpms = new ArrayList<ValueProxyMaker>();
+		this.vpms = vpms;
 		this.mirrors = mirrors;
 	}
 
@@ -47,12 +47,16 @@ public class IocMaking {
 		return objectName;
 	}
 
-	public ObjectMaker getObjectMake() {
-		return objectMake;
+	public ObjectMaker getObjectMaker() {
+		return objectMaker;
 	}
 
 	public MirrorFactory getMirrors() {
 		return mirrors;
+	}
+
+	public IocMaking clone(String objectName) {
+		return new IocMaking(ioc, mirrors, context, objectMaker, vpms, objectName);
 	}
 
 	public ValueProxy makeValue(IocValue iv) {

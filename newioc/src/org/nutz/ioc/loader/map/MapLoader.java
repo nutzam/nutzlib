@@ -4,8 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.nutz.ioc.IocLoader;
-import org.nutz.ioc.loader.Loaders;
+import org.nutz.ioc.loader.ObjectLoadException;
 import org.nutz.ioc.meta.IocObject;
+import org.nutz.lang.Strings;
 
 /**
  * 从一个 Map 对象中读取配置信息，支持 Parent
@@ -40,8 +41,32 @@ public class MapLoader implements IocLoader {
 		return map.containsKey(name);
 	}
 
-	public IocObject load(String name) {
-		return Loaders.map2obj(map.get(name));
+	public IocObject load(String name) throws ObjectLoadException {
+		return Loaders.map2iobj(getMap(name));
+	}
+
+	/**
+	 * Inner Object can not support 'parent'.
+	 * 
+	 * @param name
+	 *            object Map name
+	 * @return object Map
+	 */
+	private Map<String, Object> getMap(String name) {
+		Map<String, Object> m = map.get(name);
+		String pKey = (String) m.get("parent");
+		// If link to parent
+		if (!Strings.isBlank(pKey)) {
+			// Get the parent
+			Map<String, Object> parent = getMap(pKey);
+			// create new Map
+			Map<String, Object> newMap = new HashMap<String, Object>();
+			newMap.putAll(parent);
+			// merge with current map
+			newMap.putAll(m);
+			return newMap;
+		}
+		return m;
 	}
 
 }
