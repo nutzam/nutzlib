@@ -13,6 +13,6 @@ package org.nutz.ioc;
  */
 public interface ValueProxy {
 
-	Object get(IocContext context);
+	Object get(IocMaking ing);
 
 }

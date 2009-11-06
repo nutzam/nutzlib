@@ -1,7 +1,7 @@
 package org.nutz.ioc.weaver;
 
-import org.nutz.ioc.IocContext;
 import org.nutz.ioc.IocEventTrigger;
+import org.nutz.ioc.IocMaking;
 import org.nutz.ioc.ObjectWeaver;
 
 public class StaticWeaver implements ObjectWeaver {
@@ -19,7 +19,7 @@ public class StaticWeaver implements ObjectWeaver {
 			depose.trigger(obj);
 	}
 
-	public Object weave(IocContext context) {
+	public Object weave(IocMaking ing) {
 		return obj;
 	}
 

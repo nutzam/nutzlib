@@ -1,6 +1,6 @@
 package org.nutz.ioc.val;
 
-import org.nutz.ioc.IocContext;
+import org.nutz.ioc.IocMaking;
 import org.nutz.ioc.ValueProxy;
 
 public class StaticValue implements ValueProxy {
@@ -11,7 +11,7 @@ public class StaticValue implements ValueProxy {
 		this.obj = obj;
 	}
 
-	public Object get(IocContext context) {
+	public Object get(IocMaking ing) {
 		return obj;
 	}
 

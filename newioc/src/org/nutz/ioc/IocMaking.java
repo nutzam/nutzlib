@@ -7,11 +7,12 @@ import org.nutz.ioc.aop.MirrorFactory;
 import org.nutz.ioc.meta.IocValue;
 import org.nutz.json.Json;
 import org.nutz.lang.Lang;
-import org.nutz.lang.Mirror;
 
 public class IocMaking {
 
 	private String objectName;
+
+	private ObjectMaker objectMake;
 
 	private Ioc ioc;
 
@@ -21,8 +22,13 @@ public class IocMaking {
 
 	private MirrorFactory mirrors;
 
-	public IocMaking(Ioc ioc, MirrorFactory mirrors, IocContext context, String objectName) {
-		this.objectName = objectName;
+	public IocMaking(	Ioc ioc,
+						MirrorFactory mirrors,
+						IocContext context,
+						ObjectMaker maker,
+						String objName) {
+		this.objectName = objName;
+		this.objectMake = maker;
 		this.ioc = ioc;
 		this.context = context;
 		this.vpms = new ArrayList<ValueProxyMaker>();
@@ -41,9 +47,17 @@ public class IocMaking {
 		return objectName;
 	}
 
+	public ObjectMaker getObjectMake() {
+		return objectMake;
+	}
+
+	public MirrorFactory getMirrors() {
+		return mirrors;
+	}
+
 	public ValueProxy makeValue(IocValue iv) {
 		for (ValueProxyMaker vpm : vpms) {
-			ValueProxy vp = vpm.make(iv);
+			ValueProxy vp = vpm.make(this, iv);
 			if (null != vp)
 				return vp;
 		}
@@ -51,7 +65,4 @@ public class IocMaking {
 				.toJson(iv.getValue()), objectName);
 	}
 
-	public Mirror<?> getMirror(Class<?> type) {
-		return mirrors.getMirror(type, objectName);
-	}
 }

@@ -26,11 +26,14 @@ public class ObjectMakerImpl implements ObjectMaker {
 
 	public ObjectProxy make(IocMaking ing, IocObject iobj) {
 		// 获取 Mirror， AOP 将在这个方法中进行
-		Mirror<?> mirror = ing.getMirror(iobj.getType());
+		Mirror<?> mirror = ing.getMirrors().getMirror(iobj.getType(), ing.getObjectName());
 
-		// 建立对象代理，并保存在上下文环境中
+		/*
+		 * 建立对象代理，并保存在上下文环境中 只有对象为 singleton 并且有一个非 null 的名称的时候才会保存
+		 * 就是说，所有内部对象，将会随这其所附属的对象来保存，而自己不会单独保存
+		 */
 		ObjectProxy op = new ObjectProxy();
-		if (iobj.isSingleton())
+		if (iobj.isSingleton() && null != ing.getObjectName())
 			ing.getContext().save(iobj.getLevel(), ing.getObjectName(), op);
 
 		// 建立对象的事件触发器
@@ -54,7 +57,7 @@ public class ObjectMakerImpl implements ObjectMaker {
 		// 先获取一遍，根据这个数组来获得构造函数
 		Object[] args = new Object[vps.length];
 		for (int i = 0; i < args.length; i++)
-			args[i] = vps[i].get(ing.getContext());
+			args[i] = vps[i].get(ing);
 
 		// 缓存构造函数
 		dw.setBorning((Borning<?>) mirror.getBorning(args));
@@ -64,12 +67,12 @@ public class ObjectMakerImpl implements ObjectMaker {
 		for (int i = 0; i < fields.length; i++) {
 			IocField ifld = iobj.getFields()[i];
 			ValueProxy vp = ing.makeValue(ifld.getValue());
-			fields[i] = new FieldInjector(mirror, ifld.getName(), vp);
+			fields[i] = FieldInjector.create(mirror, ifld.getName(), vp);
 		}
 
-		// 如果对象是 singleton， 那么转变成 static weaver
+		// 如果对象是 singleton, 那么转变成 static weaver
 		if (iobj.isSingleton())
-			op.setWeaver(dw.toStatic(ing.getContext()));
+			op.setWeaver(dw.toStatic(ing));
 		else
 			op.setWeaver(dw);
 

@@ -58,6 +58,9 @@ public class NutIoc implements Ioc2 {
 		else
 			cntx = new ComboContext(this, context, this.context);
 
+		// 创建对象创建时
+		IocMaking ing = new IocMaking(this, mirrors, cntx, maker, name);
+
 		// 从上下文缓存中获取对象代理
 		ObjectProxy re = cntx.fetch(name);
 
@@ -81,17 +84,17 @@ public class NutIoc implements Ioc2 {
 							throw Lang.makeThrow("NULL TYPE object '%s'", name);
 						else
 							iobj.setType(type);
-					
+
 					// 检查对象级别
 					if (Strings.isBlank(iobj.getLevel()))
 						iobj.setLevel(defaultLevel);
 
 					// 根据对象定义，创建对象，maker 会自动的缓存对象到 context 中
-					re = maker.make(new IocMaking(this, mirrors, cntx, name), iobj);
+					re = maker.make(ing, iobj);
 				}
 			}
 		}
-		return re.get(cntx, type);
+		return re.get(ing);
 	}
 
 	public <T> T get(Class<T> type, String name) {

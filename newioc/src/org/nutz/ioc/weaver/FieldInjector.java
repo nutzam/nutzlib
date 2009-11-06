@@ -4,43 +4,52 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import org.nutz.castor.Castors;
-import org.nutz.ioc.IocContext;
+import org.nutz.ioc.IocMaking;
 import org.nutz.ioc.ValueProxy;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Mirror;
 
 public class FieldInjector {
 
+	public static FieldInjector create(Mirror<?> mirror, String fieldName, ValueProxy vp) {
+		FieldInjector fi = new FieldInjector();
+		fi.valueProxy = vp;
+
+		Method[] sss = mirror.findSetters(fieldName);
+		if (sss.length == 1)
+			fi.doSet = new DoSetBySetter(sss[0]);
+		else
+			try {
+				Field field = mirror.getField(fieldName);
+				try {
+					Method setter = mirror.getSetter(field);
+					fi.doSet = new DoSetBySetter(setter);
+				} catch (NoSuchMethodException e) {
+					fi.doSet = new DoSetByField(field);
+				}
+			} catch (NoSuchFieldException e) {
+				throw Lang.wrapThrow(e);
+			}
+		return fi;
+	}
+
 	private ValueProxy valueProxy;
 	private DoSet doSet;
 
-	public FieldInjector(Mirror<?> mirror, String fieldName, ValueProxy vp) {
-		valueProxy = vp;
-		try {
-			Field field = mirror.getField(fieldName);
-			try {
-				Method setter = mirror.getSetter(field);
-				doSet = new DoSetBySetter(setter);
-			} catch (NoSuchMethodException e) {
-				doSet = new DoSetByField(field);
-			}
-		} catch (NoSuchFieldException e) {
-			throw Lang.wrapThrow(e);
-		}
-	}
+	private FieldInjector() {}
 
-	void inject(IocContext context, Object obj) {
-		Object value = valueProxy.get(context);
+	void inject(IocMaking ing, Object obj) {
+		Object value = valueProxy.get(ing);
 		doSet.set(obj, value);
 	}
 
 	/* ================================================================= */
-	interface DoSet {
+	static interface DoSet {
 		void set(Object obj, Object value);
 	}
 
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-	class DoSetByField implements DoSet {
+	static class DoSetByField implements DoSet {
 
 		private Field field;
 
@@ -62,7 +71,7 @@ public class FieldInjector {
 	}
 
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-	class DoSetBySetter implements DoSet {
+	static class DoSetBySetter implements DoSet {
 
 		private Method setter;
 		private Class<?> valueType;

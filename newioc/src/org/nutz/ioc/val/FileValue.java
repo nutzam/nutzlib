@@ -1,12 +1,19 @@
 package org.nutz.ioc.val;
 
-import org.nutz.ioc.IocContext;
+import org.nutz.ioc.IocMaking;
 import org.nutz.ioc.ValueProxy;
+import org.nutz.lang.Files;
 
 public class FileValue implements ValueProxy {
 
-	public Object get(IocContext context) {
-		return null;
+	private String path;
+
+	public FileValue(String path) {
+		this.path = path;
+	}
+
+	public Object get(IocMaking ing) {
+		return Files.findFile(path);
 	}
 
 }
