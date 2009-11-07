@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.nutz.ioc.IocLoader;
-import org.nutz.ioc.loader.ObjectLoadException;
+import org.nutz.ioc.Iocs;
+import org.nutz.ioc.ObjectLoadException;
 import org.nutz.ioc.meta.IocObject;
 import org.nutz.lang.Strings;
 
@@ -42,7 +43,7 @@ public class MapLoader implements IocLoader {
 	}
 
 	public IocObject load(String name) throws ObjectLoadException {
-		return Loaders.map2iobj(getMap(name));
+		return Iocs.map2iobj(getMap(name));
 	}
 
 	/**

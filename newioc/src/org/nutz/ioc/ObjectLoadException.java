@@ -1,4 +1,4 @@
-package org.nutz.ioc.loader;
+package org.nutz.ioc;
 
 public class ObjectLoadException extends Exception {
 

@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import org.nutz.lang.Strings;
+
 public class Animal {
 
 	private int age;
@@ -94,6 +96,10 @@ public class Animal {
 
 	public void setRelations(Map<String, Animal> relations) {
 		this.relations = relations;
+	}
+
+	public String showName(String prefix, int num, String name) {
+		return Strings.dup(prefix, num) + name;
 	}
 
 }

@@ -1,6 +1,5 @@
 package org.nutz.ioc;
 
-import org.nutz.ioc.loader.ObjectLoadException;
 import org.nutz.ioc.meta.IocObject;
 
 public interface IocLoader {

@@ -1,4 +1,4 @@
-package org.nutz.ioc.loader.map;
+package org.nutz.ioc;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 
 import org.nutz.castor.Castors;
 import org.nutz.castor.FailToCastObjectException;
-import org.nutz.ioc.loader.ObjectLoadException;
 import org.nutz.ioc.meta.IocEventSet;
 import org.nutz.ioc.meta.IocField;
 import org.nutz.ioc.meta.IocObject;
@@ -16,8 +15,9 @@ import org.nutz.ioc.meta.IocValue;
 import org.nutz.lang.Each;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
+import org.nutz.lang.meta.Pair;
 
-public class Loaders {
+public class Iocs {
 
 	private static final String OBJFIELDS = "^(type|singleton|fields|args|events)$";
 
@@ -33,7 +33,7 @@ public class Loaders {
 	}
 
 	@SuppressWarnings("unchecked")
-	static IocObject map2iobj(Map<String, Object> map) throws ObjectLoadException {
+	public static IocObject map2iobj(Map<String, Object> map) throws ObjectLoadException {
 		final IocObject iobj = new IocObject();
 		if (!isIocObject(map)) {
 			for (Entry<String, Object> en : map.entrySet()) {
@@ -179,5 +179,23 @@ public class Loaders {
 		iv.setType("normal");
 		iv.setValue(obj);
 		return iv;
+	}
+
+	public static Pair<Class<?>> parseName(String name) {
+		String _name = null;
+		Class<?> type = null;
+		int pos = name.indexOf(':');
+		if (pos < 0) {
+			_name = Strings.trim(name);
+		} else {
+			_name = Strings.trim(name.substring(0, pos));
+			try {
+				String typeName = Strings.trim(name.substring(pos + 1));
+				type = Class.forName(typeName);
+			} catch (ClassNotFoundException e) {
+				throw Lang.wrapThrow(e);
+			}
+		}
+		return new Pair<Class<?>>(_name, type);
 	}
 }

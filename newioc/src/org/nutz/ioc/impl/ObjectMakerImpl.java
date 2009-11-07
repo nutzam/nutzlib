@@ -64,8 +64,12 @@ public class ObjectMakerImpl implements ObjectMaker {
 		FieldInjector[] fields = new FieldInjector[iobj.getFields().length];
 		for (int i = 0; i < fields.length; i++) {
 			IocField ifld = iobj.getFields()[i];
-			ValueProxy vp = ing.makeValue(ifld.getValue());
-			fields[i] = FieldInjector.create(mirror, ifld.getName(), vp);
+			try {
+				ValueProxy vp = ing.makeValue(ifld.getValue());
+				fields[i] = FieldInjector.create(mirror, ifld.getName(), vp);
+			} catch (Exception e) {
+				throw Lang.wrapThrow(e, "Fail to eval Injector for field: '%s'", ifld.getName());
+			}
 		}
 		dw.setFields(fields);
 
