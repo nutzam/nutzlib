@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import org.nutz.ioc.IocEventTrigger;
 import org.nutz.lang.Lang;
 
-public class MethodEventTrigger implements IocEventTrigger {
+public class MethodEventTrigger implements IocEventTrigger<Object> {
 
 	private Method method;
 

@@ -1,7 +1,7 @@
 package org.nutz.ioc;
 
-public interface IocEventTrigger {
+public interface IocEventTrigger<T> {
 
-	void trigger(Object obj);
+	void trigger(T obj);
 
 }

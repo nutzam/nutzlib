@@ -8,17 +8,17 @@ import org.nutz.lang.born.Borning;
 
 public class DynamicWeaver implements ObjectWeaver {
 
-	private IocEventTrigger create;
-	private IocEventTrigger depose;
+	private IocEventTrigger<Object> create;
+	private IocEventTrigger<Object> depose;
 	private Borning<?> borning;
 	private ValueProxy[] args;
 	private FieldInjector[] fields;
 
-	public void setCreate(IocEventTrigger create) {
+	public void setCreate(IocEventTrigger<Object> create) {
 		this.create = create;
 	}
 
-	public void setDepose(IocEventTrigger depose) {
+	public void setDepose(IocEventTrigger<Object> depose) {
 		this.depose = depose;
 	}
 

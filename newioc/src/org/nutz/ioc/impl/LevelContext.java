@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import org.nutz.ioc.IocContext;
 import org.nutz.ioc.ObjectProxy;
+import org.nutz.lang.Lang;
 
 /**
  * 自定义级别上下文对象
@@ -22,12 +23,19 @@ public class LevelContext implements IocContext {
 		objs = new HashMap<String, ObjectProxy>();
 	}
 
+	private void checkBuffer() {
+		if (null == objs)
+			throw Lang.makeThrow("Context '%s' had been deposed!", level);
+	}
+
 	public ObjectProxy fetch(String name) {
+		checkBuffer();
 		return objs.get(name);
 	}
 
 	public boolean save(String level, String name, ObjectProxy obj) {
 		if (accept(level)) {
+			checkBuffer();
 			synchronized (this) {
 				if (!objs.containsKey(name)) {
 					return null != objs.put(name, obj);
@@ -43,6 +51,7 @@ public class LevelContext implements IocContext {
 
 	public boolean remove(String level, String name) {
 		if (accept(level)) {
+			checkBuffer();
 			synchronized (this) {
 				if (!objs.containsKey(name)) {
 					return null != objs.remove(name);
@@ -53,14 +62,16 @@ public class LevelContext implements IocContext {
 	}
 
 	public void clear() {
-		objs.clear();
-	}
-
-	public void depose() {
+		checkBuffer();
 		for (Entry<String, ObjectProxy> en : objs.entrySet()) {
 			en.getValue().depose();
 		}
 		objs.clear();
+	}
+
+	public void depose() {
+		clear();
+		objs = null;
 	}
 
 }

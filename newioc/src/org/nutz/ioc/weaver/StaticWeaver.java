@@ -6,10 +6,10 @@ import org.nutz.ioc.ObjectWeaver;
 
 public class StaticWeaver implements ObjectWeaver {
 
-	private IocEventTrigger depose;
+	private IocEventTrigger<Object> depose;
 	private Object obj;
 
-	StaticWeaver(Object obj, IocEventTrigger depose) {
+	StaticWeaver(Object obj, IocEventTrigger<Object> depose) {
 		this.depose = depose;
 		this.obj = obj;
 	}

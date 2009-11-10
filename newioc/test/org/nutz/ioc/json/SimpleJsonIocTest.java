@@ -3,37 +3,15 @@ package org.nutz.ioc.json;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.util.Map;
 
 import org.junit.Test;
 import org.nutz.ioc.Ioc;
-import org.nutz.ioc.impl.NutIoc;
 import org.nutz.ioc.json.pojo.Animal;
 import org.nutz.ioc.json.pojo.AnimalRace;
-import org.nutz.ioc.loader.map.MapLoader;
-import org.nutz.json.Json;
-import org.nutz.lang.Lang;
+
+import static org.nutz.ioc.json.Utils.*;
 
 public class SimpleJsonIocTest {
-
-	@SuppressWarnings("unchecked")
-	private static Ioc I(String... ss) {
-		String json = "{";
-		json += Lang.concatBy(',', ss);
-		json += "}";
-		Map<String, Map<String, Object>> map = (Map<String, Map<String, Object>>) Json
-				.fromJson(json);
-		return new NutIoc(new MapLoader(map));
-	}
-
-	private static String J(String name, String s) {
-		return name + " : {" + s + "}";
-	}
-
-	private static Animal A(String s) {
-		Ioc ioc = I(J("obj", s));
-		return ioc.get(Animal.class, "obj");
-	}
 
 	@Test
 	public void test_normal() {

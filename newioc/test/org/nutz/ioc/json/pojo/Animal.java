@@ -26,6 +26,24 @@ public class Animal {
 
 	private Map<String, Animal> relations;
 
+	private int fetchTime;
+
+	private int deposeTime;
+
+	private int createTime;
+
+	public int getFetchTime() {
+		return fetchTime;
+	}
+
+	public int getDeposeTime() {
+		return deposeTime;
+	}
+
+	public int getCreateTime() {
+		return createTime;
+	}
+
 	public int getAge() {
 		return age;
 	}
@@ -102,4 +120,15 @@ public class Animal {
 		return Strings.dup(prefix, num) + name;
 	}
 
+	public void onFetch() {
+		fetchTime++;
+	}
+
+	public void onCreate() {
+		createTime++;
+	}
+
+	public void onDepose() {
+		deposeTime++;
+	}
 }
