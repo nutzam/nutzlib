@@ -84,7 +84,7 @@ public class ObjectMakerImpl implements ObjectMaker {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static IocEventTrigger createTrigger(Mirror<?> mirror, String str) {
+	private static IocEventTrigger<Object> createTrigger(Mirror<?> mirror, String str) {
 		if (Strings.isBlank(str))
 			return null;
 		if (str.contains(".")) {

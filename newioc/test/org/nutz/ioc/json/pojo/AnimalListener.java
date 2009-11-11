@@ -6,16 +6,28 @@ import org.nutz.aop.MethodListener;
 
 public class AnimalListener implements MethodListener {
 
-	public Object afterInvoke(Object obj, Object returnObj, Method method, Object... args) {
-		return null;
+	private StringBuilder sb;
+
+	public AnimalListener(StringBuilder sb) {
+		this.sb = sb;
 	}
 
 	public boolean beforeInvoke(Object obj, Method method, Object... args) {
+		sb.append("B:").append(method.getName()).append(args.length).append(';');
 		return true;
 	}
 
-	public void whenError(Throwable e, Object obj, Method method, Object... args) {}
+	public Object afterInvoke(Object obj, Object returnObj, Method method, Object... args) {
+		sb.append("A:").append(method.getName()).append(args.length).append(';');
+		return returnObj;
+	}
 
-	public void whenException(Exception e, Object obj, Method method, Object... args) {}
+	public void whenError(Throwable e, Object obj, Method method, Object... args) {
+		sb.append("E:").append(method.getName()).append(';');
+	}
+
+	public void whenException(Exception e, Object obj, Method method, Object... args) {
+		sb.append("E:").append(method.getName()).append(';');
+	}
 
 }

@@ -131,4 +131,5 @@ public class Animal {
 	public void onDepose() {
 		deposeTime++;
 	}
+
 }

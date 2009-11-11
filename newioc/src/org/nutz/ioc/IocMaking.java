@@ -22,7 +22,7 @@ public class IocMaking {
 	private MirrorFactory mirrors;
 
 	public IocMaking(	Ioc ioc,
-						MirrorFactory mirrors,
+	                 	MirrorFactory mirrors,
 						IocContext context,
 						ObjectMaker maker,
 						List<ValueProxyMaker> vpms,

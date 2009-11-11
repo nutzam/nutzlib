@@ -20,14 +20,14 @@ public class ObjectProxy {
 	/**
 	 *获取时触发器
 	 */
-	private IocEventTrigger fetch;
+	private IocEventTrigger<Object> fetch;
 
 	public ObjectProxy setWeaver(ObjectWeaver weaver) {
 		this.weaver = weaver;
 		return this;
 	}
 
-	public ObjectProxy setFetch(IocEventTrigger fetch) {
+	public ObjectProxy setFetch(IocEventTrigger<Object> fetch) {
 		this.fetch = fetch;
 		return this;
 	}

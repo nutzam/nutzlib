@@ -13,6 +13,7 @@ import org.nutz.ioc.ObjectMaker;
 import org.nutz.ioc.ObjectProxy;
 import org.nutz.ioc.ValueProxyMaker;
 import org.nutz.ioc.aop.MirrorFactory;
+import org.nutz.ioc.aop.impl.DefaultMirrorFactory;
 import org.nutz.ioc.meta.IocObject;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
@@ -49,8 +50,7 @@ public class NutIoc implements Ioc2 {
 		addValueProxyMaker(new DefaultValueProxyMaker());
 
 		// 初始化类工厂， 这是同 AOP 的连接点
-		mirrors = new MirrorFactory();
-		mirrors.init(this, "$aop");
+		mirrors = new DefaultMirrorFactory(this);
 	}
 
 	public <T> T get(Class<T> type, String name, IocContext context) {

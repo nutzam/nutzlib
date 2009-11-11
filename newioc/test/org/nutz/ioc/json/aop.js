@@ -7,13 +7,10 @@ var ioc = {
 		type : 'java.lang.StringBuilder'
 	},
 	// ---------------------------------------------
-	"$aop" : {
-		items : [ {
-			type : 'org.nutz.ioc.json.pojo.AnimalListener',
-			args : [ {
-				refer : 'sb'
-			} ],
-			
+	lst : {
+		type : 'org.nutz.ioc.json.pojo.AnimalListener',
+		args : [ {
+			refer : 'sb'
 		} ]
 	}
 }
