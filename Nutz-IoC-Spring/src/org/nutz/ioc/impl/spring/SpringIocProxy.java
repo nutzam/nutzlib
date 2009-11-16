@@ -1,14 +1,9 @@
 package org.nutz.ioc.impl.spring;
 
-import javax.servlet.ServletConfig;
-
 import org.nutz.ioc.Ioc;
-import org.nutz.mvc.IocProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * 简单实现Nutz.IoC-Spring桥
@@ -18,20 +13,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  */
 public class SpringIocProxy implements Ioc{
 	
-	private ApplicationContext applicationContext;
-
-	public static class Factory implements IocProvider{
-
-		@Override
-		public Ioc create(ServletConfig config, String[] args) {
-			SpringIocProxy ioc = new SpringIocProxy();
-			if(config == null)
-				ioc.applicationContext = new ClassPathXmlApplicationContext(args);
-			else
-				ioc.applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
-			return ioc;
-		}
-	}
+	ApplicationContext applicationContext;
 
 	@Override
 	public void depose() {
