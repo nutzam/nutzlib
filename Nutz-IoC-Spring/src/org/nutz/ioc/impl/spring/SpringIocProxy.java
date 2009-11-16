@@ -5,14 +5,14 @@ import javax.servlet.ServletConfig;
 import org.nutz.ioc.Ioc;
 import org.nutz.mvc.IocProvider;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.ContextStoppedEvent;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * 简单实现Nutz.IoC-Spring桥
- * <p/>Need Spring 2.5
+ * <p/>Need Spring 2.0
  * @author wendal chen(wendal1985@gmail.com)
  *
  */
@@ -35,7 +35,7 @@ public class SpringIocProxy implements Ioc{
 
 	@Override
 	public void depose() {
-		applicationContext.publishEvent(new ContextStoppedEvent(applicationContext));
+		applicationContext.publishEvent(new ContextClosedEvent(applicationContext));
 	}
 
 	@SuppressWarnings("unchecked")
