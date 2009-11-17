@@ -1,8 +1,7 @@
 package org.nutz.log.impl;
 
+import org.nutz.lang.Lang;
 import org.nutz.log.Log;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * 用来做在Log内部处理时的日志输出。到System.err.
@@ -12,19 +11,19 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class SystemLog implements Log {
 
 	public void debug(Object message) {
-		throw new NotImplementedException();
+		throw Lang.noImplement();
 	}
 
 	public void debug(Object message, Throwable t) {
-		throw new NotImplementedException();
+		throw Lang.noImplement();
 	}
 
 	public void error(Object message) {
-		throw new NotImplementedException();
+		throw Lang.noImplement();
 	}
 
 	public void error(Object message, Throwable t) {
-		throw new NotImplementedException();
+		throw Lang.noImplement();
 	}
 
 	public void fatal(Object message) {
@@ -38,51 +37,51 @@ public class SystemLog implements Log {
 	}
 
 	public void info(Object message) {
-		throw new NotImplementedException();
+		throw Lang.noImplement();
 	}
 
 	public void info(Object message, Throwable t) {
-		throw new NotImplementedException();
+		throw Lang.noImplement();
 	}
 
 	public boolean isDebugEnabled() {
-		throw new NotImplementedException();
+		throw Lang.noImplement();
 	}
 
 	public boolean isErrorEnabled() {
-		throw new NotImplementedException();
+		throw Lang.noImplement();
 	}
 
 	public boolean isFatalEnabled() {
-		throw new NotImplementedException();
+		throw Lang.noImplement();
 	}
 
 	public boolean isInfoEnabled() {
-		throw new NotImplementedException();
+		throw Lang.noImplement();
 	}
 
 	public boolean isTraceEnabled() {
-		throw new NotImplementedException();
+		throw Lang.noImplement();
 	}
 
 	public boolean isWarnEnabled() {
-		throw new NotImplementedException();
+		throw Lang.noImplement();
 	}
 
 	public void trace(Object message) {
-		throw new NotImplementedException();
+		throw Lang.noImplement();
 	}
 
 	public void trace(Object message, Throwable t) {
-		throw new NotImplementedException();
+		throw Lang.noImplement();
 	}
 
 	public void warn(Object message) {
-		throw new NotImplementedException();
+		throw Lang.noImplement();
 	}
 
 	public void warn(Object message, Throwable t) {
-		throw new NotImplementedException();
+		throw Lang.noImplement();
 	}
 
 }
