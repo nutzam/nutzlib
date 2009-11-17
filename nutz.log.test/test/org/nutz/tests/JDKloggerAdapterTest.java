@@ -2,15 +2,12 @@ package org.nutz.tests;
 
 import java.net.URL;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.nutz.log.Log;
 import org.nutz.log.LogFactory;
