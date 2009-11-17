@@ -103,5 +103,6 @@ public class WebApplicationContext implements IContext {
 
 	public void afterServe() {
 		sessionLocation.remove();
+		requestLocation.remove();
 	}
 }

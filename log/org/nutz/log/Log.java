@@ -14,11 +14,11 @@ public interface Log {
 	
 	void error(Object message, Throwable t);
 	
-	boolean isWarningEnabled();
+	boolean isWarnEnabled();
 	
-	void warning(Object message);
+	void warn(Object message);
 	
-	void warning(Object message, Throwable t);
+	void warn(Object message, Throwable t);
 	
 	boolean isInfoEnabled();
 	
