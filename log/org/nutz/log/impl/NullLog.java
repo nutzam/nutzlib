@@ -2,6 +2,11 @@ package org.nutz.log.impl;
 
 import org.nutz.log.Log;
 
+/**
+ * 没有Log可以用的时候的空Log
+ * @author Young(sunonfire@gmail.com)
+ *
+ */
 public class NullLog implements Log {
 
 	public void debug(Object message) {
