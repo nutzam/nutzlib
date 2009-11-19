@@ -63,11 +63,6 @@ public class TryMeta {
 		rs.close();
 	}
 
-	private static void dumpRs(DatabaseMetaData dmd) throws SQLException {
-		ResultSet rs = dmd.getPrimaryKeys(null, null, "t_pet");
-		printRS(rs);
-	}
-
 	private static Map<Integer, String> types = new HashMap<Integer, String>();
 	static {
 		try {
