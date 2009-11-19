@@ -1,0 +1,144 @@
+[MySql]
+====================================================================================================
+           COL|      TYPE|        TYPENAME|SZ|PE|SC|               CLASSNAME|AU|CS|NN|DW|CR|SG
+----------------------------------------------------------------------------------------------------
+            id|    BIGINT| BIGINT UNSIGNED|20|20| 0|    java.math.BigInteger| Y| n| 0| n| Y| n
+          name|   VARCHAR|         VARCHAR|20|20| 0|        java.lang.String| n| n| 0| n| Y| n
+         email|   VARCHAR|         VARCHAR|20|20| 0|        java.lang.String| n| n| 1| n| Y| n
+        enum_s|   VARCHAR|         VARCHAR|10|10| 0|        java.lang.String| n| n| 1| n| Y| n
+        enum_i|  SMALLINT|        SMALLINT| 6| 6| 0|       java.lang.Integer| n| n| 1| n| Y| n
+        bool_p|       BIT|         TINYINT| 1| 1| 0|       java.lang.Boolean| n| n| 1| n| Y| n
+      bool_obj|       BIT|         TINYINT| 1| 1| 0|       java.lang.Boolean| n| n| 1| n| Y| n
+        char_p|   VARCHAR|         VARCHAR| 2| 2| 0|        java.lang.String| n| n| 1| n| Y| n
+      char_obj|   VARCHAR|         VARCHAR| 2| 2| 0|        java.lang.String| n| n| 1| n| Y| n
+         int_p|   INTEGER|             INT|11|11| 0|       java.lang.Integer| n| n| 1| n| Y| n
+       int_obj|   INTEGER|             INT|11|11| 0|       java.lang.Integer| n| n| 1| n| Y| n
+       float_p|      REAL|           FLOAT|12|12|31|         java.lang.Float| n| n| 1| n| Y| n
+     float_obj|      REAL|           FLOAT|12|12|31|         java.lang.Float| n| n| 1| n| Y| n
+       short_p|  SMALLINT|        SMALLINT| 6| 6| 0|       java.lang.Integer| n| n| 1| n| Y| n
+     short_obj|  SMALLINT|        SMALLINT| 6| 6| 0|       java.lang.Integer| n| n| 1| n| Y| n
+        byte_p|  SMALLINT|        SMALLINT| 6| 6| 0|       java.lang.Integer| n| n| 1| n| Y| n
+      byte_obj|  SMALLINT|        SMALLINT| 6| 6| 0|       java.lang.Integer| n| n| 1| n| Y| n
+        long_p|    BIGINT|          BIGINT|20|20| 0|          java.lang.Long| n| n| 1| n| Y| n
+      long_obj|    BIGINT|          BIGINT|20|20| 0|          java.lang.Long| n| n| 1| n| Y| n
+      double_p|   DECIMAL|         DECIMAL|17|15|10|    java.math.BigDecimal| n| Y| 1| n| Y| n
+    double_obj|   DECIMAL|         DECIMAL|17|15|10|    java.math.BigDecimal| n| Y| 1| n| Y| n
+       sqlDate|      DATE|            DATE|10|10| 0|           java.sql.Date| n| n| 1| n| Y| n
+       sqlTime|      TIME|            TIME| 8| 8| 0|           java.sql.Time| n| n| 1| n| Y| n
+         sqlDT| TIMESTAMP|       TIMESTAMP|19|19| 0|      java.sql.Timestamp| n| n| 0| n| Y| n
+
+[Psql]
+====================================================================================================
+           COL|      TYPE|        TYPENAME|SZ|PE|SC|               CLASSNAME|AU|CS|NN|DW|CR|SG
+----------------------------------------------------------------------------------------------------
+            id|   INTEGER|            int4|11|10| 0|       java.lang.Integer| Y| n| 0| n| n| n
+          name|   VARCHAR|         varchar|20|20| 0|        java.lang.String| n| Y| 0| n| n| n
+         email|   VARCHAR|         varchar|20|20| 0|        java.lang.String| n| Y| 1| n| n| n
+        enum_s|   VARCHAR|         varchar|10|10| 0|        java.lang.String| n| Y| 1| n| n| n
+        enum_i|  SMALLINT|            int2| 6| 5| 0|       java.lang.Integer| n| n| 1| n| n| n
+        bool_p|       BIT|            bool| 1| 1| 0|       java.lang.Boolean| n| n| 1| n| n| n
+      bool_obj|       BIT|            bool| 1| 1| 0|       java.lang.Boolean| n| n| 1| n| n| n
+        char_p|   VARCHAR|         varchar| 2| 2| 0|        java.lang.String| n| Y| 1| n| n| n
+      char_obj|   VARCHAR|         varchar| 2| 2| 0|        java.lang.String| n| Y| 1| n| n| n
+         int_p|   INTEGER|            int4|11|10| 0|       java.lang.Integer| n| n| 1| n| n| n
+       int_obj|   INTEGER|            int4|11|10| 0|       java.lang.Integer| n| n| 1| n| n| n
+       float_p|    DOUBLE|          float8|24|17|17|        java.lang.Double| n| n| 1| n| n| n
+     float_obj|    DOUBLE|          float8|24|17|17|        java.lang.Double| n| n| 1| n| n| n
+       short_p|  SMALLINT|            int2| 6| 5| 0|       java.lang.Integer| n| n| 1| n| n| n
+     short_obj|  SMALLINT|            int2| 6| 5| 0|       java.lang.Integer| n| n| 1| n| n| n
+        byte_p|  SMALLINT|            int2| 6| 5| 0|       java.lang.Integer| n| n| 1| n| n| n
+      byte_obj|  SMALLINT|            int2| 6| 5| 0|       java.lang.Integer| n| n| 1| n| n| n
+        long_p|    BIGINT|            int8|20|19| 0|          java.lang.Long| n| n| 1| n| n| n
+      long_obj|    BIGINT|            int8|20|19| 0|          java.lang.Long| n| n| 1| n| n| n
+      double_p|   NUMERIC|         numeric|17|15|10|    java.math.BigDecimal| n| n| 1| n| n| n
+    double_obj|   NUMERIC|         numeric|17|15|10|    java.math.BigDecimal| n| n| 1| n| n| n
+       sqldate|      DATE|            date|13|13| 0|           java.sql.Date| n| n| 1| n| n| n
+       sqltime|      TIME|            time|15|15| 6|           java.sql.Time| n| n| 1| n| n| n
+         sqldt| TIMESTAMP|       timestamp|29|29| 6|      java.sql.Timestamp| n| n| 1| n| n| n
+
+[Sql2005]
+====================================================================================================
+           COL|      TYPE|        TYPENAME|SZ|PE|SC|               CLASSNAME|AU|CS|NN|DW|CR|SG
+----------------------------------------------------------------------------------------------------
+            id|   INTEGER|             int|11|10| 0|       java.lang.Integer| Y| n| 0| Y| n| n
+          name|   VARCHAR|         varchar|20|20| 0|        java.lang.String| n| n| 0| n| n| n
+         email|   VARCHAR|         varchar|20|20| 0|        java.lang.String| n| n| 1| n| n| n
+        enum_s|   VARCHAR|         varchar|10|10| 0|        java.lang.String| n| n| 1| n| n| n
+        enum_i|  SMALLINT|        smallint| 6| 5| 0|         java.lang.Short| n| n| 1| n| n| n
+        bool_p|       BIT|             bit| 1| 1| 0|       java.lang.Boolean| n| n| 1| n| n| n
+      bool_obj|       BIT|             bit| 1| 1| 0|       java.lang.Boolean| n| n| 1| n| n| n
+        char_p|   VARCHAR|         varchar| 2| 2| 0|        java.lang.String| n| n| 1| n| n| n
+      char_obj|   VARCHAR|         varchar| 2| 2| 0|        java.lang.String| n| n| 1| n| n| n
+         int_p|   INTEGER|             int|11|10| 0|       java.lang.Integer| n| n| 1| n| n| n
+       int_obj|   INTEGER|             int|11|10| 0|       java.lang.Integer| n| n| 1| n| n| n
+       float_p|    DOUBLE|           float|22|15| 0|        java.lang.Double| n| n| 1| n| n| n
+     float_obj|    DOUBLE|           float|22|15| 0|        java.lang.Double| n| n| 1| n| n| n
+       short_p|  SMALLINT|        smallint| 6| 5| 0|         java.lang.Short| n| n| 1| n| n| n
+     short_obj|  SMALLINT|        smallint| 6| 5| 0|         java.lang.Short| n| n| 1| n| n| n
+        byte_p|  SMALLINT|        smallint| 6| 5| 0|         java.lang.Short| n| n| 1| n| n| n
+      byte_obj|  SMALLINT|        smallint| 6| 5| 0|         java.lang.Short| n| n| 1| n| n| n
+        long_p|    BIGINT|          bigint|20|19| 0|          java.lang.Long| n| n| 1| n| n| n
+      long_obj|    BIGINT|          bigint|20|19| 0|          java.lang.Long| n| n| 1| n| n| n
+      double_p|   NUMERIC|         numeric|17|15|10|    java.math.BigDecimal| n| n| 1| n| n| n
+    double_obj|   NUMERIC|         numeric|17|15|10|    java.math.BigDecimal| n| n| 1| n| n| n
+       sqlDate| TIMESTAMP|        datetime|23|23| 3|      java.sql.Timestamp| n| n| 1| n| n| n
+       sqlTime| TIMESTAMP|        datetime|23|23| 3|      java.sql.Timestamp| n| n| 1| n| n| n
+         sqlDT| TIMESTAMP|        datetime|23|23| 3|      java.sql.Timestamp| n| n| 1| n| n| n
+
+[Sql2000]
+====================================================================================================
+           COL|      TYPE|        TYPENAME|SZ| PE|  SC|               CLASSNAME|AU|CS|NN|DW|CR|SG
+----------------------------------------------------------------------------------------------------
+            id|   INTEGER|             int|11| 10|   0|       java.lang.Integer| Y| n| 0| Y| n| n
+          name|   VARCHAR|         varchar|20| 20|   0|        java.lang.String| n| n| 0| n| n| n
+         email|   VARCHAR|         varchar|20| 20|   0|        java.lang.String| n| n| 1| n| n| n
+        enum_s|   VARCHAR|         varchar|10| 10|   0|        java.lang.String| n| n| 1| n| n| n
+        enum_i|  SMALLINT|        smallint| 6|  5|   0|         java.lang.Short| n| n| 1| n| n| n
+        bool_p|       BIT|             bit| 1|  1|   0|       java.lang.Boolean| n| n| 1| n| n| n
+      bool_obj|       BIT|             bit| 1|  1|   0|       java.lang.Boolean| n| n| 1| n| n| n
+        char_p|   VARCHAR|         varchar| 2|  2|   0|        java.lang.String| n| n| 1| n| n| n
+      char_obj|   VARCHAR|         varchar| 2|  2|   0|        java.lang.String| n| n| 1| n| n| n
+         int_p|   INTEGER|             int|11| 10|   0|       java.lang.Integer| n| n| 1| n| n| n
+       int_obj|   INTEGER|             int|11| 10|   0|       java.lang.Integer| n| n| 1| n| n| n
+       float_p|    DOUBLE|           float|22| 15|   0|        java.lang.Double| n| n| 1| n| n| n
+     float_obj|    DOUBLE|           float|22| 15|   0|        java.lang.Double| n| n| 1| n| n| n
+       short_p|  SMALLINT|        smallint| 6|  5|   0|         java.lang.Short| n| n| 1| n| n| n
+     short_obj|  SMALLINT|        smallint| 6|  5|   0|         java.lang.Short| n| n| 1| n| n| n
+        byte_p|  SMALLINT|        smallint| 6|  5|   0|         java.lang.Short| n| n| 1| n| n| n
+      byte_obj|  SMALLINT|        smallint| 6|  5|   0|         java.lang.Short| n| n| 1| n| n| n
+        long_p|    BIGINT|          bigint|20| 19|   0|          java.lang.Long| n| n| 1| n| n| n
+      long_obj|    BIGINT|          bigint|20| 19|   0|          java.lang.Long| n| n| 1| n| n| n
+      double_p|   NUMERIC|         numeric|17| 15|  10|    java.math.BigDecimal| n| n| 1| n| n| n
+    double_obj|   NUMERIC|         numeric|17| 15|  10|    java.math.BigDecimal| n| n| 1| n| n| n
+       sqlDate| TIMESTAMP|        datetime|23| 23|   3|      java.sql.Timestamp| n| n| 1| n| n| n
+       sqlTime| TIMESTAMP|        datetime|23| 23|   3|      java.sql.Timestamp| n| n| 1| n| n| n
+         sqlDT| TIMESTAMP|        datetime|23| 23|   3|      java.sql.Timestamp| n| n| 1| n| n| n
+
+[Oracle]
+====================================================================================================
+           COL|      TYPE|        TYPENAME|SZ| PE|  SC|               CLASSNAME|AU|CS|NN|DW|CR|SG
+----------------------------------------------------------------------------------------------------
+            ID|   NUMERIC|          NUMBER|22| 38|   0|    java.math.BigDecimal| n| n| 0| n| n| Y
+          NAME|   VARCHAR|        VARCHAR2|20| 20|   0|        java.lang.String| n| Y| 0| n| n| n
+         EMAIL|   VARCHAR|        VARCHAR2|20| 20|   0|        java.lang.String| n| Y| 1| n| n| n
+        ENUM_S|   VARCHAR|        VARCHAR2|10| 10|   0|        java.lang.String| n| Y| 1| n| n| n
+        ENUM_I|   NUMERIC|          NUMBER|22| 38|   0|    java.math.BigDecimal| n| n| 1| n| n| Y
+        BOOL_P|      CHAR|            CHAR| 1|  1|   0|        java.lang.String| n| Y| 1| n| n| n
+      BOOL_OBJ|      CHAR|            CHAR| 1|  1|   0|        java.lang.String| n| Y| 1| n| n| n
+        CHAR_P|   VARCHAR|        VARCHAR2| 2|  2|   0|        java.lang.String| n| Y| 1| n| n| n
+      CHAR_OBJ|   VARCHAR|        VARCHAR2| 2|  2|   0|        java.lang.String| n| Y| 1| n| n| n
+         INT_P|   NUMERIC|          NUMBER|22| 38|   0|    java.math.BigDecimal| n| n| 1| n| n| Y
+       INT_OBJ|   NUMERIC|          NUMBER|22| 38|   0|    java.math.BigDecimal| n| n| 1| n| n| Y
+       FLOAT_P|   NUMERIC|          NUMBER|22|126|-127|        java.lang.Double| n| n| 1| n| n| Y
+     FLOAT_OBJ|   NUMERIC|          NUMBER|22|126|-127|        java.lang.Double| n| n| 1| n| n| Y
+       SHORT_P|   NUMERIC|          NUMBER|22| 38|   0|    java.math.BigDecimal| n| n| 1| n| n| Y
+     SHORT_OBJ|   NUMERIC|          NUMBER|22| 38|   0|    java.math.BigDecimal| n| n| 1| n| n| Y
+        BYTE_P|   NUMERIC|          NUMBER|22| 38|   0|    java.math.BigDecimal| n| n| 1| n| n| Y
+      BYTE_OBJ|   NUMERIC|          NUMBER|22| 38|   0|    java.math.BigDecimal| n| n| 1| n| n| Y
+        LONG_P|   NUMERIC|          NUMBER|22|  0|-127|    java.math.BigDecimal| n| n| 1| n| n| Y
+      LONG_OBJ|   NUMERIC|          NUMBER|22|  0|-127|    java.math.BigDecimal| n| n| 1| n| n| Y
+      DOUBLE_P|   NUMERIC|          NUMBER|22| 15|  10|    java.math.BigDecimal| n| n| 1| n| n| Y
+    DOUBLE_OBJ|   NUMERIC|          NUMBER|22| 15|  10|    java.math.BigDecimal| n| n| 1| n| n| Y
+       SQLDATE|      DATE|            DATE| 7|  0|   0|      java.sql.Timestamp| n| n| 1| n| n| n
+       SQLTIME| TIMESTAMP|       TIMESTAMP|11|  0|   6|    oracle.sql.TIMESTAMP| n| n| 1| n| n| n
+         SQLDT| TIMESTAMP|       TIMESTAMP|11|  0|   6|    oracle.sql.TIMESTAMP| n| n| 1| n| n| n

@@ -1,0 +1,52 @@
+[Sql2000]
+=====================================================================================
+        TABLE_CAT |      TABLE_SCHEM |       TABLE_NAME |      COLUMN_NAME |          KEY_SEQ |          PK_NAME |
+          zzhtest |              dbo |            t_pet |               id |                1 | PK__t_pet__276EDEB3 |
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        TABLE_CAT |      TABLE_SCHEM |       TABLE_NAME |       NON_UNIQUE |  INDEX_QUALIFIER |       INDEX_NAME |             TYPE | ORDINAL_POSITION |      COLUMN_NAME |      ASC_OR_DESC |      CARDINALITY |            PAGES | FILTER_CONDITION |
+          zzhtest |              dbo |            t_pet |             null |             null |             null |                0 |             null |             null |             null |                8 |                1 |             null |
+          zzhtest |              dbo |            t_pet |                0 |            t_pet | PK__t_pet__276EDEB3 |                1 |                1 |               id |                A |                8 |                1 |             null |
+          zzhtest |              dbo |            t_pet |                0 |            t_pet | UQ__t_pet__286302EC |                3 |                1 |             name |                A |             null |             null |             null |
+
+
+
+[Sql2005]
+=====================================================================================
+        TABLE_CAT |      TABLE_SCHEM |       TABLE_NAME |      COLUMN_NAME |          KEY_SEQ |          PK_NAME |
+          zzhtest |              dbo |            t_pet |               id |                1 | PK__t_pet__2D27B809 |
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        TABLE_CAT |      TABLE_SCHEM |       TABLE_NAME |       NON_UNIQUE |  INDEX_QUALIFIER |       INDEX_NAME |             TYPE | ORDINAL_POSITION |      COLUMN_NAME |      ASC_OR_DESC |      CARDINALITY |            PAGES | FILTER_CONDITION |
+          zzhtest |              dbo |            t_pet |             null |             null |             null |                0 |             null |             null |             null |                8 |                1 |             null |
+          zzhtest |              dbo |            t_pet |                0 |            t_pet | PK__t_pet__2D27B809 |                1 |                1 |               id |                A |                8 |                1 |             null |
+          zzhtest |              dbo |            t_pet |                0 |            t_pet | UQ__t_pet__2E1BDC42 |                3 |                1 |             name |                A |             null |             null |             null |
+
+
+
+[Psql]
+=====================================================================================
+        table_cat |      table_schem |       table_name |      column_name |          key_seq |          pk_name |
+             null |           public |            t_pet |               id |                1 |       t_pet_pkey |
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        table_cat |      table_schem |       table_name |       non_unique |  index_qualifier |       index_name |             type | ordinal_position |      column_name |      asc_or_desc |      cardinality |            pages | filter_condition |
+             null |           public |            t_pet |            false |             null |   t_pet_name_key |                3 |                1 |             name |             null |              0.0 |                1 |             null |
+             null |           public |            t_pet |            false |             null |       t_pet_pkey |                3 |                1 |               id |             null |              0.0 |                1 |             null |
+
+
+
+[Mysql]
+=====================================================================================
+        TABLE_CAT |      TABLE_SCHEM |       TABLE_NAME |      COLUMN_NAME |          KEY_SEQ |          PK_NAME |
+          zzhtest |             null |            t_pet |               id |                1 |          PRIMARY |
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        TABLE_CAT |      TABLE_SCHEM |       TABLE_NAME |       NON_UNIQUE |  INDEX_QUALIFIER |       INDEX_NAME |             TYPE | ORDINAL_POSITION |      COLUMN_NAME |      ASC_OR_DESC |      CARDINALITY |            PAGES | FILTER_CONDITION |
+          zzhtest |             null |            t_pet |            false |                  |          PRIMARY |                3 |                1 |               id |                A |                8 |                0 |             null |
+          zzhtest |             null |            t_pet |            false |                  |               id |                3 |                1 |               id |                A |                8 |                0 |             null |
+          zzhtest |             null |            t_pet |            false |                  |             name |                3 |                1 |             name |                A |                8 |                0 |             null |
+
+
+
+[Oracle]
+=====================================================================================
+        TABLE_CAT |      TABLE_SCHEM |       TABLE_NAME |      COLUMN_NAME |          KEY_SEQ |          PK_NAME |
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        TABLE_CAT |      TABLE_SCHEM |       TABLE_NAME |       NON_UNIQUE |  INDEX_QUALIFIER |       INDEX_NAME |             TYPE | ORDINAL_POSITION |      COLUMN_NAME |      ASC_OR_DESC |      CARDINALITY |            PAGES | FILTER_CONDITION |
