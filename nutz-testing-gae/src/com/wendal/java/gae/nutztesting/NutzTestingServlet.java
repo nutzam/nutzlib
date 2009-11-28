@@ -14,6 +14,7 @@ import junit.textui.TestRunner;
 public class NutzTestingServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
+		resp.setContentType("text/plain; charset=utf-8");
 		String className = req.getParameter("class");
 		if(className != null){
 			try {
@@ -25,7 +26,7 @@ public class NutzTestingServlet extends HttpServlet {
 				e.printStackTrace(resp.getWriter());
 			}
 		}else{
-			resp.setContentType("text/plain; charset=utf-8");
+			
 			resp.getWriter().println("Using : http://wendalx999.appspot.com/check?class= + className");
 		}
 	}
