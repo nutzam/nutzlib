@@ -1,4 +1,4 @@
-package org.nutz.aop.asm;
+package org.nutz.aop.asm.test;
 
 import java.lang.reflect.Method;
 

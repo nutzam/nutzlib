@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import org.nutz.aop.Aop;
 import org.nutz.aop.ClassAgent;
 import org.nutz.aop.asm.test.Aop1;
+import org.nutz.aop.asm.test.MyMethodInterceptor;
 
 public class Main2 {
 
@@ -22,14 +23,12 @@ public class Main2 {
 		for (Method method : methods) {
 			System.out.println("找到一个Method: " + method);
 		}
-		
-		Aop1 a1 = classZ.newInstance();
+		classZ.newInstance();
+		Aop1 a1 = classZ.getConstructor(String.class).newInstance("Wendal");
 		a1.mixArgsVoid(null, null, 0, 'c');
 		a1.nonArgsVoid();
 		a1.argsVoid(null);
 		
-		//会出错
-		classZ.getConstructor(String.class).newInstance("Wendal");
 	}
 
 }

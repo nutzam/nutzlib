@@ -8,7 +8,6 @@ import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassAdapter;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
-import org.objectweb.asm.MethodAdapter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -46,7 +45,7 @@ class EnhandClassAdapter extends ClassAdapter {
 		if (name.equals("<init>")) {
 			MethodVisitor mv = cv.visitMethod(access, name, desc, signature,
 					exceptions);
-			return new ChangeToChildConstructorMethodAdapter(mv,
+			return new ChangeToChildConstructorMethodAdapter(mv,desc,access,
 					enhancedSuperName);
 		} else {
 			int methodIndex = AopToolkit.findMethodIndex(name, desc, methods);
@@ -92,23 +91,5 @@ class EnhandClassAdapter extends ClassAdapter {
 
 }
 
-class ChangeToChildConstructorMethodAdapter extends MethodAdapter {
 
-	private String superClassName;
-
-	public ChangeToChildConstructorMethodAdapter(MethodVisitor mv,
-			String superClassName) {
-		super(mv);
-		this.superClassName = superClassName;
-	}
-
-	public void visitMethodInsn(int opcode, String owner, String name,
-			String desc) {
-		// 调用父类的方法
-		if (opcode == Opcodes.INVOKESPECIAL && name.equals("<init>")) {
-			owner = superClassName;
-		}
-		super.visitMethodInsn(opcode, owner, name, desc);//
-	}
-}
 
