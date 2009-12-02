@@ -5,7 +5,7 @@ public class MethodInfo {
 	private short accessFlags;
 	private short nameIndex;
 	private short descriptorIndex;
-	private short attributes_count;
+	private short attributesCount;
 	private AttInfo attributes[];
 
 	public short getAccessFlags() {
@@ -35,12 +35,12 @@ public class MethodInfo {
 		return this;
 	}
 
-	public short getAttributes_count() {
-		return attributes_count;
+	public short getAttributesCount() {
+		return attributesCount;
 	}
 
-	public MethodInfo setAttributes_count(short attributesCount) {
-		attributes_count = attributesCount;
+	public MethodInfo setAttributesCount(short attributesCount) {
+		this.attributesCount = attributesCount;
 		return this;
 	}
 
