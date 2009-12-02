@@ -1,7 +1,7 @@
 package org.nutz.jdk.bytes;
 
-import org.nutz.jdk.bytes.elements.AttInfo;
-import org.nutz.jdk.bytes.elements.ConstantPool;
+import org.nutz.jdk.bytes.attr.AttrInfo;
+import org.nutz.jdk.bytes.elements.CstPool;
 import org.nutz.jdk.bytes.elements.FieldInfo;
 import org.nutz.jdk.bytes.elements.JDKVersion;
 import org.nutz.jdk.bytes.elements.MethodInfo;
@@ -12,7 +12,7 @@ public class ClassFile {
 	private JDKVersion version;
 	// u2 length
 	private int constantPoolCount;
-	private ConstantPool constantPool;
+	private CstPool constantPool;
 
 	private short accessFlags;
 	// u2, cp index
@@ -29,6 +29,6 @@ public class ClassFile {
 	private MethodInfo[] methods;
 	// u2 length
 	private int attributesCount;
-	private AttInfo attributes[];
+	private AttrInfo attributes[];
 
 }
