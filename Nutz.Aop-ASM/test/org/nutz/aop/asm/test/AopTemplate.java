@@ -1,10 +1,9 @@
-package org.nutz.aop.asm;
+package org.nutz.aop.asm.test;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
 import org.nutz.aop.MethodInterceptor;
-import org.nutz.aop.asm.test.Aop2;
 import org.objectweb.asm.util.ASMifierClassVisitor;
 
 public class AopTemplate {

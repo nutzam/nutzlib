@@ -6,6 +6,10 @@ import java.util.List;
 import org.nutz.aop.MethodInterceptor;
 
 public class Aop2 extends Aop1{
+	
+	public Aop2(String name) {
+		super(name);
+	}
 
 	private static Method [] _$$Nut_methodArray;
 	
@@ -32,6 +36,22 @@ public class Aop2 extends Aop1{
 	public void nonArgsVoid() {
 		if(_Nut_before(188)){
 			super.nonArgsVoid();
+			_Nut_after(188, null);
+		}
+	}
+	
+	@Override
+	public void argsVoid(String x) {
+		if(_Nut_before(188)){
+			super.argsVoid(x);
+			_Nut_after(188, null);
+		}
+	}
+	
+	@Override
+	public void mixArgsVoid(String x, Object obj, int yy, char xp, long... z) {
+		if(_Nut_before(188)){
+			super.mixArgsVoid(x, obj, yy, xp, z);
 			_Nut_after(188, null);
 		}
 	}

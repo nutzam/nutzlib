@@ -99,6 +99,7 @@ public class NutClassGenerator implements ClassAgent {
 				p2.add(new Pair2(m, mls));
 			}
 		}
+		System.out.println("共有"+p2.size()+"个方法需要拦截");
 		return p2.toArray(new Pair2[] {});
 	}
 
