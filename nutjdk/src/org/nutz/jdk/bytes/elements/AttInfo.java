@@ -1,6 +1,6 @@
 package org.nutz.jdk.bytes.elements;
 
-abstract class AttInfo {
+public abstract class AttInfo {
 
 	public static final String ConstantValue = "ConstantValue", Code = "Code",
 			Exceptions = "Exceptions", InnerClasses = "InnerClasses", Synthetic = "Synthetic",
