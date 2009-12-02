@@ -24,7 +24,6 @@ public class Main2 {
 			System.out.println("找到一个Method: " + method);
 		}
 		classZ.getConstructor(String.class).newInstance("Wendal").dMethod();
-		System.out.println("End Main");
 	}
 
 }

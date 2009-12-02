@@ -16,7 +16,7 @@ public class MyMethodInterceptor implements MethodInterceptor {
 	@Override
 	public boolean beforeInvoke(Object arg0, Method arg1, Object... arg2) {
 		System.out.println("Before....");
-		return false;
+		return true;
 	}
 
 	@Override
