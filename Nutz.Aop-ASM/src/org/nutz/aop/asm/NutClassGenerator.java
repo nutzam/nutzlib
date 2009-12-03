@@ -1,6 +1,5 @@
 package org.nutz.aop.asm;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -11,7 +10,6 @@ import java.util.List;
 import org.nutz.aop.ClassAgent;
 import org.nutz.aop.MethodInterceptor;
 import org.nutz.aop.MethodMatcher;
-import org.nutz.aop.asm.test.Aop2;
 import org.nutz.lang.Mirror;
 import org.objectweb.asm.ClassAdapter;
 import org.objectweb.asm.ClassReader;
@@ -30,7 +28,6 @@ public class NutClassGenerator implements ClassAgent {
 				generateData(classZ, newName, methodArray));
 	}
 	
-	static byte [] tmpData;
 	
 	public static <T> byte [] generateData(Class<T> classZ, String newName,
 			Method[] methodArray) throws ClassFormatError,
@@ -40,7 +37,8 @@ public class NutClassGenerator implements ClassAgent {
 		ClassAdapter classAdapter = new EnhandClassAdapter(cw, newName,
 				methodArray);
 		cr.accept(classAdapter, ClassReader.SKIP_DEBUG);
-		tmpData = cw.toByteArray();
+		byte [] tmpData = cw.toByteArray();
+		printClass(newName, tmpData);
 		return tmpData;
 	}
 
@@ -90,15 +88,6 @@ public class NutClassGenerator implements ClassAgent {
 			Class<T> newClass = generate(klass, newName, methodArray);
 			AopToolkit.injectFieldValue(newClass, methodArray,
 					methodInterceptorList);
-//			try {
-//				FileOutputStream fw = new FileOutputStream(newName + ".class");
-//				fw.write(tmpData);
-//				fw.flush();
-//				fw.close();
-//				ASMifierClassVisitor.main(new String[] { newName + ".class" });
-//			} catch (Throwable e1) {
-//				e1.printStackTrace();
-//			}
 			return newClass;
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -122,7 +111,19 @@ public class NutClassGenerator implements ClassAgent {
 			}
 		}
 		System.out.println("共有"+p2.size()+"个方法需要拦截");
-		return p2.toArray(new Pair2[] {});
+		return p2.toArray(new Pair2[p2.size()] );
+	}
+	
+	private static void printClass(String newName, byte [] tmpData){
+		try {
+			FileOutputStream fw = new FileOutputStream(newName + ".class");
+			fw.write(tmpData);
+			fw.flush();
+			fw.close();
+			ASMifierClassVisitor.main(new String[] { newName + ".class" });
+		} catch (Throwable e1) {
+			e1.printStackTrace();
+		}
 	}
 
 }

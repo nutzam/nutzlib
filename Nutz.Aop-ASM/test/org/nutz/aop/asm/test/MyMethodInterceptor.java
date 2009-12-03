@@ -20,21 +20,20 @@ public class MyMethodInterceptor implements MethodInterceptor {
 		System.out.println("-----------------------------------------------------");
 		System.out.println("Before....");
 		System.out.println("参数 "+Castors.me().castToString(objs));
-//		throw new RuntimeException();
 		return true;
 	}
 
 	@Override
 	public void whenError(Throwable e, Object arg1, Method arg2,
 			Object... objs) {
-		System.out.println("抛出了异常"+e);
+		System.out.println("抛出了Throwable "+e);
 		System.out.println("参数 "+Castors.me().castToString(objs));
 	}
 
 	@Override
 	public void whenException(Exception e, Object arg1, Method arg2,
 			Object... objs) {
-		System.out.println("抛出了异常"+e);
+		System.out.println("抛出了Exception "+e);
 		System.out.println("参数 "+Castors.me().castToString(objs));
 	}
 	

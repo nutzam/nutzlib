@@ -62,4 +62,13 @@ public class Aop1 {
 	public void  x(){
 		throw Lang.noImplement();
 	}
+	
+//	public Object mixArgsVoid3(String x) {
+//		return mixArgsVoid4(x);
+//	}
+//	
+	public Object mixArgsVoid4(String x){
+		System.out.println("I am here");
+		return "X";
+	}
 }
