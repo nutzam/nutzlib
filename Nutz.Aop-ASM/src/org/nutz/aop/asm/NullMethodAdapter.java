@@ -17,7 +17,7 @@ public abstract class NullMethodAdapter extends MethodAdapter {
     /**
      * Argument types of the method visited by this adapter.
      */
-    private final Type[] argumentTypes;
+    protected final Type[] argumentTypes;
 
 	public NullMethodAdapter(MethodVisitor mv,String desc,int access) {
 		super(mv);
@@ -45,7 +45,7 @@ public abstract class NullMethodAdapter extends MethodAdapter {
         }
     }
     
-    private int getArgIndex(final int arg) {
+    protected int getArgIndex(final int arg) {
         int index = (access & Opcodes.ACC_STATIC) == 0 ? 1 : 0;
         for (int i = 0; i < arg; i++) {
             index += argumentTypes[i].getSize();
@@ -59,7 +59,7 @@ public abstract class NullMethodAdapter extends MethodAdapter {
      * @param type the type of the local variable to be loaded.
      * @param index an index in the frame's local variables array.
      */
-    private void loadInsn(final Type type, final int index) {
+    protected void loadInsn(final Type type, final int index) {
         mv.visitVarInsn(type.getOpcode(Opcodes.ILOAD), index);
     }
 	

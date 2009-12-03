@@ -52,7 +52,7 @@ class EnhandClassAdapter extends ClassAdapter {
 			if (methodIndex > -1) {
 				MethodVisitor mv = cv.visitMethod(access, name, desc,
 						signature, exceptions);
-				return new AopMethodAdapter(mv, name, desc, access,methodIndex, myName,
+				return new AopMethodAdapter(mv, access, name, desc,methodIndex, myName,
 						enhancedSuperName);
 			}
 		}
