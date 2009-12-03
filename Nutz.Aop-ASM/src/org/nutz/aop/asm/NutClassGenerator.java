@@ -1,6 +1,5 @@
 package org.nutz.aop.asm;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -11,38 +10,20 @@ import org.nutz.aop.ClassAgent;
 import org.nutz.aop.MethodInterceptor;
 import org.nutz.aop.MethodMatcher;
 import org.nutz.lang.Mirror;
-import org.objectweb.asm.ClassAdapter;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.util.ASMifierClassVisitor;
 
 public class NutClassGenerator implements ClassAgent {
 
 	private static GeneratorClassLoader classLoader = new GeneratorClassLoader();
 
 	@SuppressWarnings("unchecked")
-	public static <T> Class<T> generate(Class<T> classZ, String newName,
+	public <T> Class<T> generate(Class<T> kclass, String newName,
 			Method[] methodArray) throws ClassFormatError,
 			InstantiationException, IllegalAccessException, IOException {
 		return (Class<T>) classLoader.defineClassFromClassFile(newName, 
-				generateData(classZ, newName, methodArray));
-	}
-	
-	
-	public static <T> byte [] generateData(Class<T> classZ, String newName,
-			Method[] methodArray) throws ClassFormatError,
-			InstantiationException, IllegalAccessException, IOException {
-		ClassReader cr = new ClassReader(classZ.getName());
-		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-		ClassAdapter classAdapter = new EnhandClassAdapter(cw, newName,
-				methodArray);
-		cr.accept(classAdapter, ClassReader.SKIP_DEBUG);
-		byte [] tmpData = cw.toByteArray();
-		printClass(newName, tmpData);
-		return tmpData;
+					ClassX.enhandClass(kclass, newName, methodArray));
 	}
 
-	private static class GeneratorClassLoader extends ClassLoader {
+	static class GeneratorClassLoader extends ClassLoader {
 		public Class<?> defineClassFromClassFile(String className,
 				byte[] classFile) throws ClassFormatError {
 			return defineClass(className, classFile, 0, classFile.length);
@@ -112,18 +93,6 @@ public class NutClassGenerator implements ClassAgent {
 		}
 		System.out.println("共有"+p2.size()+"个方法需要拦截");
 		return p2.toArray(new Pair2[p2.size()] );
-	}
-	
-	private static void printClass(String newName, byte [] tmpData){
-		try {
-			FileOutputStream fw = new FileOutputStream(newName + ".class");
-			fw.write(tmpData);
-			fw.flush();
-			fw.close();
-			ASMifierClassVisitor.main(new String[] { newName + ".class" });
-		} catch (Throwable e1) {
-			e1.printStackTrace();
-		}
 	}
 
 }
