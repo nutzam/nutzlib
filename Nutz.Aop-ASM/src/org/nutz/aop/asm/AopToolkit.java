@@ -1,12 +1,32 @@
 package org.nutz.aop.asm;
 
-import static org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.Opcodes.AALOAD;
+import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
+import static org.objectweb.asm.Opcodes.ACC_STATIC;
+import static org.objectweb.asm.Opcodes.ACC_VARARGS;
+import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.ARETURN;
+import static org.objectweb.asm.Opcodes.ASTORE;
+import static org.objectweb.asm.Opcodes.CHECKCAST;
+import static org.objectweb.asm.Opcodes.F_FULL;
+import static org.objectweb.asm.Opcodes.F_SAME;
+import static org.objectweb.asm.Opcodes.GETSTATIC;
+import static org.objectweb.asm.Opcodes.GOTO;
+import static org.objectweb.asm.Opcodes.IAND;
+import static org.objectweb.asm.Opcodes.ICONST_1;
+import static org.objectweb.asm.Opcodes.IFNE;
+import static org.objectweb.asm.Opcodes.ILOAD;
+import static org.objectweb.asm.Opcodes.INTEGER;
+import static org.objectweb.asm.Opcodes.INVOKEINTERFACE;
+import static org.objectweb.asm.Opcodes.IRETURN;
+import static org.objectweb.asm.Opcodes.ISTORE;
+import static org.objectweb.asm.Opcodes.TOP;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
 import org.nutz.aop.MethodInterceptor;
+import org.nutz.lang.Mirror;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.Label;
@@ -18,17 +38,10 @@ public final class AopToolkit {
 
 	public static <T> void injectFieldValue(Class<T> newClass, Method[] methodArray, List<MethodInterceptor>[] methodInterceptorList) {
 		try {
-			{
-				Field field = newClass.getDeclaredField("_$$Nut_methodArray");
-				field.setAccessible(true);
-				field.set(null, methodArray);
-			}
-			{
-				Field field = newClass.getDeclaredField("_$$Nut_methodInterceptorList");
-				field.setAccessible(true);
-				field.set(null, methodInterceptorList);
-			}
-			System.out.println("Aop变量注入成功");
+			Mirror<T> mirror = Mirror.me(newClass);
+			mirror.setValue(null, "_$$Nut_methodArray", methodArray);
+			mirror.setValue(null, "_$$Nut_methodInterceptorList", methodInterceptorList);
+			System.out.println("Aop变量赋值成功");
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}

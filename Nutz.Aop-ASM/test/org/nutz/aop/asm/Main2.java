@@ -7,6 +7,7 @@ import org.nutz.aop.Aop;
 import org.nutz.aop.ClassAgent;
 import org.nutz.aop.asm.test.Aop1;
 import org.nutz.aop.asm.test.MyMethodInterceptor;
+import org.nutz.lang.Mirror;
 
 public class Main2 {
 
@@ -25,7 +26,7 @@ public class Main2 {
 				System.out.println("找到一个Method: " + method);
 			}
 			classZ.newInstance();
-			Aop1 a1 = classZ.getConstructor(String.class).newInstance("Wendal");
+			Aop1 a1 = Mirror.me(classZ).born("Wendal");
 			a1.nonArgsVoid();
 			a1.argsVoid("Wendal is the best!");
 			a1.mixObjectsVoid("Arg1", new Object(), 1, null);

@@ -8,6 +8,14 @@ import javax.swing.JFrame;
 import org.nutz.aop.MethodInterceptor;
 import org.nutz.log.Log;
 
+/**
+ * 演示Aop1进行Aop改造后的行为....
+ * <p/>1. 相同数量的构造函数(除私有和静态构造函数)
+ * <p/>2. 包含两个静态类变量,其值会在Aop后期通过反射进行赋值
+ * <p/>3. 包含两个静态方法, 用于被Aop拦截的方法进行调用.
+ * @author zcchen
+ *
+ */
 public class Aop2 extends Aop1{
 	
 	public Aop2(String name) {
@@ -61,7 +69,7 @@ public class Aop2 extends Aop1{
 	
 	@Override
 	public void mixObjectsVoid(String x, Object obj, Integer i, JFrame f) {
-		if(_Nut_before(188,x,obj,i,f,1L,'c',(byte)18,1.1,1.9f,true,(short)45)){
+		if(_Nut_before(188,x,obj,i,f)){
 			super.argsVoid(x);
 			_Nut_after(188, null,x,obj,i,f);
 		}
