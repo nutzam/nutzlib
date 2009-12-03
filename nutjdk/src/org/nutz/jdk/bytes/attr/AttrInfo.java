@@ -7,21 +7,21 @@ public abstract class AttrInfo {
 			SourceFile = "SourceFile", LineNumberTable = "LineNumberTable",
 			LocalVariableTable = "LocalVariableTable", Deprecated = "Deprecated";
 
-	protected short attrNameIndex;
-	protected int attrLength;
+	protected int attrNameIndex;
+	protected long attrLength;
 
-	public short getAttrNameIndex() {
-		return attrNameIndex;
-	}
+//	public short getAttrNameIndex() {
+//		return attrNameIndex;
+//	}
 
-	public AttrInfo setAttrNameIndex(short attrNameIndex) {
+	public AttrInfo setAttrNameIndex(int attrNameIndex) {
 		this.attrNameIndex = attrNameIndex;
 		return this;
 	}
 
-	public int getAttrLength() {
-		return attrLength;
-	}
+//	public int getAttrLength() {
+//		return attrLength;
+//	}
 
 	public AttrInfo setAttrLength(int attrLength) {
 		this.attrLength = attrLength;
