@@ -1,9 +1,12 @@
 package org.nutz.aop.asm.test;
 
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.lang.reflect.Method;
 import java.util.List;
 
 import org.nutz.aop.MethodInterceptor;
+import org.nutz.aop.asm.NutClassGenerator;
 import org.objectweb.asm.util.ASMifierClassVisitor;
 
 public class AopTemplate {
@@ -35,5 +38,6 @@ public class AopTemplate {
 	public static void main(String[] args) throws Throwable {
 		// ASMifierClassVisitor.main(new String[]{AopTemplate.class.getName()});
 		ASMifierClassVisitor.main(new String[] { Aop2.class.getName() });
+		
 	}
 }

@@ -1,5 +1,7 @@
 package org.nutz.aop.asm;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -9,10 +11,12 @@ import java.util.List;
 import org.nutz.aop.ClassAgent;
 import org.nutz.aop.MethodInterceptor;
 import org.nutz.aop.MethodMatcher;
+import org.nutz.aop.asm.test.Aop2;
 import org.nutz.lang.Mirror;
 import org.objectweb.asm.ClassAdapter;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.util.ASMifierClassVisitor;
 
 public class NutClassGenerator implements ClassAgent {
 
@@ -22,13 +26,22 @@ public class NutClassGenerator implements ClassAgent {
 	public static <T> Class<T> generate(Class<T> classZ, String newName,
 			Method[] methodArray) throws ClassFormatError,
 			InstantiationException, IllegalAccessException, IOException {
+		return (Class<T>) classLoader.defineClassFromClassFile(newName, 
+				generateData(classZ, newName, methodArray));
+	}
+	
+	static byte [] tmpData;
+	
+	public static <T> byte [] generateData(Class<T> classZ, String newName,
+			Method[] methodArray) throws ClassFormatError,
+			InstantiationException, IllegalAccessException, IOException {
 		ClassReader cr = new ClassReader(classZ.getName());
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		ClassAdapter classAdapter = new EnhandClassAdapter(cw, newName,
 				methodArray);
 		cr.accept(classAdapter, ClassReader.SKIP_DEBUG);
-		return (Class<T>) classLoader.defineClassFromClassFile(newName, cw
-				.toByteArray());
+		tmpData = cw.toByteArray();
+		return tmpData;
 	}
 
 	private static class GeneratorClassLoader extends ClassLoader {
@@ -77,6 +90,15 @@ public class NutClassGenerator implements ClassAgent {
 			Class<T> newClass = generate(klass, newName, methodArray);
 			AopToolkit.injectFieldValue(newClass, methodArray,
 					methodInterceptorList);
+//			try {
+//				FileOutputStream fw = new FileOutputStream(newName + ".class");
+//				fw.write(tmpData);
+//				fw.flush();
+//				fw.close();
+//				ASMifierClassVisitor.main(new String[] { newName + ".class" });
+//			} catch (Throwable e1) {
+//				e1.printStackTrace();
+//			}
 			return newClass;
 		} catch (Throwable e) {
 			e.printStackTrace();

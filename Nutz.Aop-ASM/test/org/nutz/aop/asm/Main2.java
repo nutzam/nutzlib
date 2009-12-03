@@ -32,7 +32,7 @@ public class Main2 {
 			a1.mixObjectsVoid("Arg1", new Object(), 1, null);
 			a1.mixArgsVoid("XX", "WendalXXX", 0, 'c', 1L, 9090L);
 			a1.mixArgsVoid2("Aop1", Boolean.TRUE, 8888, 'p', 34L, false, 'b', "Gp", null, null, 23L, 90L, 78L);
-
+			a1.x();
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}

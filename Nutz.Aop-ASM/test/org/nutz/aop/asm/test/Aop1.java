@@ -3,6 +3,7 @@ package org.nutz.aop.asm.test;
 import javax.swing.JFrame;
 
 import org.nutz.castor.Castors;
+import org.nutz.lang.Lang;
 import org.nutz.log.Log;
 
 public class Aop1 {
@@ -56,5 +57,9 @@ public class Aop1 {
 			Log log,
 			long...z){
 		System.out.println("My - "+ name + " >> mixArgsVoid2");
+	}
+	
+	public void  x(){
+		throw Lang.noImplement();
 	}
 }
