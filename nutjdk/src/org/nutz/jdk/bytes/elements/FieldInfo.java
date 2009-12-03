@@ -1,13 +1,13 @@
 package org.nutz.jdk.bytes.elements;
 
-import org.nutz.jdk.bytes.attr.AttrInfo;
+import org.nutz.jdk.bytes.attr.Attr;
 
 public class FieldInfo {
 	private short access_flags;
 	private short name_index;
 	private short descriptor_index;
 	private short attributes_count;
-	private AttrInfo[] attributes;
+	private Attr[] attributes;
 
 	public short getAccess_flags() {
 		return access_flags;
@@ -45,11 +45,11 @@ public class FieldInfo {
 		return this;
 	}
 
-	public AttrInfo[] getAttributes() {
+	public Attr[] getAttributes() {
 		return attributes;
 	}
 
-	public FieldInfo setAttributes(AttrInfo[] attributes) {
+	public FieldInfo setAttributes(Attr[] attributes) {
 		this.attributes = attributes;
 		return this;
 	}

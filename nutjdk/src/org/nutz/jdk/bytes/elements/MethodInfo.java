@@ -1,6 +1,6 @@
 package org.nutz.jdk.bytes.elements;
 
-import org.nutz.jdk.bytes.attr.AttrInfo;
+import org.nutz.jdk.bytes.attr.Attr;
 
 public class MethodInfo {
 
@@ -8,7 +8,7 @@ public class MethodInfo {
 	private short nameIndex;
 	private short descriptorIndex;
 	private short attributesCount;
-	private AttrInfo attributes[];
+	private Attr attributes[];
 
 	public short getAccessFlags() {
 		return accessFlags;
@@ -46,11 +46,11 @@ public class MethodInfo {
 		return this;
 	}
 
-	public AttrInfo[] getAttributes() {
+	public Attr[] getAttributes() {
 		return attributes;
 	}
 
-	public MethodInfo setAttributes(AttrInfo[] attributes) {
+	public MethodInfo setAttributes(Attr[] attributes) {
 		this.attributes = attributes;
 		return this;
 	}

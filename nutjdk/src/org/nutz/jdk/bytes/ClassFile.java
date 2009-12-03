@@ -1,6 +1,6 @@
 package org.nutz.jdk.bytes;
 
-import org.nutz.jdk.bytes.attr.AttrInfo;
+import org.nutz.jdk.bytes.attr.Attr;
 import org.nutz.jdk.bytes.elements.CstPool;
 import org.nutz.jdk.bytes.elements.FieldInfo;
 import org.nutz.jdk.bytes.elements.JDKVersion;
@@ -29,6 +29,6 @@ public class ClassFile {
 	private MethodInfo[] methods;
 	// u2 length
 	private int attributesCount;
-	private AttrInfo attributes[];
+	private Attr attributes[];
 
 }
