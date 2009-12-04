@@ -53,11 +53,11 @@ public class Aop2 extends Aop1 {
 			methodInterceptor.whenException(e, this, method, args);
 	}
 
-	private void _Nut_Error(int flag_int, Throwable e, Object src_return, Object... args) {
+	private void _Nut_Error(int flag_int, Throwable e, Object... args) {
 		Method method = _$$Nut_methodArray[flag_int];
 		List<MethodInterceptor> miList = _$$Nut_methodInterceptorList[flag_int];
 		for (MethodInterceptor methodInterceptor : miList)
-			methodInterceptor.whenError(e, src_return, method, args);
+			methodInterceptor.whenError(e, this, method, args);
 
 	}
 
@@ -72,7 +72,7 @@ public class Aop2 extends Aop1 {
 			_Nut_Exception(188, e);
 			throw Lang.wrapThrow(e);
 		} catch (Throwable e) {
-			_Nut_Error(188, e, null);
+			_Nut_Error(188, e);
 			throw Lang.wrapThrow(e);
 		}
 	}
@@ -123,13 +123,13 @@ public class Aop2 extends Aop1 {
 		try {
 			if (_Nut_before(188, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z)) {
 				super.mixArgsVoid2(x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z);
-				_Nut_after(188, null, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z);
+				_Nut_after(188, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z);
 			}
 		} catch (Exception e) {
 			_Nut_Exception(188, e, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z);
 			throw Lang.wrapThrow(e);
 		} catch (Throwable e) {
-			_Nut_Error(188, e, null, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z);
+			_Nut_Error(188, e,  x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z);
 			throw Lang.wrapThrow(e);
 		}
 	}
@@ -145,7 +145,7 @@ public class Aop2 extends Aop1 {
 			_Nut_Exception(188, e, x);
 			throw Lang.wrapThrow(e);
 		} catch (Throwable e) {
-			_Nut_Error(188, e, null, x);
+			_Nut_Error(188, e, x);
 			throw Lang.wrapThrow(e);
 		}
 	}
@@ -161,7 +161,7 @@ public class Aop2 extends Aop1 {
 			_Nut_Exception(188, e, x);
 			throw Lang.wrapThrow(e);
 		} catch (Throwable e) {
-			_Nut_Error(188, e, null, x);
+			_Nut_Error(188, e, x);
 			throw Lang.wrapThrow(e);
 		}
 	}
