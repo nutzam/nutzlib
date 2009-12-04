@@ -75,4 +75,49 @@ public class Aop1 {
 		System.out.println("I am here");
 		return "X";
 	}
+	
+	public String returnString(){
+		return "Wendal-X";
+	}
+
+	public long returnLong(){
+		return 1L;
+	}
+
+	public int returnInt(){
+		return 1908;
+	}
+
+	public short returnShort(){
+		return (short)34;
+	}
+
+	public char returnChar(){
+		return 'w';
+	}
+
+	public byte returnByte(){
+		return (byte)90;
+	}
+
+	public boolean returnBoolean(){
+		return false;
+	}
+
+	public float returnFloat(){
+		return 1.1f;
+	}
+
+	public double returnDouble(){
+		return 1.1D;
+	}
+	
+	public Log getLog(StringBuilder builder){
+		return null;
+	}
+	
+	public void throwError() throws Throwable{
+		throw new Throwable();
+	}
+	
 }

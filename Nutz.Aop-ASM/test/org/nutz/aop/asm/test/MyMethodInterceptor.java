@@ -10,7 +10,7 @@ public class MyMethodInterceptor implements MethodInterceptor {
 	@Override
 	public Object afterInvoke(Object arg0, Object arg1, Method arg2,
 			Object... objs) {
-		System.out.println("After...");
+		System.out.println("After..... " + arg2.getName());
 		System.out.println("参数 "+Castors.me().castToString(objs));
 		return arg1;
 	}
@@ -18,7 +18,7 @@ public class MyMethodInterceptor implements MethodInterceptor {
 	@Override
 	public boolean beforeInvoke(Object arg0, Method arg1, Object... objs) {
 		System.out.println("-----------------------------------------------------");
-		System.out.println("Before....");
+		System.out.println("Before.... " + arg1.getName());
 		System.out.println("参数 "+Castors.me().castToString(objs));
 		return true;
 	}

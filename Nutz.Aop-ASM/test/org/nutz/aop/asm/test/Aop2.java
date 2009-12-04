@@ -142,4 +142,39 @@ public class Aop2 extends Aop1 {
 		}
 	}
 
+	@Override
+	public String returnString() {
+		try {
+			if (_Nut_before(188)) {
+				Object _result = super.returnString();
+				return (String) _Nut_after(188, _result);
+			}
+			return null;
+		} catch (Exception e) {
+			_Nut_Exception(188, e);
+			throw Lang.wrapThrow(e);
+		} catch (Throwable e) {
+			_Nut_Error(188, e);
+			throw Lang.wrapThrow(e);
+		}
+	}
+	
+
+	@Override
+	public long returnLong() {
+		try {
+			if (_Nut_before(188)) {
+				Object _result = super.returnLong();
+				return (Long) _Nut_after(188, _result);
+			}
+			return 0L;
+		} catch (Exception e) {
+			_Nut_Exception(188, e);
+			throw Lang.wrapThrow(e);
+		} catch (Throwable e) {
+			_Nut_Error(188, e);
+			throw Lang.wrapThrow(e);
+		}
+	}
+	
 }

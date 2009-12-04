@@ -38,7 +38,24 @@ public class Main2 {
 			a1.mixArgsVoid2("Aop1", Boolean.TRUE, 8888, 'p', 34L, false, 'b', "Gp", null, null, 23L, 90L, 78L);
 			String result = (String) a1.mixArgsVoid4("WendalXXX");
 			System.out.println("返回值: "+ result);
-			a1.x();
+			try{
+				a1.x();
+			}catch (Throwable e) {
+				// TODO: handle exception
+			}
+			a1.returnString();
+			a1.returnLong();
+			a1.returnBoolean();
+			a1.returnByte();
+			a1.returnChar();
+			a1.returnFloat();
+			a1.returnShort();
+			a1.toString();
+			a1.equals(new Object());
+			a1.getLog(new StringBuilder("I am OK"));
+			
+			a1.throwError();
+			
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
