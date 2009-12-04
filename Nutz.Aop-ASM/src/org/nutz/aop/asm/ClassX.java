@@ -38,10 +38,10 @@ public class ClassX implements Opcodes{
 		Constructor<?> [] constructors = klass.getDeclaredConstructors();
 		for (int i = 0; i < constructors.length; i++) {
 			Constructor<?> constructor = constructors[i];
-			if(Modifier.isPrivate(constructor.getModifiers())){
-				continue;
+			if(Modifier.isProtected(constructor.getModifiers())
+					|| Modifier.isPublic(constructor.getModifiers())){
+				addConstructor(constructor);
 			}
-			addConstructor(constructor);
 		}
 	}
 	
@@ -80,11 +80,9 @@ public class ClassX implements Opcodes{
 	}
 	
 	protected int getAccess(Constructor<?> constructor) {
-		int methodAccess = 0x00; //缺省
+		int methodAccess = ACC_PUBLIC;
 		if(Modifier.isProtected(constructor.getModifiers()))
 			methodAccess = ACC_PROTECTED;
-		if(Modifier.isPublic(constructor.getModifiers()))
-			methodAccess = ACC_PUBLIC;
 		return methodAccess;
 	}
 	
