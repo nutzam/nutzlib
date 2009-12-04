@@ -1,5 +1,6 @@
 package org.nutz.aop.asm;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -11,7 +12,7 @@ import org.nutz.lang.Mirror;
 
 public class Main2 {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Throwable{
 		try {
 			ClassAgent agent = new NutClassGenerator();
 			agent.addListener(Aop.matcher(".*"), new MyMethodInterceptor());
@@ -25,7 +26,10 @@ public class Main2 {
 			for (Method method : methods) {
 				System.out.println("找到一个Method: " + method);
 			}
-			classZ.newInstance();
+			Constructor<?> [] constructors = classZ.getDeclaredConstructors();
+			for (Constructor<?> constructor : constructors) {
+				System.out.println("找个一个Constructor: " +constructor);
+			}
 			Aop1 a1 = Mirror.me(classZ).born("Wendal");
 			a1.nonArgsVoid();
 			a1.argsVoid("Wendal is the best!");

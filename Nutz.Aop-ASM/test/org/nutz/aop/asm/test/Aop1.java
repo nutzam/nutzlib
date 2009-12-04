@@ -14,8 +14,10 @@ public class Aop1 {
 		this.name = name;
 	}
 	
-	public Aop1() {
+	Aop1() {
 	}
+	
+	protected Aop1(Integer uu){}
 
 	/**
 	 * 无参数,无返回

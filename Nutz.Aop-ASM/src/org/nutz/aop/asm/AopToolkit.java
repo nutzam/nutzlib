@@ -1,20 +1,20 @@
 package org.nutz.aop.asm;
 
-import static org.objectweb.asm.Opcodes.*;
-
+import java.io.FileOutputStream;
 import java.lang.reflect.Method;
 import java.util.List;
 
 import org.nutz.aop.MethodInterceptor;
+import org.nutz.aop.asm.test.Aop1;
 import org.nutz.lang.Mirror;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.util.ASMifierClassVisitor;
 
-import com.sun.xml.internal.ws.org.objectweb.asm.Type;
-
-public final class AopToolkit {
+public final class AopToolkit implements Opcodes{
 
 	public static <T> void injectFieldValue(Class<T> newClass, Method[] methodArray, List<MethodInterceptor>[] methodInterceptorList) {
 		try {
@@ -27,13 +27,23 @@ public final class AopToolkit {
 		}
 	}
 
-	public static int findMethodIndex(String name, String desc, Method[] methods) {
-		for (int i = 0; i < methods.length; i++) {
-			Method method = methods[i];
-			if (Type.getMethodDescriptor(method).equals(desc) && method.getName().equals(name))
-				return i;
+	public static void main(String[] args) throws Throwable{
+		String newName = Aop1.class.getName()+"$$Nut";
+		byte [] data = ClassX.enhandClass(Aop1.class, newName, new Method[]{});
+		Class<?> x = new GeneratorClassLoader().defineClassFromClassFile(newName, data);
+		System.out.println(Mirror.me(x).born("Wendal"));
+	}
+	
+	static void printClass(String newName, byte [] tmpData){
+		try {
+			FileOutputStream fw = new FileOutputStream(newName + ".class");
+			fw.write(tmpData);
+			fw.flush();
+			fw.close();
+			ASMifierClassVisitor.main(new String[] { newName + ".class" });
+		} catch (Throwable e1) {
+			e1.printStackTrace();
 		}
-		return -1;
 	}
 
 	public static void addFields(ClassVisitor cv) {

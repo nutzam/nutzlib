@@ -1,18 +1,13 @@
 package org.nutz.aop.asm;
 
-import java.io.FileOutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import org.nutz.aop.asm.test.Aop1;
-import org.nutz.lang.Mirror;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.util.ASMifierClassVisitor;
-
-import com.sun.xml.internal.ws.org.objectweb.asm.Type;
+import org.objectweb.asm.Type;
 
 public class ClassX implements Opcodes{
 	
@@ -46,13 +41,15 @@ public class ClassX implements Opcodes{
 			if(Modifier.isPrivate(constructor.getModifiers())){
 				continue;
 			}
-			addConstructor(Type.getConstructorDescriptor(constructor));
+			addConstructor(constructor);
 		}
 	}
 	
-	protected void addConstructor(String desc){
-		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", desc,null, null);
-		new ChangeToChildConstructorMethodAdapter(mv,desc,ACC_PUBLIC,enhancedSuperName).visitCode();
+	protected void addConstructor(Constructor<?> constructor){
+		String desc = Type.getConstructorDescriptor(constructor);
+		int access = getAccess(constructor);
+		MethodVisitor mv = cw.visitMethod(access, "<init>", desc,null, null);
+		new ChangeToChildConstructorMethodAdapter(mv,desc,access,enhancedSuperName).visitCode();
 	}
 	
 	
@@ -67,11 +64,36 @@ public class ClassX implements Opcodes{
 			String methodDesc = Type.getMethodDescriptor(method);
 			MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, methodName, 
 					methodDesc,null, null);
-			int methodIndex = AopToolkit.findMethodIndex(methodName, methodDesc, methodArray);
-			new AopMethodAdapter(mv,ACC_PUBLIC,methodName,
+			int methodIndex = findMethodIndex(methodName, methodDesc, methodArray);
+			new AopMethodAdapter(mv,getAccess(method),methodName,
 					methodDesc,methodIndex,
 					myName,enhancedSuperName).visitCode();
 		}
+	}
+	
+	protected int getAccess(Method method) {
+		int methodAccess = ACC_PUBLIC;
+		if(Modifier.isProtected(method.getModifiers()))
+			methodAccess = ACC_PROTECTED;
+		return methodAccess;
+	}
+	
+	protected int getAccess(Constructor<?> constructor) {
+		int methodAccess = 0x00; //缺省
+		if(Modifier.isProtected(constructor.getModifiers()))
+			methodAccess = ACC_PROTECTED;
+		if(Modifier.isPublic(constructor.getModifiers()))
+			methodAccess = ACC_PUBLIC;
+		return methodAccess;
+	}
+	
+	protected static int findMethodIndex(String name, String desc, Method[] methods) {
+		for (int i = 0; i < methods.length; i++) {
+			Method method = methods[i];
+			if (Type.getMethodDescriptor(method).equals(desc) && method.getName().equals(name))
+				return i;
+		}
+		return -1;
 	}
 
 	public byte[] toByteArray(){
@@ -86,22 +108,4 @@ public class ClassX implements Opcodes{
 		return new ClassX(kclass,myName,methodArray).toByteArray();
 	}
 	
-	public static void main(String[] args) throws Throwable{
-		String newName = Aop1.class.getName()+"$$Nut";
-		byte [] data = ClassX.enhandClass(Aop1.class, newName, new Method[]{});
-		Class<?> x = new NutClassGenerator.GeneratorClassLoader().defineClassFromClassFile(newName, data);
-		System.out.println(Mirror.me(x).born("Wendal"));
-	}
-	
-	static void printClass(String newName, byte [] tmpData){
-		try {
-			FileOutputStream fw = new FileOutputStream(newName + ".class");
-			fw.write(tmpData);
-			fw.flush();
-			fw.close();
-			ASMifierClassVisitor.main(new String[] { newName + ".class" });
-		} catch (Throwable e1) {
-			e1.printStackTrace();
-		}
-	}
 }

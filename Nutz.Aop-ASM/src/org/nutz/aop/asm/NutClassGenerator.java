@@ -1,6 +1,5 @@
 package org.nutz.aop.asm;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -13,22 +12,7 @@ import org.nutz.lang.Mirror;
 
 public class NutClassGenerator implements ClassAgent {
 
-	private static GeneratorClassLoader classLoader = new GeneratorClassLoader();
-
-	@SuppressWarnings("unchecked")
-	public <T> Class<T> generate(Class<T> kclass, String newName,
-			Method[] methodArray) throws ClassFormatError,
-			InstantiationException, IllegalAccessException, IOException {
-		return (Class<T>) classLoader.defineClassFromClassFile(newName, 
-					ClassX.enhandClass(kclass, newName, methodArray));
-	}
-
-	static class GeneratorClassLoader extends ClassLoader {
-		public Class<?> defineClassFromClassFile(String className,
-				byte[] classFile) throws ClassFormatError {
-			return defineClass(className, classFile, 0, classFile.length);
-		}
-	}
+	private static GeneratorClassLoader generatorClassLoader = new GeneratorClassLoader();
 
 	private ArrayList<Pair> pairs = new ArrayList<Pair>();
 
@@ -66,9 +50,9 @@ public class NutClassGenerator implements ClassAgent {
 			methodInterceptorList[i] = pair2.listeners;
 		}
 		try {
-			Class<T> newClass = generate(klass, newName, methodArray);
-			AopToolkit.injectFieldValue(newClass, methodArray,
-					methodInterceptorList);
+			Class<T> newClass = (Class<T>) generatorClassLoader.defineClassFromClassFile(newName, 
+					ClassX.enhandClass(klass, newName, methodArray));
+			AopToolkit.injectFieldValue(newClass, methodArray,methodInterceptorList);
 			return newClass;
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -95,6 +79,13 @@ public class NutClassGenerator implements ClassAgent {
 		return p2.toArray(new Pair2[p2.size()] );
 	}
 
+}
+
+class GeneratorClassLoader extends ClassLoader {
+	public Class<?> defineClassFromClassFile(String className,
+			byte[] classFile) throws ClassFormatError {
+		return defineClass(className, classFile, 0, classFile.length);
+	}
 }
 
 class Pair {
