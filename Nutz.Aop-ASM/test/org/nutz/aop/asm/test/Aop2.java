@@ -68,6 +68,7 @@ public class Aop2 extends Aop1 {
 				super.nonArgsVoid();
 				_Nut_after(188, null);
 			}
+			return;
 		} catch (Exception e) {
 			_Nut_Exception(188, e);
 			throw Lang.wrapThrow(e);
@@ -76,48 +77,23 @@ public class Aop2 extends Aop1 {
 			throw Lang.wrapThrow(e);
 		}
 	}
+	
+	@Override
+	public void argsVoid(String x) {
+		if (_Nut_before(188, x)) {
+			super.argsVoid(x);
+			_Nut_after(188, null, x);
+		}
+	}
 
-	// public void nonArgsVoid_old() {
-	// if(_Nut_before(188)){
-	// super.nonArgsVoid();
-	// _Nut_after(188, null);
-	// }
-	// }
-	//	
-	// @Override
-	// public void argsVoid(String x) {
-	// if(_Nut_before(188,x)){
-	// super.argsVoid(x);
-	// _Nut_after(188, null,x);
-	// }
-	// }
-	//	
-	// @Override
-	// public void mixArgsVoid(String x, Object obj, int yy, char xp, long... z)
-	// {
-	// if(_Nut_before(188,x, obj, yy, xp, z)){
-	// super.mixArgsVoid(x, obj, yy, xp, z);
-	// _Nut_after(188, null,x, obj, yy, xp, z);
-	// }
-	// }
-	//	
-	// @Override
-	// public void mixObjectsVoid(String x, Object obj, Integer i, JFrame f) {
-	// if(_Nut_before(188,x,obj,i,f)){
-	// super.argsVoid(x);
-	// _Nut_after(188, null,x,obj,i,f);
-	// }
-	// }
-	//	
-	// @Override
-	// public void mixArgsVoid2(String x, Object obj, int yy, char xp, long bb,
-	// boolean ser, char xzzz, String ppp, StringBuffer sb, Log log, long... z)
-	// {
-	// if(_Nut_before(188, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z)){
-	// super.mixArgsVoid2(x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z);
-	// _Nut_after(188, null,x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z);
-	// }
-	// }
+	@Override
+	public void mixArgsVoid(String x, Object obj, int yy, char xp, long... z) {
+		if (_Nut_before(188, x, obj, yy, xp, z)) {
+			super.mixArgsVoid(x, obj, yy, xp, z);
+			_Nut_after(188, null, x, obj, yy, xp, z);
+		}
+	}
+
 
 	public void mixArgsVoid2(String x, Object obj, int yy, char xp, long bb, boolean ser, char xzzz, String ppp, StringBuffer sb, Log log, long... z) {
 		try {
@@ -129,11 +105,11 @@ public class Aop2 extends Aop1 {
 			_Nut_Exception(188, e, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z);
 			throw Lang.wrapThrow(e);
 		} catch (Throwable e) {
-			_Nut_Error(188, e,  x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z);
+			_Nut_Error(188, e, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z);
 			throw Lang.wrapThrow(e);
 		}
 	}
-	
+
 	public Object mixArgsVoid3(String x) {
 		try {
 			if (_Nut_before(188, x)) {
@@ -149,7 +125,7 @@ public class Aop2 extends Aop1 {
 			throw Lang.wrapThrow(e);
 		}
 	}
-	
+
 	public Object mixArgsVoid4(String x) {
 		try {
 			if (_Nut_before(188, x)) {
@@ -165,5 +141,5 @@ public class Aop2 extends Aop1 {
 			throw Lang.wrapThrow(e);
 		}
 	}
-	
+
 }

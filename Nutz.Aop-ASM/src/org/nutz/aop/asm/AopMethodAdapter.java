@@ -27,14 +27,13 @@ class AopMethodAdapter extends NullMethodAdapter {
 
 	public void visitCode() {
 		if(Type.getReturnType(desc).equals(Type.VOID_TYPE)){
-			enhandMethod_Void(mv, methodName, methodIndex, myName,
-				enhancedSuperName);
+			enhandMethod_Void();
 		}else{
-			enhandMethod_Object(mv, methodName, methodIndex, myName, enhancedSuperName);
+			enhandMethod_Object();
 		}
 	}
 	
-	private void enhandMethod_Void(MethodVisitor mv, String methodName, int methodIndex, String myName, String superName) {
+	private void enhandMethod_Void() {
 		int lastIndex = getLastIndex();
 		
 		mv.visitCode();
@@ -47,34 +46,27 @@ class AopMethodAdapter extends NullMethodAdapter {
 		mv.visitLabel(l0);
 		mv.visitVarInsn(ALOAD, 0);
 		mv.visitIntInsn(SIPUSH, methodIndex);
-		mv.visitIntInsn(BIPUSH, argumentTypes.length);
-		mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
 		loadArgsAsArray();
 		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_before", "(I[Ljava/lang/Object;)Z");
-		Label l4 = new Label();
-		mv.visitJumpInsn(IFEQ, l4);
+		mv.visitJumpInsn(IFEQ, l1);
 		mv.visitVarInsn(ALOAD, 0);
 		loadArgs();
 		mv.visitMethodInsn(INVOKESPECIAL, enhancedSuperName, methodName, desc);
 		mv.visitVarInsn(ALOAD, 0);
 		mv.visitIntInsn(SIPUSH, methodIndex);
 		mv.visitInsn(ACONST_NULL);
-		mv.visitIntInsn(BIPUSH, argumentTypes.length);
-		mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
 		loadArgsAsArray();
 		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_after", "(ILjava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;");
 		mv.visitInsn(POP);
 		mv.visitLabel(l1);
 		mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-		mv.visitJumpInsn(GOTO, l4);
+		mv.visitInsn(RETURN);
 		mv.visitLabel(l2);
 		mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[] {"java/lang/Exception"});
 		mv.visitVarInsn(ASTORE, lastIndex);
 		mv.visitVarInsn(ALOAD, 0);
 		mv.visitIntInsn(SIPUSH, methodIndex);
 		mv.visitVarInsn(ALOAD, lastIndex);
-		mv.visitIntInsn(BIPUSH, argumentTypes.length);
-		mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
 		loadArgsAsArray();
 		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_Exception", "(ILjava/lang/Exception;[Ljava/lang/Object;)V");
 		mv.visitVarInsn(ALOAD, lastIndex);
@@ -87,21 +79,18 @@ class AopMethodAdapter extends NullMethodAdapter {
 		mv.visitIntInsn(SIPUSH, methodIndex);
 		mv.visitVarInsn(ALOAD, lastIndex);
 		mv.visitInsn(ACONST_NULL);
-		mv.visitIntInsn(BIPUSH, argumentTypes.length);
-		mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
 		loadArgsAsArray();
 		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_Error", "(ILjava/lang/Throwable;Ljava/lang/Object;[Ljava/lang/Object;)V");
 		mv.visitVarInsn(ALOAD, lastIndex);
 		mv.visitMethodInsn(INVOKESTATIC, "org/nutz/lang/Lang", "wrapThrow", "(Ljava/lang/Throwable;)Ljava/lang/RuntimeException;");
 		mv.visitInsn(ATHROW);
-		mv.visitLabel(l4);
-		mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-		mv.visitInsn(RETURN);
-		mv.visitMaxs(5, 2);
+		mv.visitMaxs(1, 1); // 自动计算
 		mv.visitEnd();
 	}
 
 	void loadArgsAsArray(){
+		mv.visitIntInsn(BIPUSH, argumentTypes.length);
+		mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
 		int index = getArgIndex(0);
 		for (int i = 0; i < argumentTypes.length; i++) {
 			mv.visitInsn(DUP);
@@ -149,7 +138,7 @@ class AopMethodAdapter extends NullMethodAdapter {
 		}
 	}
 	
-	private void enhandMethod_Object(MethodVisitor mv, String methodName, int methodIndex, String myName, String superName) {
+	private void enhandMethod_Object() {
 		int lastIndex = getLastIndex();
 		
 		mv.visitCode();
@@ -162,21 +151,17 @@ class AopMethodAdapter extends NullMethodAdapter {
 		mv.visitLabel(l0);
 		mv.visitVarInsn(ALOAD, 0);
 		mv.visitIntInsn(SIPUSH, methodIndex);
-		mv.visitIntInsn(BIPUSH, argumentTypes.length);
-		mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
 		loadArgsAsArray();
 		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_before", "(I[Ljava/lang/Object;)Z");
 		Label l4 = new Label();
 		mv.visitJumpInsn(IFEQ, l4);
 		mv.visitVarInsn(ALOAD, 0);
 		loadArgs();
-		mv.visitMethodInsn(INVOKESPECIAL, superName, methodName, desc);
+		mv.visitMethodInsn(INVOKESPECIAL, enhancedSuperName, methodName, desc);
 		mv.visitVarInsn(ASTORE, lastIndex);
 		mv.visitVarInsn(ALOAD, 0);
 		mv.visitIntInsn(SIPUSH, methodIndex);
 		mv.visitVarInsn(ALOAD, lastIndex);
-		mv.visitIntInsn(BIPUSH, argumentTypes.length);
-		mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
 		loadArgsAsArray();
 		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_after", "(ILjava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;");
 		mv.visitLabel(l1);
@@ -191,8 +176,6 @@ class AopMethodAdapter extends NullMethodAdapter {
 		mv.visitVarInsn(ALOAD, 0);
 		mv.visitIntInsn(SIPUSH, methodIndex);
 		mv.visitVarInsn(ALOAD, lastIndex);
-		mv.visitIntInsn(BIPUSH, argumentTypes.length);
-		mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
 		loadArgsAsArray();
 		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_Exception", "(ILjava/lang/Exception;[Ljava/lang/Object;)V");
 		mv.visitVarInsn(ALOAD, lastIndex);
@@ -205,14 +188,12 @@ class AopMethodAdapter extends NullMethodAdapter {
 		mv.visitIntInsn(SIPUSH, methodIndex);
 		mv.visitVarInsn(ALOAD, lastIndex);
 		mv.visitInsn(ACONST_NULL);
-		mv.visitIntInsn(BIPUSH, argumentTypes.length);
-		mv.visitTypeInsn(ANEWARRAY, "java/lang/Object");
 		loadArgsAsArray();
 		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_Error", "(ILjava/lang/Throwable;Ljava/lang/Object;[Ljava/lang/Object;)V");
 		mv.visitVarInsn(ALOAD, lastIndex);
 		mv.visitMethodInsn(INVOKESTATIC, "org/nutz/lang/Lang", "wrapThrow", "(Ljava/lang/Throwable;)Ljava/lang/RuntimeException;");
 		mv.visitInsn(ATHROW);
-		mv.visitMaxs(8, 3);
+		mv.visitMaxs(1, 1); // 自动计算
 		mv.visitEnd();
 	}
 }

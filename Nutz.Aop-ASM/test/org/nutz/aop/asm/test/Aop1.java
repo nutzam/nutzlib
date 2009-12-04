@@ -26,6 +26,8 @@ public class Aop1 {
 		System.out.println("My - "+ name + " >> nonArgsVoid");
 	}
 	
+	protected void voidZ(){}
+	
 	/**
 	 * 有一个参数,无返回
 	 */

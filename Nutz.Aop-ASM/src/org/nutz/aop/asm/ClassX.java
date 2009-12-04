@@ -62,10 +62,11 @@ public class ClassX implements Opcodes{
 		for (Method method : methodArray) {
 			String methodName = method.getName();
 			String methodDesc = Type.getMethodDescriptor(method);
-			MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, methodName, 
+			int methodAccess = getAccess(method);
+			MethodVisitor mv = cw.visitMethod(methodAccess, methodName, 
 					methodDesc,null, null);
 			int methodIndex = findMethodIndex(methodName, methodDesc, methodArray);
-			new AopMethodAdapter(mv,getAccess(method),methodName,
+			new AopMethodAdapter(mv,methodAccess,methodName,
 					methodDesc,methodIndex,
 					myName,enhancedSuperName).visitCode();
 		}

@@ -29,9 +29,9 @@ public final class AopToolkit implements Opcodes{
 
 	public static void main(String[] args) throws Throwable{
 		String newName = Aop1.class.getName()+"$$Nut";
-		byte [] data = ClassX.enhandClass(Aop1.class, newName, new Method[]{});
-		Class<?> x = new GeneratorClassLoader().defineClassFromClassFile(newName, data);
-		System.out.println(Mirror.me(x).born("Wendal"));
+		byte [] data = ClassX.enhandClass(Aop1.class, newName, Aop1.class.getMethods());
+//		Class<?> x = new GeneratorClassLoader().defineClassFromClassFile(newName, data);
+		printClass(newName, data);
 	}
 	
 	static void printClass(String newName, byte [] tmpData){
