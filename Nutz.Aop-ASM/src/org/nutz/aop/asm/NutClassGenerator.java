@@ -10,8 +10,6 @@ import org.nutz.aop.MethodInterceptor;
 import org.nutz.aop.MethodMatcher;
 import org.nutz.lang.Mirror;
 
-import sun.security.action.GetLongAction;
-
 public class NutClassGenerator implements ClassAgent {
 
 	private static GeneratorClassLoader generatorClassLoader = new GeneratorClassLoader();
