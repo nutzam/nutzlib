@@ -8,6 +8,7 @@ import org.nutz.aop.Aop;
 import org.nutz.aop.ClassAgent;
 import org.nutz.aop.asm.test.Aop1;
 import org.nutz.aop.asm.test.MyMethodInterceptor;
+import org.nutz.castor.Castors;
 import org.nutz.lang.Mirror;
 
 public class Main2 {
@@ -67,6 +68,11 @@ public class Main2 {
 		a1.returnCharArray();
 		a1.returnFloatArray();
 		a1.returnShortArray();
+		{
+			//带异常的构造函数
+			Constructor<?> constructor = a1.getClass().getConstructor(new Class<?>[]{Object.class,Object.class});
+			System.out.println("构造方法:"+constructor+" \n带有的异常:"+Castors.me().castToString(constructor.getExceptionTypes()));
+		}
 		System.out.println("-Demo Over-");
 	}
 

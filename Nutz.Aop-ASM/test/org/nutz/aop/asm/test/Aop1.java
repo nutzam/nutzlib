@@ -1,5 +1,7 @@
 package org.nutz.aop.asm.test;
 
+import java.io.IOException;
+
 import javax.swing.JFrame;
 
 import org.nutz.castor.Castors;
@@ -160,4 +162,8 @@ public class Aop1 {
 	}
 	
 
+	public Aop1(Object x, Object y) throws IOException{
+		
+	}
+	
 }

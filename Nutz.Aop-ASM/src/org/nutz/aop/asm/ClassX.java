@@ -45,13 +45,21 @@ public class ClassX implements Opcodes{
 	}
 	
 	protected void addConstructor(Constructor<?> constructor){
+		String [] expClasses = convertExp(constructor.getExceptionTypes());
 		String desc = Type.getConstructorDescriptor(constructor);
 		int access = getAccess(constructor);
-		MethodVisitor mv = cw.visitMethod(access, "<init>", desc,null, null);
+		MethodVisitor mv = cw.visitMethod(access, "<init>", desc,null, expClasses);
 		new ChangeToChildConstructorMethodAdapter(mv,desc,access,enhancedSuperName).visitCode();
 	}
 	
-	
+	private String [] convertExp(Class<?> [] expClasses){
+		if(expClasses.length == 0) return null;
+		String [] results = new String[expClasses.length];
+		for (int i = 0; i < results.length; i++) {
+			results[i] = expClasses[i].getName().replace('.', '/');
+		}
+		return results;
+	}
 	
 	protected void addAopMethods() {
 		AopToolkit.addMethods(cw, myName);
