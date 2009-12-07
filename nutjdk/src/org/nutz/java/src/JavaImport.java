@@ -1,5 +1,5 @@
 package org.nutz.java.src;
 
-public class JavaSource {
+public class JavaImport {
 
 }

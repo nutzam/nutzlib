@@ -1,5 +1,5 @@
 package org.nutz.java.cls;
 
-public class JavaClass {
+public class ByteCode {
 
 }
