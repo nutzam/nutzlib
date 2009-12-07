@@ -7,8 +7,12 @@ import org.nutz.java.exception.ElementExistsException;
 
 public class Srcs {
 
-	static <T> List<T> list(Class<T> classOfT) {
+	public static <T> List<T> list(Class<T> classOfT) {
 		return new ArrayList<T>();
+	}
+
+	public static <T> List<T> list(Class<T> classOfT, int size) {
+		return new ArrayList<T>(size);
 	}
 
 	/**

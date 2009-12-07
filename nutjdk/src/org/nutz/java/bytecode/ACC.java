@@ -1,4 +1,4 @@
-package org.nutz.java.cls;
+package org.nutz.java.bytecode;
 
 public abstract class ACC {
 

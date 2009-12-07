@@ -12,7 +12,7 @@ public class JavaClass extends JavaParameterizedType {
 	/**
 	 * 静态初始化话方法，相当于 static{...}
 	 */
-	private JavaMethod initMethod;
+	private JavaMethod init;
 
 	/**
 	 * 本类声明的所有字段
@@ -33,18 +33,18 @@ public class JavaClass extends JavaParameterizedType {
 	/**
 	 * @return 初始化静态方法
 	 */
-	public JavaMethod getInitMethod() {
-		return initMethod;
+	public JavaMethod getInit() {
+		return init;
 	}
 
 	/**
 	 * 设置初始化静态方法
 	 * 
-	 * @param initMethod
+	 * @param init
 	 *            静态方法
 	 */
-	public void setInitMethod(JavaMethod initMethod) {
-		this.initMethod = initMethod;
+	public void setInit(JavaMethod init) {
+		this.init = init;
 	}
 
 	/**

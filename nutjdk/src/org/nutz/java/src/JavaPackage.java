@@ -26,5 +26,5 @@ public class JavaPackage {
 	public JavaPackage getParent() {
 		return new JavaPackage(parent);
 	}
-
+	
 }
