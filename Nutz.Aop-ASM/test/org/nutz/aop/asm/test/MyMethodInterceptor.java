@@ -24,17 +24,19 @@ public class MyMethodInterceptor implements MethodInterceptor {
 	}
 
 	@Override
-	public void whenError(Throwable e, Object arg1, Method arg2,
+	public boolean whenError(Throwable e, Object arg1, Method arg2,
 			Object... objs) {
 		System.out.println("抛出了Throwable "+e);
 		System.out.println("参数 "+Castors.me().castToString(objs));
+		return false;
 	}
 
 	@Override
-	public void whenException(Exception e, Object arg1, Method arg2,
+	public boolean whenException(Exception e, Object arg1, Method arg2,
 			Object... objs) {
 		System.out.println("抛出了Exception "+e);
 		System.out.println("参数 "+Castors.me().castToString(objs));
+		return false;
 	}
 	
 	void printArgs(Object...objs){
