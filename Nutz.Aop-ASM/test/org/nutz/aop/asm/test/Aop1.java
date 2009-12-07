@@ -23,7 +23,7 @@ public class Aop1 {
 	/**
 	 * 无参数,无返回
 	 */
-	public void nonArgsVoid() {
+	public void nonArgsVoid() throws Throwable{
 		System.out.println("My - " + name + " >> nonArgsVoid");
 	}
 
@@ -64,7 +64,7 @@ public class Aop1 {
 								String ppp,
 								StringBuffer sb,
 								Log log,
-								long... z) {
+								long... z) throws Throwable{
 		System.out.println("My - " + name + " >> mixArgsVoid2");
 	}
 
@@ -81,7 +81,7 @@ public class Aop1 {
 		return "X";
 	}
 
-	public String returnString() {
+	public String returnString() throws Throwable{
 		return "Wendal-X";
 	}
 

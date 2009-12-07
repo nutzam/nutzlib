@@ -152,8 +152,8 @@ public final class AopToolkit implements Opcodes{
 		mv.visitEnd();
 	}
 
-	private static void addMethod_whenExption(ClassVisitor cv, String _Nut_myName) {
-		MethodVisitor mv = cv.visitMethod(ACC_PRIVATE + ACC_VARARGS, "_Nut_Exception", "(ILjava/lang/Exception;[Ljava/lang/Object;)V", null, null);
+	private static void addMethod_whenExption(ClassVisitor cw, String _Nut_myName) {
+		MethodVisitor mv = cw.visitMethod(ACC_PRIVATE + ACC_VARARGS, "_Nut_Exception", "(ILjava/lang/Exception;[Ljava/lang/Object;)Z", null, null);
 		mv.visitCode();
 		mv.visitFieldInsn(GETSTATIC, _Nut_myName, "_$$Nut_methodArray", "[Ljava/lang/reflect/Method;");
 		mv.visitVarInsn(ILOAD, 1);
@@ -163,36 +163,42 @@ public final class AopToolkit implements Opcodes{
 		mv.visitVarInsn(ILOAD, 1);
 		mv.visitInsn(AALOAD);
 		mv.visitVarInsn(ASTORE, 5);
+		mv.visitInsn(ICONST_1);
+		mv.visitVarInsn(ISTORE, 6);
 		mv.visitVarInsn(ALOAD, 5);
 		mv.visitMethodInsn(INVOKEINTERFACE, "java/util/List", "iterator", "()Ljava/util/Iterator;");
-		mv.visitVarInsn(ASTORE, 7);
+		mv.visitVarInsn(ASTORE, 8);
 		Label l0 = new Label();
 		mv.visitJumpInsn(GOTO, l0);
 		Label l1 = new Label();
 		mv.visitLabel(l1);
-		mv.visitFrame(F_FULL, 8, new Object[] {_Nut_myName, INTEGER, "java/lang/Exception", "[Ljava/lang/Object;", "java/lang/reflect/Method", "java/util/List", TOP, "java/util/Iterator"}, 0, new Object[] {});
-		mv.visitVarInsn(ALOAD, 7);
+		mv.visitFrame(Opcodes.F_FULL, 9, new Object[] {_Nut_myName, Opcodes.INTEGER, "java/lang/Exception", "[Ljava/lang/Object;", "java/lang/reflect/Method", "java/util/List", Opcodes.INTEGER, Opcodes.TOP, "java/util/Iterator"}, 0, new Object[] {});
+		mv.visitVarInsn(ALOAD, 8);
 		mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "next", "()Ljava/lang/Object;");
 		mv.visitTypeInsn(CHECKCAST, "org/nutz/aop/MethodInterceptor");
-		mv.visitVarInsn(ASTORE, 6);
-		mv.visitVarInsn(ALOAD, 6);
+		mv.visitVarInsn(ASTORE, 7);
+		mv.visitVarInsn(ILOAD, 6);
+		mv.visitVarInsn(ALOAD, 7);
 		mv.visitVarInsn(ALOAD, 2);
 		mv.visitVarInsn(ALOAD, 0);
 		mv.visitVarInsn(ALOAD, 4);
 		mv.visitVarInsn(ALOAD, 3);
-		mv.visitMethodInsn(INVOKEINTERFACE, "org/nutz/aop/MethodInterceptor", "whenException", "(Ljava/lang/Exception;Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/Object;)V");
+		mv.visitMethodInsn(INVOKEINTERFACE, "org/nutz/aop/MethodInterceptor", "whenException", "(Ljava/lang/Exception;Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/Object;)Z");
+		mv.visitInsn(IAND);
+		mv.visitVarInsn(ISTORE, 6);
 		mv.visitLabel(l0);
-		mv.visitFrame(F_SAME, 0, null, 0, null);
-		mv.visitVarInsn(ALOAD, 7);
+		mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+		mv.visitVarInsn(ALOAD, 8);
 		mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "hasNext", "()Z");
 		mv.visitJumpInsn(IFNE, l1);
-		mv.visitInsn(RETURN);
-		mv.visitMaxs(5, 8);
+		mv.visitVarInsn(ILOAD, 6);
+		mv.visitInsn(IRETURN);
+		mv.visitMaxs(6, 9);
 		mv.visitEnd();
 	}
 
-	private static void addMethod_after(ClassVisitor cv, String _Nut_myName) {
-		MethodVisitor mv = cv.visitMethod(ACC_PRIVATE + ACC_VARARGS, "_Nut_Error", "(ILjava/lang/Throwable;[Ljava/lang/Object;)V", null, null);
+	private static void addMethod_after(ClassVisitor cw, String _Nut_myName) {
+		MethodVisitor mv = cw.visitMethod(ACC_PRIVATE + ACC_VARARGS, "_Nut_Error", "(ILjava/lang/Throwable;[Ljava/lang/Object;)Z", null, null);
 		mv.visitCode();
 		mv.visitFieldInsn(GETSTATIC, _Nut_myName, "_$$Nut_methodArray", "[Ljava/lang/reflect/Method;");
 		mv.visitVarInsn(ILOAD, 1);
@@ -202,31 +208,37 @@ public final class AopToolkit implements Opcodes{
 		mv.visitVarInsn(ILOAD, 1);
 		mv.visitInsn(AALOAD);
 		mv.visitVarInsn(ASTORE, 5);
+		mv.visitInsn(ICONST_1);
+		mv.visitVarInsn(ISTORE, 6);
 		mv.visitVarInsn(ALOAD, 5);
 		mv.visitMethodInsn(INVOKEINTERFACE, "java/util/List", "iterator", "()Ljava/util/Iterator;");
-		mv.visitVarInsn(ASTORE, 7);
+		mv.visitVarInsn(ASTORE, 8);
 		Label l0 = new Label();
 		mv.visitJumpInsn(GOTO, l0);
 		Label l1 = new Label();
 		mv.visitLabel(l1);
-		mv.visitFrame(F_FULL, 8, new Object[] {_Nut_myName, INTEGER, "java/lang/Throwable", "[Ljava/lang/Object;", "java/lang/reflect/Method", "java/util/List", TOP, "java/util/Iterator"}, 0, new Object[] {});
-		mv.visitVarInsn(ALOAD, 7);
+		mv.visitFrame(Opcodes.F_FULL, 9, new Object[] {_Nut_myName, Opcodes.INTEGER, "java/lang/Throwable", "[Ljava/lang/Object;", "java/lang/reflect/Method", "java/util/List", Opcodes.INTEGER, Opcodes.TOP, "java/util/Iterator"}, 0, new Object[] {});
+		mv.visitVarInsn(ALOAD, 8);
 		mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "next", "()Ljava/lang/Object;");
 		mv.visitTypeInsn(CHECKCAST, "org/nutz/aop/MethodInterceptor");
-		mv.visitVarInsn(ASTORE, 6);
-		mv.visitVarInsn(ALOAD, 6);
+		mv.visitVarInsn(ASTORE, 7);
+		mv.visitVarInsn(ILOAD, 6);
+		mv.visitVarInsn(ALOAD, 7);
 		mv.visitVarInsn(ALOAD, 2);
 		mv.visitVarInsn(ALOAD, 0);
 		mv.visitVarInsn(ALOAD, 4);
 		mv.visitVarInsn(ALOAD, 3);
-		mv.visitMethodInsn(INVOKEINTERFACE, "org/nutz/aop/MethodInterceptor", "whenError", "(Ljava/lang/Throwable;Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/Object;)V");
+		mv.visitMethodInsn(INVOKEINTERFACE, "org/nutz/aop/MethodInterceptor", "whenError", "(Ljava/lang/Throwable;Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/Object;)Z");
+		mv.visitInsn(IAND);
+		mv.visitVarInsn(ISTORE, 6);
 		mv.visitLabel(l0);
-		mv.visitFrame(F_SAME, 0, null, 0, null);
-		mv.visitVarInsn(ALOAD, 7);
+		mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+		mv.visitVarInsn(ALOAD, 8);
 		mv.visitMethodInsn(INVOKEINTERFACE, "java/util/Iterator", "hasNext", "()Z");
 		mv.visitJumpInsn(IFNE, l1);
-		mv.visitInsn(RETURN);
-		mv.visitMaxs(5, 8);
+		mv.visitVarInsn(ILOAD, 6);
+		mv.visitInsn(IRETURN);
+		mv.visitMaxs(6, 9);
 		mv.visitEnd();
 	}
 

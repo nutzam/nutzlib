@@ -71,7 +71,7 @@ public class ClassX implements Opcodes{
 			String methodDesc = Type.getMethodDescriptor(method);
 			int methodAccess = getAccess(method);
 			MethodVisitor mv = cw.visitMethod(methodAccess, methodName, 
-					methodDesc,null, null);
+					methodDesc,null, convertExp(method.getExceptionTypes()));
 			int methodIndex = findMethodIndex(methodName, methodDesc, methodArray);
 			new AopMethodAdapter(mv,methodAccess,methodName,
 					methodDesc,methodIndex,

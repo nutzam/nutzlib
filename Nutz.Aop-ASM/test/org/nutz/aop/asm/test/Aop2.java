@@ -45,32 +45,37 @@ public class Aop2 extends Aop1 {
 		return src_return;
 	}
 
-	private void _Nut_Exception(int flag_int, Exception e, Object... args) {
+	private boolean _Nut_Exception(int flag_int, Exception e, Object... args) {
 		Method method = _$$Nut_methodArray[flag_int];
 		List<MethodInterceptor> miList = _$$Nut_methodInterceptorList[flag_int];
+		boolean flag = true;
 		for (MethodInterceptor methodInterceptor : miList)
-			methodInterceptor.whenException(e, this, method, args);
+			flag &= methodInterceptor.whenException(e, this, method, args);
+		return flag;
 	}
 
-	private void _Nut_Error(int flag_int, Throwable e, Object... args) {
+	private boolean _Nut_Error(int flag_int, Throwable e, Object... args) {
 		Method method = _$$Nut_methodArray[flag_int];
 		List<MethodInterceptor> miList = _$$Nut_methodInterceptorList[flag_int];
+		boolean flag = true;
 		for (MethodInterceptor methodInterceptor : miList)
-			methodInterceptor.whenError(e, this, method, args);
-
+			flag &= methodInterceptor.whenError(e, this, method, args);
+		return flag;
 	}
 
 	@Override
-	public void nonArgsVoid() {
+	public void nonArgsVoid() throws Throwable{
 		try {
 			if (_Nut_before(188)) {
 				super.nonArgsVoid();
 			}
 			_Nut_after(188, null);
 		} catch (Exception e) {
-			_Nut_Exception(188, e);
+			if(_Nut_Exception(188, e))
+				throw e;
 		} catch (Throwable e) {
-			_Nut_Error(188, e);
+			if(_Nut_Error(188, e))
+				throw e;
 		}
 	}
 	
@@ -91,51 +96,57 @@ public class Aop2 extends Aop1 {
 //	}
 
 
-	public void mixArgsVoid2(String x, Object obj, int yy, char xp, long bb, boolean ser, char xzzz, String ppp, StringBuffer sb, Log log, long... z) {
+	public void mixArgsVoid2(String x, Object obj, 
+			int yy, char xp, long bb, 
+			boolean ser, char xzzz, 
+			String ppp, StringBuffer sb, Log log, long... z) 
+				throws Throwable{
 		try {
 			if (_Nut_before(188, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z)) {
 				super.mixArgsVoid2(x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z);
 			}
 			_Nut_after(188, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z);
 		} catch (Exception e) {
-			_Nut_Exception(188, e, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z);
+			if(_Nut_Exception(188, e, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z))
+				throw e;
 		} catch (Throwable e) {
-			_Nut_Error(188, e, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z);
+			if(_Nut_Error(188, e, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z))
+				throw e;
 		}
 	}
 
-	public Object mixArgsVoid3(String x) {
-		try {
-			Object _result = null;
-			if (_Nut_before(188, x)) {
-				_result = mixArgsVoid4(x);
-			}
-			return _Nut_after(188, _result, x);
-		} catch (Exception e) {
-			_Nut_Exception(188, e, x);
-		} catch (Throwable e) {
-			_Nut_Error(188, e, x);
-		}
-		return null;
-	}
+//	public Object mixArgsVoid3(String x) {
+//		try {
+//			Object _result = null;
+//			if (_Nut_before(188, x)) {
+//				_result = mixArgsVoid4(x);
+//			}
+//			return _Nut_after(188, _result, x);
+//		} catch (Exception e) {
+//			_Nut_Exception(188, e, x);
+//		} catch (Throwable e) {
+//			_Nut_Error(188, e, x);
+//		}
+//		return null;
+//	}
 
-	public Object mixArgsVoid4(String x) {
-		try {
-			Object _result = null;
-			if (_Nut_before(188, x)) {
-				 _result = super.mixArgsVoid4(x);
-			}
-			return _Nut_after(188, _result, x);
-		} catch (Exception e) {
-			_Nut_Exception(188, e, x);
-		} catch (Throwable e) {
-			_Nut_Error(188, e, x);
-		}
-			return null;
-	}
+//	public Object mixArgsVoid4(String x) {
+//		try {
+//			Object _result = null;
+//			if (_Nut_before(188, x)) {
+//				 _result = super.mixArgsVoid4(x);
+//			}
+//			return _Nut_after(188, _result, x);
+//		} catch (Exception e) {
+//			_Nut_Exception(188, e, x);
+//		} catch (Throwable e) {
+//			_Nut_Error(188, e, x);
+//		}
+//			return null;
+//	}
 
 	@Override
-	public String returnString() {
+	public String returnString() throws Throwable{
 		try {
 			Object _result = null;
 			if (_Nut_before(188)) {
@@ -143,44 +154,46 @@ public class Aop2 extends Aop1 {
 			}
 			return (String) _Nut_after(188, _result);
 		} catch (Exception e) {
-			_Nut_Exception(188, e);
+			if(_Nut_Exception(188, e))
+				throw e;
 		} catch (Throwable e) {
-			_Nut_Error(188, e);
+			if(_Nut_Error(188, e))
+				throw e;
 		}
 		return null;
 	}
 	
 
-	@Override
-	public long returnLong() {
-		try {
-			Object _result = null;
-			if (_Nut_before(188)) {
-				_result = super.returnLong();
-			}
-			return (Long) _Nut_after(188, _result);
-		} catch (Exception e) {
-			_Nut_Exception(188, e);
-		} catch (Throwable e) {
-			_Nut_Error(188, e);
-		}
-		return 0L;
-	}
-	
-	@Override
-	public Object[] returnObjectArray() {
-		try {
-			Object _result = null;
-			if (_Nut_before(188)) {
-				_result = super.returnObjectArray();
-			}
-			return (Object[]) _Nut_after(188, _result);
-		} catch (Exception e) {
-			_Nut_Exception(188, e);
-		} catch (Throwable e) {
-			_Nut_Error(188, e);
-		}
-		return null;
-	}
+//	@Override
+//	public long returnLong() {
+//		try {
+//			Object _result = null;
+//			if (_Nut_before(188)) {
+//				_result = super.returnLong();
+//			}
+//			return (Long) _Nut_after(188, _result);
+//		} catch (Exception e) {
+//			_Nut_Exception(188, e);
+//		} catch (Throwable e) {
+//			_Nut_Error(188, e);
+//		}
+//		return 0L;
+//	}
+//	
+//	@Override
+//	public Object[] returnObjectArray() {
+//		try {
+//			Object _result = null;
+//			if (_Nut_before(188)) {
+//				_result = super.returnObjectArray();
+//			}
+//			return (Object[]) _Nut_after(188, _result);
+//		} catch (Exception e) {
+//			_Nut_Exception(188, e);
+//		} catch (Throwable e) {
+//			_Nut_Error(188, e);
+//		}
+//		return null;
+//	}
 	
 }
