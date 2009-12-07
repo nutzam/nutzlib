@@ -122,5 +122,42 @@ public class Aop1 {
 	public void throwError() throws Throwable {
 		throw new RuntimeException("我是被主动抛出的异常!!!");
 	}
+	
+	public Object[] returnObjectArray(){
+		return null;
+	}
+	
+	public long [] returnLongArray() {
+		return null;
+	}
+
+	public int [] returnIntArray() {
+		return null;
+	}
+
+	public short [] returnShortArray() {
+		return null;
+	}
+
+	public char [] returnCharArray() {
+		return null;
+	}
+
+	public byte [] returnByteArray() {
+		return null;
+	}
+
+	public boolean [] returnBooleanArray() {
+		return null;
+	}
+
+	public float [] returnFloatArray() {
+		return null;
+	}
+
+	public double [] returnDoubleArray() {
+		return null;
+	}
+	
 
 }

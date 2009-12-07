@@ -60,6 +60,13 @@ public class Main2 {
 			System.out.println("抓住你：");
 			e.printStackTrace(System.out);
 		}
+		a1.returnObjectArray();
+		a1.returnLongArray();
+		a1.returnBooleanArray();
+		a1.returnByteArray();
+		a1.returnCharArray();
+		a1.returnFloatArray();
+		a1.returnShortArray();
 		System.out.println("-Demo Over-");
 	}
 

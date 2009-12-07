@@ -242,6 +242,11 @@ class AopMethodAdapter extends NullMethodAdapter {
 	private boolean isObject = true;
 	
 	void checkCast(){
+		if(returnType.getSort() == Type.ARRAY){
+			String returnType_str = desc.substring(desc.lastIndexOf(")")+1);
+			mv.visitTypeInsn(CHECKCAST, returnType_str);
+			return;
+		}
 		if(returnType.equals(Type.getType(Object.class))){
 			;
 		}else{

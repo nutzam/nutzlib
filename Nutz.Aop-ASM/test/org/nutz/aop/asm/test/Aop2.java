@@ -167,4 +167,20 @@ public class Aop2 extends Aop1 {
 		return 0L;
 	}
 	
+	@Override
+	public Object[] returnObjectArray() {
+		try {
+			Object _result = null;
+			if (_Nut_before(188)) {
+				_result = super.returnObjectArray();
+			}
+			return (Object[]) _Nut_after(188, _result);
+		} catch (Exception e) {
+			_Nut_Exception(188, e);
+		} catch (Throwable e) {
+			_Nut_Error(188, e);
+		}
+		return null;
+	}
+	
 }
