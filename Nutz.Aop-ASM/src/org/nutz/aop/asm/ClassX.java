@@ -38,10 +38,9 @@ public class ClassX implements Opcodes{
 		Constructor<?> [] constructors = klass.getDeclaredConstructors();
 		for (int i = 0; i < constructors.length; i++) {
 			Constructor<?> constructor = constructors[i];
-			if(Modifier.isProtected(constructor.getModifiers())
-					|| Modifier.isPublic(constructor.getModifiers())){
-				addConstructor(constructor);
-			}
+			if(Modifier.isPrivate(constructor.getModifiers()))
+				continue;
+			addConstructor(constructor);
 		}
 	}
 	
@@ -73,17 +72,19 @@ public class ClassX implements Opcodes{
 	}
 	
 	protected int getAccess(Method method) {
-		int methodAccess = ACC_PUBLIC;
 		if(Modifier.isProtected(method.getModifiers()))
-			methodAccess = ACC_PROTECTED;
-		return methodAccess;
+			return ACC_PROTECTED;
+		if(Modifier.isPublic(method.getModifiers()))
+			return ACC_PUBLIC;
+		return 0x00;
 	}
 	
 	protected int getAccess(Constructor<?> constructor) {
-		int methodAccess = ACC_PUBLIC;
 		if(Modifier.isProtected(constructor.getModifiers()))
-			methodAccess = ACC_PROTECTED;
-		return methodAccess;
+			return ACC_PROTECTED;
+		if(Modifier.isPublic(constructor.getModifiers()))
+			return ACC_PUBLIC;
+		return 0x00;
 	}
 	
 	protected static int findMethodIndex(String name, String desc, Method[] methods) {
