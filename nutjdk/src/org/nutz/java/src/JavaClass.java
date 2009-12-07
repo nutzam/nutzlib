@@ -3,24 +3,24 @@ package org.nutz.java.src;
 import java.util.List;
 
 /**
- * Àà
+ * ç±»
  * 
  * @author zozoh(zozohtnt@gmail.com)
  */
 public class JavaClass extends JavaParameterizedType {
 
 	/**
-	 * ¾²Ì¬³õÊ¼»¯»°·½·¨£¬Ïàµ±ÓÚ static{...}
+	 * é™æ€åˆå§‹åŒ–è¯æ–¹æ³•ï¼Œç›¸å½“äº static{...}
 	 */
 	private JavaMethod initMethod;
 
 	/**
-	 * ±¾ÀàÉùÃ÷µÄËùÓĞ×Ö¶Î
+	 * æœ¬ç±»å£°æ˜çš„æ‰€æœ‰å­—æ®µ
 	 */
 	private List<JavaField> fields;
 
 	/**
-	 * ±¾ÀàËùÓĞµÄ¹¹Ôìº¯Êı¡£Èç¹û size() Îª 0 £¬Ôò±íÊ¾Ö»ÓĞÒ»¸öÄ¬ÈÏ¹¹Ôìº¯Êı
+	 * æœ¬ç±»æ‰€æœ‰çš„æ„é€ å‡½æ•°ã€‚å¦‚æœ size() ä¸º 0 ï¼Œåˆ™è¡¨ç¤ºåªæœ‰ä¸€ä¸ªé»˜è®¤æ„é€ å‡½æ•°
 	 */
 	private List<JavaMethod> constructors;
 
@@ -31,27 +31,27 @@ public class JavaClass extends JavaParameterizedType {
 	}
 
 	/**
-	 * @return ³õÊ¼»¯¾²Ì¬·½·¨
+	 * @return åˆå§‹åŒ–é™æ€æ–¹æ³•
 	 */
 	public JavaMethod getInitMethod() {
 		return initMethod;
 	}
 
 	/**
-	 * ÉèÖÃ³õÊ¼»¯¾²Ì¬·½·¨
+	 * è®¾ç½®åˆå§‹åŒ–é™æ€æ–¹æ³•
 	 * 
 	 * @param initMethod
-	 *            ¾²Ì¬·½·¨
+	 *            é™æ€æ–¹æ³•
 	 */
 	public void setInitMethod(JavaMethod initMethod) {
 		this.initMethod = initMethod;
 	}
 
 	/**
-	 * Ôö¼ÓÒ»¸ö¹¹Ôìº¯Êı
+	 * å¢åŠ ä¸€ä¸ªæ„é€ å‡½æ•°
 	 * 
 	 * @param c
-	 *            ¹¹Ôìº¯Êı
+	 *            æ„é€ å‡½æ•°
 	 * @return JavaClass
 	 */
 	public JavaClass addConstructor(JavaMethod c) {
@@ -61,7 +61,7 @@ public class JavaClass extends JavaParameterizedType {
 	}
 
 	/**
-	 * ÒÆ³ıËùÓĞ¹¹Ôìº¯Êı
+	 * ç§»é™¤æ‰€æœ‰æ„é€ å‡½æ•°
 	 * 
 	 * @return JavaClass
 	 */
@@ -71,11 +71,11 @@ public class JavaClass extends JavaParameterizedType {
 	}
 
 	/**
-	 * »ñÈ¡Ò»¸ö¹¹Ôìº¯Êı
+	 * è·å–ä¸€ä¸ªæ„é€ å‡½æ•°
 	 * 
 	 * @param descriptor
-	 *            ¹¹Ôìº¯ÊıÃèÊö·û
-	 * @return ¹¹Ôìº¯Êı
+	 *            æ„é€ å‡½æ•°æè¿°ç¬¦
+	 * @return æ„é€ å‡½æ•°
 	 */
 	public JavaMethod getConstructor(String descriptor) {
 		return Srcs.get(constructors, descriptor);
@@ -83,18 +83,18 @@ public class JavaClass extends JavaParameterizedType {
 
 	/**
 	 * @param descriptor
-	 *            ·½·¨ÃèÊö·û
-	 * @return ¹¹Ôìº¯ÊıÊÇ·ñ´æÔÚ
+	 *            æ–¹æ³•æè¿°ç¬¦
+	 * @return æ„é€ å‡½æ•°æ˜¯å¦å­˜åœ¨
 	 */
 	public boolean hasConstructor(String descriptor) {
 		return null != getConstructor(descriptor);
 	}
 
 	/**
-	 * ÒÆ³ıÒ»¸ö¹¹Ôìº¯Êı
+	 * ç§»é™¤ä¸€ä¸ªæ„é€ å‡½æ•°
 	 * 
 	 * @param method
-	 *            ¹¹Ôìº¯Êı
+	 *            æ„é€ å‡½æ•°
 	 * @return JavaClass
 	 */
 	public JavaClass removeConstructor(JavaMethod c) {
@@ -103,10 +103,10 @@ public class JavaClass extends JavaParameterizedType {
 	}
 
 	/**
-	 * ÒÆ³ıÒ»¸ö¹¹Ôìº¯Êı
+	 * ç§»é™¤ä¸€ä¸ªæ„é€ å‡½æ•°
 	 * 
 	 * @param descriptor
-	 *            ¹¹Ôìº¯ÊıÃèÊö·û
+	 *            æ„é€ å‡½æ•°æè¿°ç¬¦
 	 * @return JavaClass
 	 */
 	public JavaClass removeConstructor(String descriptor) {
@@ -117,17 +117,17 @@ public class JavaClass extends JavaParameterizedType {
 	}
 
 	/**
-	 * @return È«²¿¹¹Ôìº¯Êı
+	 * @return å…¨éƒ¨æ„é€ å‡½æ•°
 	 */
 	public JavaMethod[] getConstructors() {
 		return constructors.toArray(new JavaMethod[constructors.size()]);
 	}
 
 	/**
-	 * Ôö¼ÓÒ»¸ö×Ö¶Î
+	 * å¢åŠ ä¸€ä¸ªå­—æ®µ
 	 * 
 	 * @param field
-	 *            ×Ö¶Î
+	 *            å­—æ®µ
 	 * @return JavaClass
 	 */
 	public JavaClass addfField(JavaField field) {
@@ -137,10 +137,10 @@ public class JavaClass extends JavaParameterizedType {
 	}
 
 	/**
-	 * ÒÆ³ıÒ»¸ö×Ö¶Î
+	 * ç§»é™¤ä¸€ä¸ªå­—æ®µ
 	 * 
 	 * @param field
-	 *            ×Ö¶Î
+	 *            å­—æ®µ
 	 * @return JavaClass
 	 */
 	public JavaClass removeField(String name) {
@@ -151,7 +151,7 @@ public class JavaClass extends JavaParameterizedType {
 	}
 
 	/**
-	 * Çå³ıËùÓĞ×Ö¶Î
+	 * æ¸…é™¤æ‰€æœ‰å­—æ®µ
 	 * 
 	 * @return JavaClass
 	 */
@@ -161,11 +161,11 @@ public class JavaClass extends JavaParameterizedType {
 	}
 
 	/**
-	 * »ñÈ¡Ò»¸ö×Ö¶Î
+	 * è·å–ä¸€ä¸ªå­—æ®µ
 	 * 
 	 * @param name
-	 *            ×Ö¶ÎÃû
-	 * @return ×Ö¶Î
+	 *            å­—æ®µå
+	 * @return å­—æ®µ
 	 */
 	public JavaField getField(String name) {
 		return Srcs.get(fields, name);
@@ -173,15 +173,15 @@ public class JavaClass extends JavaParameterizedType {
 
 	/**
 	 * @param descriptor
-	 *            ×Ö¶ÎÃû
-	 * @return ÊÇ·ñ´æÔÚ
+	 *            å­—æ®µå
+	 * @return æ˜¯å¦å­˜åœ¨
 	 */
 	public boolean hasField(String name) {
 		return null != getField(name);
 	}
 
 	/**
-	 * @return È«²¿×Ö¶Î
+	 * @return å…¨éƒ¨å­—æ®µ
 	 */
 	public JavaField[] getFields() {
 		return fields.toArray(new JavaField[fields.size()]);

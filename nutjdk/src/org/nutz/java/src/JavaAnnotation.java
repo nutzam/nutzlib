@@ -1,7 +1,7 @@
 package org.nutz.java.src;
 
 /**
- * 注解实例
+ * 娉ㄨВ瀹炰緥
  * 
  * @author zozoh(zozohtnt@gmail.com)
  */
@@ -10,17 +10,17 @@ public class JavaAnnotation extends JavaElement {
 	private JavaAnnotationType type;
 
 	/**
-	 * @return 注解类型
+	 * @return 娉ㄨВ绫诲瀷
 	 */
 	public JavaAnnotationType getType() {
 		return type;
 	}
 
 	/**
-	 * 设置注解类型
+	 * 璁剧疆娉ㄨВ绫诲瀷
 	 * 
 	 * @param type
-	 *            注解类型
+	 *            娉ㄨВ绫诲瀷
 	 * @return JavaAnnotation
 	 */
 	public JavaAnnotation setType(JavaAnnotationType type) {

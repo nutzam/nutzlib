@@ -12,14 +12,14 @@ public class Srcs {
 	}
 
 	/**
-	 * È·±£Ä³Ò»¸ö Java ÔªËØ¼¯ºÏÃ»ÓĞÄ³Ò»¸öÔªËØ
+	 * ç¡®ä¿æŸä¸€ä¸ª Java å…ƒç´ é›†åˆæ²¡æœ‰æŸä¸€ä¸ªå…ƒç´ 
 	 * 
 	 * @param list
-	 *            ¼¯ºÏ
+	 *            é›†åˆ
 	 * @param je
-	 *            ÔªËØ
+	 *            å…ƒç´ 
 	 * @throws ElementExistsException
-	 *             Èç¹ûÒÑ´æÔÚ£¬Å×³ö¸ÃÒì³£
+	 *             å¦‚æœå·²å­˜åœ¨ï¼ŒæŠ›å‡ºè¯¥å¼‚å¸¸
 	 */
 	static void assertNoExists(List<? extends JavaElement> list, JavaElement je)
 			throws ElementExistsException {
@@ -30,13 +30,13 @@ public class Srcs {
 	}
 
 	/**
-	 * ´ÓÒ»¸öÔªËØ¼¯ºÏÖĞ»ñÈ¡Ò»¸öÔªËØ
+	 * ä»ä¸€ä¸ªå…ƒç´ é›†åˆä¸­è·å–ä¸€ä¸ªå…ƒç´ 
 	 * 
 	 * @param list
-	 *            ¼¯ºÏ
+	 *            é›†åˆ
 	 * @param e
-	 *            ÔªËØÃèÊö·û
-	 * @return ¼¯ºÏÔªËØ£¬Èç¹û²»´æÔÚ·µ»Ø null
+	 *            å…ƒç´ æè¿°ç¬¦
+	 * @return é›†åˆå…ƒç´ ï¼Œå¦‚æœä¸å­˜åœ¨è¿”å› null
 	 */
 	static <T extends JavaElement> T get(List<T> list, String descriptor) {
 		for (T item : list)

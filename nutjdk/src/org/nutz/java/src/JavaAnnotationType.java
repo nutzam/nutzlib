@@ -1,7 +1,7 @@
 package org.nutz.java.src;
 
 /**
- * ×¢½âÀàĞÍ
+ * æ³¨è§£ç±»å‹
  * 
  * @author zozoh(zozohtnt@gmail.com)
  */

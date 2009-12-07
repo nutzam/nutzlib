@@ -15,12 +15,12 @@ public abstract class JavaElement {
 	}
 
 	/**
-	 * @return µ±Ç°¶ÔÏóµÄ×Ö·ûÃèÊö
+	 * @return å½“å‰å¯¹è±¡çš„å­—ç¬¦æè¿°
 	 */
 	public abstract String getDescriptor();
 
 	/**
-	 * @return ÔªËØÃû
+	 * @return å…ƒç´ å
 	 */
 	public String getName() {
 		return name;
@@ -28,7 +28,7 @@ public abstract class JavaElement {
 
 	/**
 	 * @param name
-	 *            ÔªËØÃû
+	 *            å…ƒç´ å
 	 * @return JavaElement
 	 */
 	public JavaElement setName(String name) {
@@ -37,11 +37,11 @@ public abstract class JavaElement {
 	}
 
 	/**
-	 * µ±Ç°·½·¨ÊÇ·ñÆ¥ÅäÃèÊö·û
+	 * å½“å‰æ–¹æ³•æ˜¯å¦åŒ¹é…æè¿°ç¬¦
 	 * 
 	 * @param descriptor
-	 *            ÃèÊö·û
-	 * @return ÊÇ·ñÆ¥Åä
+	 *            æè¿°ç¬¦
+	 * @return æ˜¯å¦åŒ¹é…
 	 * 
 	 * @see org.nutz.java.src.Describable
 	 */
@@ -50,11 +50,11 @@ public abstract class JavaElement {
 	}
 
 	/**
-	 * ÊÇ·ñºÍÁíÍâÒ»¸öÔªËØÏàµÈ
+	 * æ˜¯å¦å’Œå¦å¤–ä¸€ä¸ªå…ƒç´ ç›¸ç­‰
 	 * 
 	 * @param ele
-	 *            ÁíÍâµÄÔªËØ
-	 * @return ÊÇ·ñÏàµÈ
+	 *            å¦å¤–çš„å…ƒç´ 
+	 * @return æ˜¯å¦ç›¸ç­‰
 	 */
 	public boolean is(JavaElement ele) {
 		if (null == ele)
@@ -79,10 +79,10 @@ public abstract class JavaElement {
 	}
 
 	/**
-	 * Ôö¼ÓÒ»¸ö×¢½â
+	 * å¢åŠ ä¸€ä¸ªæ³¨è§£
 	 * 
 	 * @param ann
-	 *            ×¢½â
+	 *            æ³¨è§£
 	 * @return JavaElement
 	 */
 	public JavaElement addAnnotation(JavaAnnotation ann) throws ElementExistsException {
@@ -91,10 +91,10 @@ public abstract class JavaElement {
 	}
 
 	/**
-	 * ÒÆ³ıÒ»¸ö×¢½â
+	 * ç§»é™¤ä¸€ä¸ªæ³¨è§£
 	 * 
 	 * @param ann
-	 *            ×¢½âÀàĞÍ
+	 *            æ³¨è§£ç±»å‹
 	 * @return JavaElement
 	 */
 	public JavaElement removeAnnotation(JavaAnnotationType annType) {
@@ -105,25 +105,25 @@ public abstract class JavaElement {
 	}
 
 	/**
-	 * ¸ù¾İ×¢½âÀàĞÍ»ñµÃÒ»¸ö×¢½âÊµÀı
+	 * æ ¹æ®æ³¨è§£ç±»å‹è·å¾—ä¸€ä¸ªæ³¨è§£å®ä¾‹
 	 * 
 	 * @param annType
-	 *            ×¢½âÀàĞÍ
-	 * @return ×¢½âÊµÀı
+	 *            æ³¨è§£ç±»å‹
+	 * @return æ³¨è§£å®ä¾‹
 	 */
 	public JavaAnnotation getAnnotation(JavaAnnotationType annType) {
 		return Srcs.get(anns, "@" + annType.getDescriptor());
 	}
 
 	/**
-	 * @return ×¢½âÁĞ±í£¬×ÓÀà×¨ÓÃ
+	 * @return æ³¨è§£åˆ—è¡¨ï¼Œå­ç±»ä¸“ç”¨
 	 */
 	protected List<JavaAnnotation> annotations() {
 		return anns;
 	}
 
 	/**
-	 * Çå³ıËùÓĞµÄ×¢½â
+	 * æ¸…é™¤æ‰€æœ‰çš„æ³¨è§£
 	 * 
 	 * @return JavaElement
 	 */
@@ -134,8 +134,8 @@ public abstract class JavaElement {
 
 	/**
 	 * @param annType
-	 *            ×¢½âÀàĞÍ
-	 * @return ÊÇ·ñ´æÔÚ×¢½â
+	 *            æ³¨è§£ç±»å‹
+	 * @return æ˜¯å¦å­˜åœ¨æ³¨è§£
 	 */
 	public boolean hasAnnotation(JavaAnnotationType annType) {
 		return null != getAnnotation(annType);

@@ -1,7 +1,7 @@
 package org.nutz.java.src;
 
 /**
- * Java µÄ³éÏó¶ÔÏóÀàĞÍ
+ * Java çš„æŠ½è±¡å¯¹è±¡ç±»å‹
  * 
  * @author zozoh(zozohtnt@gmail.com)
  */
@@ -10,17 +10,17 @@ public abstract class JavaType extends JavaElement{
 	private JavaPackage _package;
 
 	/**
-	 * @return È«Ãû
+	 * @return å…¨å
 	 */
 	public String getFullName() {
 		return _package.getFullName() + "." + getName();
 	}
 
 	/**
-	 * ÉèÖÃÈ«Ãû
+	 * è®¾ç½®å…¨å
 	 * 
 	 * @param name
-	 *            È«Ãû
+	 *            å…¨å
 	 * @return JavaType
 	 */
 	public JavaType setFullName(String fullName) {
@@ -31,10 +31,10 @@ public abstract class JavaType extends JavaElement{
 	}
 
 	/**
-	 * ÉèÖÃ°ü
+	 * è®¾ç½®åŒ…
 	 * 
 	 * @param jp
-	 *            °ü
+	 *            åŒ…
 	 * @return JavaType
 	 */
 	public JavaType setPackage(JavaPackage jp) {
@@ -43,7 +43,7 @@ public abstract class JavaType extends JavaElement{
 	}
 
 	/**
-	 * @return °ü
+	 * @return åŒ…
 	 */
 	public JavaPackage getPackage() {
 		return _package;

@@ -5,14 +5,14 @@ import java.util.List;
 import org.nutz.java.exception.ElementExistsException;
 
 /**
- * ·ºĞÍ
+ * æ³›å‹
  * 
  * @author zozoh(zozohtnt@gmail.com)
  */
 public abstract class JavaParameterizedType extends JavaType {
 
 	/**
-	 * ±¾ÀàĞÍÉùÃ÷µÄËùÓĞ·½·¨
+	 * æœ¬ç±»å‹å£°æ˜çš„æ‰€æœ‰æ–¹æ³•
 	 */
 	private List<JavaMethod> methods;
 
@@ -22,27 +22,27 @@ public abstract class JavaParameterizedType extends JavaType {
 	}
 
 	/**
-	 * @return µ±Ç°ÀàĞÍËùÓĞµÄ·½·¨
+	 * @return å½“å‰ç±»å‹æ‰€æœ‰çš„æ–¹æ³•
 	 */
 	public JavaMethod[] getMethods() {
 		return methods.toArray(new JavaMethod[methods.size()]);
 	}
 
 	/**
-	 * @return µ±Ç°ÀàĞÍËùÓĞµÄ·½·¨ÁĞ±í£¬¹©×ÓÀàÊ¹ÓÃ
+	 * @return å½“å‰ç±»å‹æ‰€æœ‰çš„æ–¹æ³•åˆ—è¡¨ï¼Œä¾›å­ç±»ä½¿ç”¨
 	 */
 	protected List<JavaMethod> methods() {
 		return this.methods;
 	}
 
 	/**
-	 * Ìí¼ÓÒ»¸ö·½·¨¡£
+	 * æ·»åŠ ä¸€ä¸ªæ–¹æ³•ã€‚
 	 * 
 	 * @param method
-	 *            ĞÂµÄ·½·¨
+	 *            æ–°çš„æ–¹æ³•
 	 * @return JavaParameterizedType
 	 * @throws ElementExistsException
-	 *             Èç¹ûÒÑ¾­ÓĞÁË¸Ã·½·¨
+	 *             å¦‚æœå·²ç»æœ‰äº†è¯¥æ–¹æ³•
 	 */
 	public JavaParameterizedType addMethod(JavaMethod method) throws ElementExistsException {
 		Srcs.assertNoExists(methods, method);
@@ -51,11 +51,11 @@ public abstract class JavaParameterizedType extends JavaType {
 	}
 
 	/**
-	 * ¸ù¾İÒ»¸ö Java ·½·¨µÄÃèÊö·û£¬»ñµÃÒ»¸ö·½·¨
+	 * æ ¹æ®ä¸€ä¸ª Java æ–¹æ³•çš„æè¿°ç¬¦ï¼Œè·å¾—ä¸€ä¸ªæ–¹æ³•
 	 * 
 	 * @param descriptor
-	 *            ·½·¨ÃèÊö·û
-	 * @return ·½·¨£¬null ±íÊ¾²»´æÔÚ
+	 *            æ–¹æ³•æè¿°ç¬¦
+	 * @return æ–¹æ³•ï¼Œnull è¡¨ç¤ºä¸å­˜åœ¨
 	 * 
 	 * @see org.nutz.java.src.Describable
 	 */
@@ -65,15 +65,15 @@ public abstract class JavaParameterizedType extends JavaType {
 
 	/**
 	 * @param descriptor
-	 *            ·½·¨ÃèÊö·û
-	 * @return ·½·¨ÊÇ·ñ´æÔÚ
+	 *            æ–¹æ³•æè¿°ç¬¦
+	 * @return æ–¹æ³•æ˜¯å¦å­˜åœ¨
 	 */
 	public boolean hasMethod(String descriptor) {
 		return null != getMethod(descriptor);
 	}
 
 	/**
-	 * Çå³ıµ±Ç°ÀàĞÍÉùÃ÷µÄËùÓĞ·½·¨
+	 * æ¸…é™¤å½“å‰ç±»å‹å£°æ˜çš„æ‰€æœ‰æ–¹æ³•
 	 * 
 	 * @return JavaParameterizedType
 	 */
@@ -83,10 +83,10 @@ public abstract class JavaParameterizedType extends JavaType {
 	}
 
 	/**
-	 * ÒÆ³ıÒ»¸ö·½·¨
+	 * ç§»é™¤ä¸€ä¸ªæ–¹æ³•
 	 * 
 	 * @param method
-	 *            ·½·¨
+	 *            æ–¹æ³•
 	 * @return JavaParameterizedType
 	 */
 	public JavaParameterizedType removeMethod(JavaMethod method) {
@@ -95,10 +95,10 @@ public abstract class JavaParameterizedType extends JavaType {
 	}
 
 	/**
-	 * ÒÆ³ıÒ»¸ö·½·¨
+	 * ç§»é™¤ä¸€ä¸ªæ–¹æ³•
 	 * 
 	 * @param descriptor
-	 *            ·½·¨ÃèÊö·û
+	 *            æ–¹æ³•æè¿°ç¬¦
 	 * @return JavaParameterizedType
 	 */
 	public JavaParameterizedType removeMethod(String descriptor) {
