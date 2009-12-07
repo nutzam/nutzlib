@@ -25,10 +25,16 @@ public class NutClassGenerator implements ClassAgent {
 
 	@SuppressWarnings("unchecked")
 	public <T> Class<T> define(Class<T> klass) {
+		if(klass == null)
+			return klass;
+		if(klass.isInterface() || klass.isArray() 
+				|| klass.isEnum() || klass.isPrimitive()
+				|| klass.isMemberClass() )
+			return klass;
 		Pair2[] pair2s = findMatchedMethod(klass);
 		if (pair2s.length == 0)
 			return klass;
-		String newName = klass.getName() + "$$Nut";
+		String newName = klass.getName() + CLASSNAME_SUFFIX;
 		ClassLoader classLoader = getClass().getClassLoader();
 		try {
 			return (Class<T>) Class.forName(newName, false, classLoader);
