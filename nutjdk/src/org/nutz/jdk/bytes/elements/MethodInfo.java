@@ -4,55 +4,50 @@ import org.nutz.jdk.bytes.attr.Attr;
 
 public class MethodInfo {
 
-	private short accessFlags;
-	private short nameIndex;
-	private short descriptorIndex;
-	private short attributesCount;
-	private Attr attributes[];
+	private int accFlag;
+	private int nameIdx;
+	private int desIdx;
+	private int attrCount;
+	private Attr attrs[];
 
-	public short getAccessFlags() {
-		return accessFlags;
+	public int getAccFlag() {
+		return accFlag;
 	}
 
-	public MethodInfo setAccessFlags(short accessFlags) {
-		this.accessFlags = accessFlags;
-		return this;
+	public void setAccFlag(int accFlag) {
+		this.accFlag = accFlag;
 	}
 
-	public short getNameIndex() {
-		return nameIndex;
+	public int getNameIdx() {
+		return nameIdx;
 	}
 
-	public MethodInfo setNameIndex(short nameIndex) {
-		this.nameIndex = nameIndex;
-		return this;
+	public void setNameIdx(int nameIdx) {
+		this.nameIdx = nameIdx;
 	}
 
-	public short getDescriptorIndex() {
-		return descriptorIndex;
+	public int getDesIdx() {
+		return desIdx;
 	}
 
-	public MethodInfo setDescriptorIndex(short descriptorIndex) {
-		this.descriptorIndex = descriptorIndex;
-		return this;
+	public void setDesIdx(int desIdx) {
+		this.desIdx = desIdx;
 	}
 
-	public short getAttributesCount() {
-		return attributesCount;
+	public int getAttrCount() {
+		return attrCount;
 	}
 
-	public MethodInfo setAttributesCount(short attributesCount) {
-		this.attributesCount = attributesCount;
-		return this;
+	public void setAttrCount(int attrCount) {
+		this.attrCount = attrCount;
 	}
 
-	public Attr[] getAttributes() {
-		return attributes;
+	public Attr[] getAttrs() {
+		return attrs;
 	}
 
-	public MethodInfo setAttributes(Attr[] attributes) {
-		this.attributes = attributes;
-		return this;
+	public void setAttrs(Attr[] attrs) {
+		this.attrs = attrs;
 	}
 
 }

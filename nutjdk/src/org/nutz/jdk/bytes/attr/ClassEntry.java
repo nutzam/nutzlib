@@ -1,41 +1,41 @@
 package org.nutz.jdk.bytes.attr;
 
 public class ClassEntry {
-	private int inIndex;
-	private int outIndex;
-	private int inNameIndex;
-	private int inAccessFlag;
+	private int inIdx;
+	private int outIdx;
+	private int inNameIdx;
+	private int inAccFlag;
 
-	public int getInIndex() {
-		return inIndex;
+	public int getInIdx() {
+		return inIdx;
 	}
 
-	public void setInIndex(int inIndex) {
-		this.inIndex = inIndex;
+	public void setInIdx(int inIdx) {
+		this.inIdx = inIdx;
 	}
 
-	public int getOutIndex() {
-		return outIndex;
+	public int getOutIdx() {
+		return outIdx;
 	}
 
-	public void setOutIndex(int outIndex) {
-		this.outIndex = outIndex;
+	public void setOutIdx(int outIdx) {
+		this.outIdx = outIdx;
 	}
 
-	public int getInNameIndex() {
-		return inNameIndex;
+	public int getInNameIdx() {
+		return inNameIdx;
 	}
 
-	public void setInNameIndex(int inNameIndex) {
-		this.inNameIndex = inNameIndex;
+	public void setInNameIdx(int inNameIdx) {
+		this.inNameIdx = inNameIdx;
 	}
 
-	public int getInAccessFlag() {
-		return inAccessFlag;
+	public int getInAccFlag() {
+		return inAccFlag;
 	}
 
-	public void setInAccessFlag(int inAccessFlag) {
-		this.inAccessFlag = inAccessFlag;
+	public void setInAccFlag(int inAccFlag) {
+		this.inAccFlag = inAccFlag;
 	}
 
 }
