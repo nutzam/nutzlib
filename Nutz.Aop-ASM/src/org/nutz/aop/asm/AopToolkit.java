@@ -111,7 +111,7 @@ public final class AopToolkit implements Opcodes{
 		mv.visitEnd();
 	}
 
-	private static void addMethod_whenError(ClassVisitor cv, String _Nut_myName) {
+	private static void addMethod_after(ClassVisitor cv, String _Nut_myName) {
 		MethodVisitor mv = cv.visitMethod(ACC_PRIVATE + ACC_VARARGS, "_Nut_after", "(ILjava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;", null, null);
 		mv.visitCode();
 		mv.visitFieldInsn(GETSTATIC, _Nut_myName, "_$$Nut_methodArray", "[Ljava/lang/reflect/Method;");
@@ -197,7 +197,7 @@ public final class AopToolkit implements Opcodes{
 		mv.visitEnd();
 	}
 
-	private static void addMethod_after(ClassVisitor cw, String _Nut_myName) {
+	private static void addMethod_whenError(ClassVisitor cw, String _Nut_myName) {
 		MethodVisitor mv = cw.visitMethod(ACC_PRIVATE + ACC_VARARGS, "_Nut_Error", "(ILjava/lang/Throwable;[Ljava/lang/Object;)Z", null, null);
 		mv.visitCode();
 		mv.visitFieldInsn(GETSTATIC, _Nut_myName, "_$$Nut_methodArray", "[Ljava/lang/reflect/Method;");
