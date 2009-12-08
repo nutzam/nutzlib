@@ -166,4 +166,15 @@ public class Aop1 {
 		
 	}
 	
+	public Runnable getRunnable(){
+		return new Thread();
+	}
+	
+	public Enum<?> getEnum(){
+		return null;
+	}
+	
+	public void getXXX(Enum<?> enumZ){
+		
+	}
 }

@@ -73,6 +73,8 @@ public class Main2 {
 			Constructor<?> constructor = a1.getClass().getConstructor(new Class<?>[]{Object.class,Object.class});
 			System.out.println("构造方法:"+constructor+" \n带有的异常:"+Castors.me().castToString(constructor.getExceptionTypes()));
 		}
+		a1.getRunnable();
+		a1.getEnum();
 		System.out.println("-Demo Over-");
 	}
 
