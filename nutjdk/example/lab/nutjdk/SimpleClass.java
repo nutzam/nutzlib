@@ -11,10 +11,6 @@ public class SimpleClass {
 		this.str = str;
 	}
 
-	String evalString() {
-		if (num > 10)
-			return str + "10";
-		return str + num;
-	}
+	
 
 }
