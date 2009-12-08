@@ -31,10 +31,14 @@ public class NutClassGenerator implements ClassAgent {
 				|| klass.isEnum() || klass.isPrimitive()
 				|| klass.isMemberClass() )
 			return klass;
+		String newName = klass.getName() + CLASSNAME_SUFFIX;
+		try {
+			return (Class<T>)generatorClassLoader.loadClass(newName);
+		} catch (ClassNotFoundException e3) {
+		}
 		Pair2[] pair2s = findMatchedMethod(klass);
 		if (pair2s.length == 0)
 			return klass;
-		String newName = klass.getName() + CLASSNAME_SUFFIX;
 		ClassLoader classLoader = getClass().getClassLoader();
 		try {
 			return (Class<T>) Class.forName(newName, false, classLoader);
@@ -45,10 +49,6 @@ public class NutClassGenerator implements ClassAgent {
 				try {
 					return (Class<T>) classLoader.loadClass(newName);
 				} catch (ClassNotFoundException e) {
-					try {
-						return (Class<T>)generatorClassLoader.loadClass(newName);
-					} catch (ClassNotFoundException e3) {
-					}
 				}
 			}
 		}
