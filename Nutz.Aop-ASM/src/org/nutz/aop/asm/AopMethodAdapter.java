@@ -53,7 +53,6 @@ class AopMethodAdapter extends NullMethodAdapter {
 		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_before", "(I[Ljava/lang/Object;)Z");
 		Label l4 = new Label();
 		mv.visitJumpInsn(IFEQ, l4);
-//		mv.visitJumpInsn(IFEQ, l1);
 		mv.visitVarInsn(ALOAD, 0);
 		loadArgs();
 		mv.visitMethodInsn(INVOKESPECIAL, enhancedSuperName, methodName, desc);
@@ -66,8 +65,6 @@ class AopMethodAdapter extends NullMethodAdapter {
 		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_after", "(ILjava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;");
 		mv.visitInsn(POP);
 		mv.visitLabel(l1);
-//		mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-//		mv.visitInsn(RETURN);
 		Label l5 = new Label();
 		mv.visitJumpInsn(GOTO, l5);
 		mv.visitLabel(l2);
@@ -78,26 +75,17 @@ class AopMethodAdapter extends NullMethodAdapter {
 		mv.visitVarInsn(ALOAD, lastIndex);
 		loadArgsAsArray();
 		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_Exception", "(ILjava/lang/Exception;[Ljava/lang/Object;)Z");
-//		mv.visitVarInsn(ALOAD, lastIndex);
-//		mv.visitMethodInsn(INVOKESTATIC, "org/nutz/lang/Lang", "wrapThrow", "(Ljava/lang/Throwable;)Ljava/lang/RuntimeException;");
-//		mv.visitInsn(ATHROW);
-//		mv.visitJumpInsn(GOTO, l5);
 		mv.visitJumpInsn(IFEQ, l5);
 		mv.visitVarInsn(ALOAD, lastIndex);
 		mv.visitInsn(ATHROW);
-		
 		mv.visitLabel(l3);
 		mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[] {"java/lang/Throwable"});
 		mv.visitVarInsn(ASTORE, lastIndex);
 		mv.visitVarInsn(ALOAD, 0);
 		mv.visitIntInsn(SIPUSH, methodIndex);
 		mv.visitVarInsn(ALOAD, lastIndex);
-//		mv.visitInsn(ACONST_NULL);
 		loadArgsAsArray();
 		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_Error", "(ILjava/lang/Throwable;[Ljava/lang/Object;)Z");
-//		mv.visitVarInsn(ALOAD, lastIndex);
-//		mv.visitMethodInsn(INVOKESTATIC, "org/nutz/lang/Lang", "wrapThrow", "(Ljava/lang/Throwable;)Ljava/lang/RuntimeException;");
-//		mv.visitInsn(ATHROW);
 		mv.visitJumpInsn(IFEQ, l5);
 		mv.visitVarInsn(ALOAD, lastIndex);
 		mv.visitInsn(ATHROW);
