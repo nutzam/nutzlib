@@ -31,11 +31,9 @@ public class NutClassGenerator implements ClassAgent {
 				|| klass.isEnum() || klass.isPrimitive()
 				|| klass.isMemberClass() )
 			return klass;
+		if(klass.getName().endsWith(CLASSNAME_SUFFIX))
+			return klass;
 		String newName = klass.getName() + CLASSNAME_SUFFIX;
-		try {
-			return (Class<T>)generatorClassLoader.loadClass(newName);
-		} catch (ClassNotFoundException e3) {
-		}
 		Pair2[] pair2s = findMatchedMethod(klass);
 		if (pair2s.length == 0)
 			return klass;
@@ -49,6 +47,10 @@ public class NutClassGenerator implements ClassAgent {
 				try {
 					return (Class<T>) classLoader.loadClass(newName);
 				} catch (ClassNotFoundException e) {
+					try {
+						return (Class<T>) generatorClassLoader.loadClass(newName);
+					} catch (ClassNotFoundException e3) {
+					}
 				}
 			}
 		}
@@ -85,7 +87,7 @@ public class NutClassGenerator implements ClassAgent {
 				p2.add(new Pair2(m, mls));
 			}
 		}
-		System.out.println("共有"+p2.size()+"个方法需要拦截");
+//		System.out.println("共有"+p2.size()+"个方法需要拦截");
 		return p2.toArray(new Pair2[p2.size()] );
 	}
 

@@ -21,7 +21,7 @@ public final class AopToolkit implements Opcodes{
 			Mirror<T> mirror = Mirror.me(newClass);
 			mirror.setValue(null, "_$$Nut_methodArray", methodArray);
 			mirror.setValue(null, "_$$Nut_methodInterceptorList", methodInterceptorList);
-			System.out.println("Aop变量赋值成功");
+//			System.out.println("Aop变量赋值成功");
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}

@@ -32,9 +32,10 @@ public class ClassXTest extends TestCase{
 	@Test
 	public void testDupAop(){
 		Class<Aop1> klass = Aop1.class;
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10000; i++) {
 			klass = classAgent.define(klass);
 		}
+		System.out.println(klass);
 		assertFalse(Aop1.class == klass);
 	}
 	
@@ -45,9 +46,10 @@ public class ClassXTest extends TestCase{
 		a1.returnObjectArray();
 	}
 
-	public void testCreate2(){
-		Object obj = classAgent.define(Aop1.class);
-		Object obj2 = classAgent.define(Aop1.class);
+	@Test
+	public void testCreate2() throws Throwable{
+		Class<?> obj = classAgent.define(Aop1.class);
+		Class<?> obj2 = classAgent.define(Aop1.class);
 		assertEquals(obj, obj2);
 	}
 }
