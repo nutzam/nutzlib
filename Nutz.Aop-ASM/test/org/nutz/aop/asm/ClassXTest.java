@@ -24,9 +24,9 @@ public class ClassXTest extends TestCase{
 		classAgent.define(getClass());
 	}
 	
-	@Test public void testInterface(){
-		Class<?> aopClass = classAgent.define(Runnable.class);
-		assertTrue(aopClass == Runnable.class);
+	@Test(expected=RuntimeException.class)
+	public void testInterface(){
+		classAgent.define(Runnable.class);
 	}
 	
 	@Test
@@ -51,5 +51,74 @@ public class ClassXTest extends TestCase{
 		Class<?> obj = classAgent.define(Aop1.class);
 		Class<?> obj2 = classAgent.define(Aop1.class);
 		assertEquals(obj, obj2);
+	}
+	
+	@Test
+	public void testConstructors(){
+		getNewInstance(Aop1.class);
+	}
+	
+	@Test
+	public void testConstructor2(){
+		Class<Aop1> newClass = classAgent.define(Aop1.class);
+		assertTrue(newClass.getDeclaredConstructors().length > 0);
+	}
+
+	@Test
+	public void testReturnPrimitive(){
+		Aop1 a1 = getNewInstance(Aop1.class);
+		a1.returnLong();
+		a1.returnBoolean();
+		a1.returnByte();
+		a1.returnChar();
+		a1.returnFloat();
+		a1.returnShort();
+		a1.returnDouble();
+	}
+
+	@Test
+	public void testReturnPrimitiveArray(){
+		Aop1 a1 = getNewInstance(Aop1.class);
+		a1.returnLongArray();
+		a1.returnBooleanArray();
+		a1.returnByteArray();
+		a1.returnCharArray();
+		a1.returnFloatArray();
+		a1.returnShortArray();
+		a1.returnDoubleArray();
+	}
+
+	@Test
+	public void testReturnObject() throws Throwable{
+		Aop1 a1 = getNewInstance(Aop1.class);
+		a1.returnString();
+		a1.returnObjectArray();
+		a1.getRunnable();
+		a1.getEnum();
+	}
+	
+	@Test(expected=Throwable.class)
+	public void testThrowError() throws Throwable{
+		Aop1 a1 = getNewInstance(Aop1.class);
+		a1.throwError();
+	}
+	
+	@Test
+	public void testArgs() throws Throwable{
+		Aop1 a1 = getNewInstance(Aop1.class);
+		a1.nonArgsVoid();
+		a1.argsVoid("Wendal is the best!");
+		a1.mixObjectsVoid("Arg1", new Object(), 1, null);
+		a1.mixArgsVoid("XX", "WendalXXX", 0, 'c', 1L, 9090L);
+		a1.mixArgsVoid2("Aop1", Boolean.TRUE, 8888, 'p', 34L, false, 'b', "Gp", null, null, 23L,
+				90L, 78L);
+		String result = String.valueOf(a1.mixArgsVoid4("WendalXXX"));
+		assertEquals("WendalXXX", result);
+	}
+
+	private <T> T getNewInstance(Class<T> klass){
+		Class<T> newClass = classAgent.define(klass);
+		Mirror<T> mirror = Mirror.me(newClass);
+		return  mirror.born("Nutz");
 	}
 }

@@ -76,9 +76,8 @@ public class Aop1 {
 	// return mixArgsVoid4(x);
 	// }
 	//	
-	public Object mixArgsVoid4(String x) {
-		System.out.println("I am here");
-		return "X";
+	public Object mixArgsVoid4(String x) throws Throwable{
+		return x;
 	}
 
 	public String returnString() throws Throwable{

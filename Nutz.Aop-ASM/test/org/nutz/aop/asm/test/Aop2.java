@@ -130,20 +130,23 @@ public class Aop2 extends Aop1 {
 //		return null;
 //	}
 
-//	public Object mixArgsVoid4(String x) {
-//		try {
-//			Object _result = null;
-//			if (_Nut_before(188, x)) {
-//				 _result = super.mixArgsVoid4(x);
-//			}
-//			return _Nut_after(188, _result, x);
-//		} catch (Exception e) {
-//			_Nut_Exception(188, e, x);
-//		} catch (Throwable e) {
-//			_Nut_Error(188, e, x);
-//		}
-//			return null;
-//	}
+	@Override
+	public Object mixArgsVoid4(String x) throws Throwable{
+		try {
+			Object result = null;
+			if (_Nut_before(188,x)) {
+				result = super.mixArgsVoid4(x);
+			}
+			return _Nut_after(188, result,x);
+		} catch (Exception e) {
+			if(_Nut_Exception(188, e,x))
+				throw e;
+		} catch (Throwable e) {
+			if(_Nut_Error(188, e,x))
+				throw e;
+		}
+		return null;
+	}
 
 	@Override
 	public String returnString() throws Throwable{

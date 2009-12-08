@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import org.nutz.lang.Lang;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -25,7 +26,7 @@ public final class ClassX implements Opcodes{
 		this.klass = kclass;
 		this.myName = myName.replace('.', '/');
 		this.enhancedSuperName = klass.getName().replace('.', '/');
-		this.cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+		this.cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
 		cw.visit(V1_6, ACC_PUBLIC, this.myName, "", enhancedSuperName, new String[]{});
 		this.methodArray = methodArray;
 	}
@@ -36,12 +37,16 @@ public final class ClassX implements Opcodes{
 	
 	protected void addConstructors(){
 		Constructor<?> [] constructors = klass.getDeclaredConstructors();
+		int vaildConstructor = 0;
 		for (int i = 0; i < constructors.length; i++) {
 			Constructor<?> constructor = constructors[i];
 			if(Modifier.isPrivate(constructor.getModifiers()))
 				continue;
 			addConstructor(constructor);
+			vaildConstructor++;
 		}
+		if(vaildConstructor == 0)
+			Lang.makeThrow("没有找到任何非private的构造方法,无法创建子类!");
 	}
 	
 	protected void addConstructor(Constructor<?> constructor){

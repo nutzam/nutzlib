@@ -8,6 +8,7 @@ import java.util.List;
 import org.nutz.aop.ClassAgent;
 import org.nutz.aop.MethodInterceptor;
 import org.nutz.aop.MethodMatcher;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Mirror;
 
 public class AsmClassAgent implements ClassAgent {
@@ -27,13 +28,16 @@ public class AsmClassAgent implements ClassAgent {
 	public <T> Class<T> define(Class<T> klass) {
 		if(klass == null)
 			return klass;
+		String klass_name = klass.getName();
 		if(klass.isInterface() || klass.isArray() 
 				|| klass.isEnum() || klass.isPrimitive()
 				|| klass.isMemberClass() )
-			return klass;
+			throw Lang.makeThrow("需要拦截的%s不是一个顶层类!创建失败!",klass_name);
+		if(Modifier.isFinal(klass.getModifiers()))
+			throw Lang.makeThrow("需要拦截的类:%s是final的!创建失败!",klass_name);
 		if(klass.getName().endsWith(CLASSNAME_SUFFIX))
 			return klass;
-		String newName = klass.getName() + CLASSNAME_SUFFIX;
+		String newName = klass_name + CLASSNAME_SUFFIX;
 		Pair2[] pair2s = findMatchedMethod(klass);
 		if (pair2s.length == 0)
 			return klass;
@@ -61,15 +65,10 @@ public class AsmClassAgent implements ClassAgent {
 			methodArray[i] = pair2.method;
 			methodInterceptorList[i] = pair2.listeners;
 		}
-		try {
-			Class<T> newClass = (Class<T>) generatorClassLoader.defineClassFromClassFile(newName, 
+		Class<T> newClass = (Class<T>) generatorClassLoader.defineClassFromClassFile(newName, 
 					ClassX.enhandClass(klass, newName, methodArray));
-			AopToolkit.injectFieldValue(newClass, methodArray,methodInterceptorList);
-			return newClass;
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		return null;
+		AopToolkit.injectFieldValue(newClass, methodArray,methodInterceptorList);
+		return newClass;
 	}
 
 	private <T> Pair2[] findMatchedMethod(Class<T> klass) {
