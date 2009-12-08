@@ -14,7 +14,7 @@ public class ClassXTest extends TestCase{
 	ClassAgent classAgent;
 	
 	public void setUp(){
-		classAgent = new NutClassGenerator();
+		classAgent = new AsmClassAgent();
 		classAgent.addListener(new RegexMethodMatcher(".*")	, new AbstractMethodInterceptor(){});
 	}
 	

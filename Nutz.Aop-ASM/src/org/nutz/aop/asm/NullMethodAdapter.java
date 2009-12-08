@@ -6,11 +6,11 @@ import org.objectweb.asm.Type;
 
 public abstract class NullMethodAdapter{
 	
-	protected String desc;
+	protected final String desc;
 	
-	protected int access;
+	protected final int access;
 	
-	protected MethodVisitor mv;
+	protected final MethodVisitor mv;
 	
     /**
      * Argument types of the method visited by this adapter.
@@ -18,11 +18,10 @@ public abstract class NullMethodAdapter{
     protected final Type[] argumentTypes;
 
 	public NullMethodAdapter(MethodVisitor mv,String desc,int access) {
-//		super(mv);
 		this.mv = mv;
 		this.desc = desc;
 		this.access = access;
-		argumentTypes = Type.getArgumentTypes(desc);
+		argumentTypes = Type.getArgumentTypes(this.desc);
 	}
 	
 	public abstract void visitCode() ;
@@ -34,7 +33,7 @@ public abstract class NullMethodAdapter{
         loadArgs(0, argumentTypes.length);
     }
     
-    public void loadArgs(final int arg, final int count) {
+    void loadArgs(final int arg, final int count) {
         int index = getArgIndex(arg);
         for (int i = 0; i < count; ++i) {
             Type t = argumentTypes[arg + i];
@@ -44,7 +43,7 @@ public abstract class NullMethodAdapter{
     }
     
     protected int getArgIndex(final int arg) {
-        int index = (access & Opcodes.ACC_STATIC) == 0 ? 1 : 0;
+        int index = 1;
         for (int i = 0; i < arg; i++) {
             index += argumentTypes[i].getSize();
         }

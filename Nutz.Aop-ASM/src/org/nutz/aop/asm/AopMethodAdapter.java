@@ -7,7 +7,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
-class AopMethodAdapter extends NullMethodAdapter {
+final class AopMethodAdapter extends NullMethodAdapter {
 	private int methodIndex;
 
 	private String myName;

@@ -1,47 +1,28 @@
 package org.nutz.aop.asm;
 
-import java.io.FileOutputStream;
 import java.lang.reflect.Method;
 import java.util.List;
 
 import org.nutz.aop.MethodInterceptor;
-import org.nutz.aop.asm.test.Aop1;
 import org.nutz.lang.Mirror;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.util.ASMifierClassVisitor;
 
-public final class AopToolkit implements Opcodes{
+final class AopToolkit implements Opcodes{
+
+	public static final String MethodArray_FieldName = "_$$Nut_methodArray";
+	public static final String MethodInterceptorList_FieldName = "_$$Nut_methodInterceptorList";
 
 	public static <T> void injectFieldValue(Class<T> newClass, Method[] methodArray, List<MethodInterceptor>[] methodInterceptorList) {
 		try {
 			Mirror<T> mirror = Mirror.me(newClass);
-			mirror.setValue(null, "_$$Nut_methodArray", methodArray);
-			mirror.setValue(null, "_$$Nut_methodInterceptorList", methodInterceptorList);
-//			System.out.println("Aop变量赋值成功");
+			mirror.setValue(null, MethodArray_FieldName, methodArray);
+			mirror.setValue(null, MethodInterceptorList_FieldName, methodInterceptorList);
 		} catch (Throwable e) {
 			e.printStackTrace();
-		}
-	}
-
-	public static void main(String[] args) throws Throwable{
-		String newName = Aop1.class.getName().replace('1', '2');
-		byte [] data = ClassX.enhandClass(Aop1.class, newName, Aop1.class.getMethods());
-		printClass(newName, data);
-	}
-	
-	static void printClass(String newName, byte [] tmpData){
-		try {
-			FileOutputStream fw = new FileOutputStream(newName + ".class");
-			fw.write(tmpData);
-			fw.flush();
-			fw.close();
-			ASMifierClassVisitor.main(new String[] { newName + ".class" });
-		} catch (Throwable e1) {
-			e1.printStackTrace();
 		}
 	}
 
@@ -51,12 +32,12 @@ public final class AopToolkit implements Opcodes{
 	}
 	
 	static void addMethodArrayFiled(ClassVisitor cv){
-		FieldVisitor fv = cv.visitField(ACC_PRIVATE + ACC_STATIC, "_$$Nut_methodArray", "[Ljava/lang/reflect/Method;", null, null);
+		FieldVisitor fv = cv.visitField(ACC_PRIVATE + ACC_STATIC, MethodArray_FieldName, "[Ljava/lang/reflect/Method;", null, null);
 		fv.visitEnd();
 	}
 	
 	static void addMethodInterceptorListField(ClassVisitor cv){
-		FieldVisitor fv = cv.visitField(ACC_PRIVATE + ACC_STATIC, "_$$Nut_methodInterceptorList", "[Ljava/util/List;", "[Ljava/util/List<Lorg/nutz/aop/MethodInterceptor;>;", null);
+		FieldVisitor fv = cv.visitField(ACC_PRIVATE + ACC_STATIC, MethodInterceptorList_FieldName, "[Ljava/util/List;", "[Ljava/util/List<Lorg/nutz/aop/MethodInterceptor;>;", null);
 		fv.visitEnd();
 	}
 	
@@ -70,11 +51,11 @@ public final class AopToolkit implements Opcodes{
 	static void addMethod_before(ClassVisitor cv, String _Nut_myName){
 		MethodVisitor mv = cv.visitMethod(ACC_PRIVATE + ACC_VARARGS, "_Nut_before", "(I[Ljava/lang/Object;)Z", null, null);
 		mv.visitCode();
-		mv.visitFieldInsn(GETSTATIC, _Nut_myName, "_$$Nut_methodArray", "[Ljava/lang/reflect/Method;");
+		mv.visitFieldInsn(GETSTATIC, _Nut_myName, MethodArray_FieldName, "[Ljava/lang/reflect/Method;");
 		mv.visitVarInsn(ILOAD, 1);
 		mv.visitInsn(AALOAD);
 		mv.visitVarInsn(ASTORE, 3);
-		mv.visitFieldInsn(GETSTATIC, _Nut_myName, "_$$Nut_methodInterceptorList", "[Ljava/util/List;");
+		mv.visitFieldInsn(GETSTATIC, _Nut_myName, MethodInterceptorList_FieldName, "[Ljava/util/List;");
 		mv.visitVarInsn(ILOAD, 1);
 		mv.visitInsn(AALOAD);
 		mv.visitVarInsn(ASTORE, 4);
@@ -114,11 +95,11 @@ public final class AopToolkit implements Opcodes{
 	private static void addMethod_after(ClassVisitor cv, String _Nut_myName) {
 		MethodVisitor mv = cv.visitMethod(ACC_PRIVATE + ACC_VARARGS, "_Nut_after", "(ILjava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;", null, null);
 		mv.visitCode();
-		mv.visitFieldInsn(GETSTATIC, _Nut_myName, "_$$Nut_methodArray", "[Ljava/lang/reflect/Method;");
+		mv.visitFieldInsn(GETSTATIC, _Nut_myName, MethodArray_FieldName, "[Ljava/lang/reflect/Method;");
 		mv.visitVarInsn(ILOAD, 1);
 		mv.visitInsn(AALOAD);
 		mv.visitVarInsn(ASTORE, 4);
-		mv.visitFieldInsn(GETSTATIC, _Nut_myName, "_$$Nut_methodInterceptorList", "[Ljava/util/List;");
+		mv.visitFieldInsn(GETSTATIC, _Nut_myName, MethodInterceptorList_FieldName, "[Ljava/util/List;");
 		mv.visitVarInsn(ILOAD, 1);
 		mv.visitInsn(AALOAD);
 		mv.visitVarInsn(ASTORE, 5);
@@ -155,11 +136,11 @@ public final class AopToolkit implements Opcodes{
 	private static void addMethod_whenExption(ClassVisitor cw, String _Nut_myName) {
 		MethodVisitor mv = cw.visitMethod(ACC_PRIVATE + ACC_VARARGS, "_Nut_Exception", "(ILjava/lang/Exception;[Ljava/lang/Object;)Z", null, null);
 		mv.visitCode();
-		mv.visitFieldInsn(GETSTATIC, _Nut_myName, "_$$Nut_methodArray", "[Ljava/lang/reflect/Method;");
+		mv.visitFieldInsn(GETSTATIC, _Nut_myName, MethodArray_FieldName, "[Ljava/lang/reflect/Method;");
 		mv.visitVarInsn(ILOAD, 1);
 		mv.visitInsn(AALOAD);
 		mv.visitVarInsn(ASTORE, 4);
-		mv.visitFieldInsn(GETSTATIC, _Nut_myName, "_$$Nut_methodInterceptorList", "[Ljava/util/List;");
+		mv.visitFieldInsn(GETSTATIC, _Nut_myName, MethodInterceptorList_FieldName, "[Ljava/util/List;");
 		mv.visitVarInsn(ILOAD, 1);
 		mv.visitInsn(AALOAD);
 		mv.visitVarInsn(ASTORE, 5);
@@ -200,11 +181,11 @@ public final class AopToolkit implements Opcodes{
 	private static void addMethod_whenError(ClassVisitor cw, String _Nut_myName) {
 		MethodVisitor mv = cw.visitMethod(ACC_PRIVATE + ACC_VARARGS, "_Nut_Error", "(ILjava/lang/Throwable;[Ljava/lang/Object;)Z", null, null);
 		mv.visitCode();
-		mv.visitFieldInsn(GETSTATIC, _Nut_myName, "_$$Nut_methodArray", "[Ljava/lang/reflect/Method;");
+		mv.visitFieldInsn(GETSTATIC, _Nut_myName, MethodArray_FieldName, "[Ljava/lang/reflect/Method;");
 		mv.visitVarInsn(ILOAD, 1);
 		mv.visitInsn(AALOAD);
 		mv.visitVarInsn(ASTORE, 4);
-		mv.visitFieldInsn(GETSTATIC, _Nut_myName, "_$$Nut_methodInterceptorList", "[Ljava/util/List;");
+		mv.visitFieldInsn(GETSTATIC, _Nut_myName, MethodInterceptorList_FieldName, "[Ljava/util/List;");
 		mv.visitVarInsn(ILOAD, 1);
 		mv.visitInsn(AALOAD);
 		mv.visitVarInsn(ASTORE, 5);

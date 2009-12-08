@@ -15,7 +15,7 @@ public class Main2 {
 
 	public static void main(String[] args) throws Throwable {
 
-		ClassAgent agent = new NutClassGenerator();
+		ClassAgent agent = new AsmClassAgent();
 		agent.addListener(Aop.matcher(".*"), new MyMethodInterceptor());
 		Class<Aop1> classZ = agent.define(Aop1.class);
 		System.out.println(classZ);

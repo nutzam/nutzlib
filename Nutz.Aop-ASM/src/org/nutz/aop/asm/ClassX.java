@@ -9,7 +9,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
-public class ClassX implements Opcodes{
+public final class ClassX implements Opcodes{
 	
 	private Class<?> klass;
 	
@@ -104,7 +104,7 @@ public class ClassX implements Opcodes{
 		return -1;
 	}
 
-	public byte[] toByteArray(){
+	protected byte[] toByteArray(){
 		addField();
 		addConstructors();
 		addAopMethods();

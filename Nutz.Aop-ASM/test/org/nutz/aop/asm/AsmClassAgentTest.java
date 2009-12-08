@@ -7,6 +7,6 @@ public class AsmClassAgentTest extends JavassistClassAgentTest{
 
 	@Override
 	public ClassAgent getNewClassAgent() {
-		return new NutClassGenerator();
+		return new AsmClassAgent();
 	}
 }

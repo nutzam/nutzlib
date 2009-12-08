@@ -15,7 +15,7 @@ import org.nutz.log.Log;
  * <p/>
  * 3. 包含四个静态方法, 用于被Aop拦截的方法进行调用.
  * 
- * @author zcchen
+ * @author wendal(wendal1985@gmail.com)
  * 
  */
 public class Aop2 extends Aop1 {
