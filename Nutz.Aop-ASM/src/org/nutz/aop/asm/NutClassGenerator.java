@@ -45,6 +45,10 @@ public class NutClassGenerator implements ClassAgent {
 				try {
 					return (Class<T>) classLoader.loadClass(newName);
 				} catch (ClassNotFoundException e) {
+					try {
+						return (Class<T>)generatorClassLoader.loadClass(newName);
+					} catch (ClassNotFoundException e3) {
+					}
 				}
 			}
 		}

@@ -2,7 +2,6 @@ package org.nutz.aop.asm;
 
 import junit.framework.TestCase;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.nutz.aop.AbstractMethodInterceptor;
 import org.nutz.aop.ClassAgent;
@@ -14,8 +13,7 @@ public class ClassXTest extends TestCase{
 	
 	ClassAgent classAgent;
 	
-	@Before
-	public void init(){
+	public void setUp(){
 		classAgent = new NutClassGenerator();
 		classAgent.addListener(new RegexMethodMatcher(".*")	, new AbstractMethodInterceptor(){});
 	}
@@ -47,4 +45,9 @@ public class ClassXTest extends TestCase{
 		a1.returnObjectArray();
 	}
 
+	public void testCreate2(){
+		Object obj = classAgent.define(Aop1.class);
+		Object obj2 = classAgent.define(Aop1.class);
+		assertEquals(obj, obj2);
+	}
 }
