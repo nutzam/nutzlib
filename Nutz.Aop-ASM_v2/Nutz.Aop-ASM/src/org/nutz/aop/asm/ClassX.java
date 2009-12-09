@@ -30,10 +30,6 @@ public class ClassX implements Opcodes{
 		this.methodArray = methodArray;
 	}
 	
-	protected void addField() {
-		AopToolkit.addFields(cw);
-	}
-	
 	protected void addConstructors(){
 		Constructor<?> [] constructors = klass.getDeclaredConstructors();
 		for (int i = 0; i < constructors.length; i++) {
@@ -59,10 +55,6 @@ public class ClassX implements Opcodes{
 			results[i] = expClasses[i].getName().replace('.', '/');
 		}
 		return results;
-	}
-	
-	protected void addAopMethods() {
-		AopToolkit.addMethods(cw, myName);
 	}
 	
 	protected void enhandMethod() {
@@ -105,9 +97,7 @@ public class ClassX implements Opcodes{
 	}
 
 	public byte[] toByteArray(){
-		addField();
 		addConstructors();
-		addAopMethods();
 		enhandMethod();
 		return cw.toByteArray();
 	}

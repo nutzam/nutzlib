@@ -1,9 +1,6 @@
 package org.nutz.aop.asm.test;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
-import org.nutz.aop.MethodInterceptor;
+import org.nutz.aop.asm.MethodInterceptorPool;
 import org.nutz.log.Log;
 
 /**
@@ -24,57 +21,18 @@ public class Aop2 extends Aop1 {
 		super(name);
 	}
 
-	private static Method[] _$$Nut_methodArray;
-
-	private static List<MethodInterceptor>[] _$$Nut_methodInterceptorList;
-
-	private boolean _Nut_before(int flag_int, Object... args) {
-		Method method = _$$Nut_methodArray[flag_int];
-		List<MethodInterceptor> miList = _$$Nut_methodInterceptorList[flag_int];
-		boolean flag = true;
-		for (MethodInterceptor methodInterceptor : miList)
-			flag &= methodInterceptor.beforeInvoke(this, method, args);
-		return flag;
-	}
-
-	private Object _Nut_after(int flag_int, Object src_return, Object... args) {
-		Method method = _$$Nut_methodArray[flag_int];
-		List<MethodInterceptor> miList = _$$Nut_methodInterceptorList[flag_int];
-		for (MethodInterceptor methodInterceptor : miList)
-			src_return = methodInterceptor.afterInvoke(this, src_return, method, args);
-		return src_return;
-	}
-
-	private boolean _Nut_Exception(int flag_int, Exception e, Object... args) {
-		Method method = _$$Nut_methodArray[flag_int];
-		List<MethodInterceptor> miList = _$$Nut_methodInterceptorList[flag_int];
-		boolean flag = true;
-		for (MethodInterceptor methodInterceptor : miList)
-			flag &= methodInterceptor.whenException(e, this, method, args);
-		return flag;
-	}
-
-	private boolean _Nut_Error(int flag_int, Throwable e, Object... args) {
-		Method method = _$$Nut_methodArray[flag_int];
-		List<MethodInterceptor> miList = _$$Nut_methodInterceptorList[flag_int];
-		boolean flag = true;
-		for (MethodInterceptor methodInterceptor : miList)
-			flag &= methodInterceptor.whenError(e, this, method, args);
-		return flag;
-	}
-
 	@Override
 	public void nonArgsVoid() throws Throwable{
 		try {
-			if (_Nut_before(188)) {
+			if (MethodInterceptorPool._Nut_before(188,this)) {
 				super.nonArgsVoid();
 			}
-			_Nut_after(188, null);
+			MethodInterceptorPool._Nut_after(188, this,null);
 		} catch (Exception e) {
-			if(_Nut_Exception(188, e))
+			if(MethodInterceptorPool._Nut_Exception(188, this,e))
 				throw e;
 		} catch (Throwable e) {
-			if(_Nut_Error(188, e))
+			if(MethodInterceptorPool._Nut_Error(188,this, e))
 				throw e;
 		}
 	}
@@ -102,15 +60,15 @@ public class Aop2 extends Aop1 {
 			String ppp, StringBuffer sb, Log log, long... z) 
 				throws Throwable{
 		try {
-			if (_Nut_before(188, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z)) {
+			if (MethodInterceptorPool._Nut_before(188,this, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z)) {
 				super.mixArgsVoid2(x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z);
 			}
-			_Nut_after(188, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z);
+			MethodInterceptorPool._Nut_after(188,this, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z);
 		} catch (Exception e) {
-			if(_Nut_Exception(188, e, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z))
+			if(MethodInterceptorPool._Nut_Exception(188,this, e, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z))
 				throw e;
 		} catch (Throwable e) {
-			if(_Nut_Error(188, e, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z))
+			if(MethodInterceptorPool._Nut_Error(188,this, e, x, obj, yy, xp, bb, ser, xzzz, ppp, sb, log, z))
 				throw e;
 		}
 	}
@@ -149,15 +107,15 @@ public class Aop2 extends Aop1 {
 	public String returnString() throws Throwable{
 		try {
 			Object _result = null;
-			if (_Nut_before(188)) {
+			if (MethodInterceptorPool._Nut_before(188,this)) {
 				_result = super.returnString();
 			}
-			return (String) _Nut_after(188, _result);
+			return (String) MethodInterceptorPool._Nut_after(188,this, _result);
 		} catch (Exception e) {
-			if(_Nut_Exception(188, e))
+			if(MethodInterceptorPool._Nut_Exception(188,this, e))
 				throw e;
 		} catch (Throwable e) {
-			if(_Nut_Error(188, e))
+			if(MethodInterceptorPool._Nut_Error(188,this, e))
 				throw e;
 		}
 		return null;

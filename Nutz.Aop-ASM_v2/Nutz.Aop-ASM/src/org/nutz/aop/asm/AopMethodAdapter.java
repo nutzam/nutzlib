@@ -17,6 +17,8 @@ class AopMethodAdapter extends NullMethodAdapter {
 	private String methodName;
 	
 	private Type returnType;
+	
+	private static String PoolName = MethodInterceptorPool.class.getName().replace('.', '/');
 
 	public AopMethodAdapter(MethodVisitor mv, int access,String methodName,String desc,
 			int methodIndex, String myName, String enhancedSuperName) {
@@ -47,10 +49,10 @@ class AopMethodAdapter extends NullMethodAdapter {
 		Label l3 = new Label();
 		mv.visitTryCatchBlock(l0, l1, l3, "java/lang/Throwable");
 		mv.visitLabel(l0);
-		mv.visitVarInsn(ALOAD, 0);
 		mv.visitIntInsn(SIPUSH, methodIndex);
+		mv.visitVarInsn(ALOAD, 0);
 		loadArgsAsArray();
-		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_before", "(I[Ljava/lang/Object;)Z");
+		mv.visitMethodInsn(INVOKESTATIC, PoolName, "_Nut_before", "(ILjava/lang/Object;[Ljava/lang/Object;)Z");
 		Label l4 = new Label();
 		mv.visitJumpInsn(IFEQ, l4);
 		mv.visitVarInsn(ALOAD, 0);
@@ -58,11 +60,11 @@ class AopMethodAdapter extends NullMethodAdapter {
 		mv.visitMethodInsn(INVOKESPECIAL, enhancedSuperName, methodName, desc);
 		mv.visitLabel(l4);
 		mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-		mv.visitVarInsn(ALOAD, 0);
 		mv.visitIntInsn(SIPUSH, methodIndex);
+		mv.visitVarInsn(ALOAD, 0);
 		mv.visitInsn(ACONST_NULL);
 		loadArgsAsArray();
-		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_after", "(ILjava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;");
+		mv.visitMethodInsn(INVOKESTATIC, PoolName, "_Nut_after", "(ILjava/lang/Object;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;");
 		mv.visitInsn(POP);
 		mv.visitLabel(l1);
 		Label l5 = new Label();
@@ -70,22 +72,22 @@ class AopMethodAdapter extends NullMethodAdapter {
 		mv.visitLabel(l2);
 		mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[] {"java/lang/Exception"});
 		mv.visitVarInsn(ASTORE, lastIndex);
-		mv.visitVarInsn(ALOAD, 0);
 		mv.visitIntInsn(SIPUSH, methodIndex);
+		mv.visitVarInsn(ALOAD, 0);
 		mv.visitVarInsn(ALOAD, lastIndex);
 		loadArgsAsArray();
-		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_Exception", "(ILjava/lang/Exception;[Ljava/lang/Object;)Z");
+		mv.visitMethodInsn(INVOKESTATIC, PoolName, "_Nut_Exception", "(ILjava/lang/Object;Ljava/lang/Exception;[Ljava/lang/Object;)Z");
 		mv.visitJumpInsn(IFEQ, l5);
 		mv.visitVarInsn(ALOAD, lastIndex);
 		mv.visitInsn(ATHROW);
 		mv.visitLabel(l3);
 		mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[] {"java/lang/Throwable"});
 		mv.visitVarInsn(ASTORE, lastIndex);
-		mv.visitVarInsn(ALOAD, 0);
 		mv.visitIntInsn(SIPUSH, methodIndex);
+		mv.visitVarInsn(ALOAD, 0);
 		mv.visitVarInsn(ALOAD, lastIndex);
 		loadArgsAsArray();
-		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_Error", "(ILjava/lang/Throwable;[Ljava/lang/Object;)Z");
+		mv.visitMethodInsn(INVOKESTATIC, PoolName, "_Nut_Error", "(ILjava/lang/Object;Ljava/lang/Throwable;[Ljava/lang/Object;)Z");
 		mv.visitJumpInsn(IFEQ, l5);
 		mv.visitVarInsn(ALOAD, lastIndex);
 		mv.visitInsn(ATHROW);
@@ -164,10 +166,10 @@ class AopMethodAdapter extends NullMethodAdapter {
 		mv.visitLabel(l0);
 		mv.visitInsn(ACONST_NULL);
 		mv.visitVarInsn(ASTORE, lastIndex);
-		mv.visitVarInsn(ALOAD, 0);
 		mv.visitIntInsn(SIPUSH, methodIndex);
+		mv.visitVarInsn(ALOAD, 0);
 		loadArgsAsArray();
-		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_before", "(I[Ljava/lang/Object;)Z");
+		mv.visitMethodInsn(INVOKESTATIC, PoolName, "_Nut_before", "(ILjava/lang/Object;[Ljava/lang/Object;)Z");
 		Label l4 = new Label();
 		mv.visitJumpInsn(IFEQ, l4);
 		mv.visitVarInsn(ALOAD, 0);
@@ -177,22 +179,22 @@ class AopMethodAdapter extends NullMethodAdapter {
 		mv.visitVarInsn(ASTORE, lastIndex);
 		mv.visitLabel(l4);
 		mv.visitFrame(Opcodes.F_APPEND,1, new Object[] {"java/lang/Object"}, 0, null);
-		mv.visitVarInsn(ALOAD, 0);
 		mv.visitIntInsn(SIPUSH, methodIndex);
+		mv.visitVarInsn(ALOAD, 0);
 		mv.visitVarInsn(ALOAD, lastIndex);
 		loadArgsAsArray();
-		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_after", "(ILjava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;");
+		mv.visitMethodInsn(INVOKESTATIC, PoolName, "_Nut_after", "(ILjava/lang/Object;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;");
 		checkCast();
 		mv.visitLabel(l1);
 		returnIt();
 		mv.visitLabel(l2);
 		mv.visitFrame(Opcodes.F_FULL, 1, new Object[] {myName}, 1, new Object[] {"java/lang/Exception"});
 		mv.visitVarInsn(ASTORE, lastIndex);
-		mv.visitVarInsn(ALOAD, 0);
 		mv.visitIntInsn(SIPUSH, methodIndex);
+		mv.visitVarInsn(ALOAD, 0);
 		mv.visitVarInsn(ALOAD, lastIndex);
 		loadArgsAsArray();
-		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_Exception", "(ILjava/lang/Exception;[Ljava/lang/Object;)Z");
+		mv.visitMethodInsn(INVOKESTATIC, PoolName, "_Nut_Exception", "(ILjava/lang/Object;Ljava/lang/Exception;[Ljava/lang/Object;)Z");
 		Label l5 = new Label();
 		mv.visitJumpInsn(IFEQ, l5);
 		mv.visitVarInsn(ALOAD, lastIndex);
@@ -200,11 +202,11 @@ class AopMethodAdapter extends NullMethodAdapter {
 		mv.visitLabel(l3);
 		mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Object[] {"java/lang/Throwable"});
 		mv.visitVarInsn(ASTORE, lastIndex);
-		mv.visitVarInsn(ALOAD, 0);
 		mv.visitIntInsn(SIPUSH, methodIndex);
+		mv.visitVarInsn(ALOAD, 0);
 		mv.visitVarInsn(ALOAD, lastIndex);
 		loadArgsAsArray();
-		mv.visitMethodInsn(INVOKESPECIAL, myName, "_Nut_Error", "(ILjava/lang/Throwable;[Ljava/lang/Object;)Z");
+		mv.visitMethodInsn(INVOKESTATIC, PoolName, "_Nut_Error", "(ILjava/lang/Object;Ljava/lang/Throwable;[Ljava/lang/Object;)Z");
 		mv.visitJumpInsn(IFEQ, l5);
 		mv.visitVarInsn(ALOAD, lastIndex);
 		mv.visitInsn(ATHROW);

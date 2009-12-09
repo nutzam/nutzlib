@@ -58,7 +58,7 @@ public class NutClassGenerator implements ClassAgent {
 		try {
 			Class<T> newClass = (Class<T>) generatorClassLoader.defineClassFromClassFile(newName, 
 					ClassX.enhandClass(klass, newName, methodArray));
-			AopToolkit.injectFieldValue(newClass, methodArray,methodInterceptorList);
+			MethodInterceptorPool.setMethodArray(newClass,methodArray, methodInterceptorList);
 			return newClass;
 		} catch (Throwable e) {
 			e.printStackTrace();
