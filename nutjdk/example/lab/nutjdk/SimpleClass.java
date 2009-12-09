@@ -1,11 +1,15 @@
 package lab.nutjdk;
 
-public class SimpleClass {
+public class SimpleClass<T> implements SimpleInterface {
+
+	public static int XYZ = 12;
 
 	private String str;
 
 	private int num;
- 
+
+	T abc;
+
 	public SimpleClass(String str, int num) {
 		this.num = num;
 		this.str = str;
@@ -17,4 +21,7 @@ public class SimpleClass {
 		return str + num;
 	}
 
+	public void doVoid(String s) {
+		System.out.println(s);
+	}
 }

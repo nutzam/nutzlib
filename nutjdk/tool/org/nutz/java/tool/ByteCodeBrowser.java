@@ -3,12 +3,12 @@ package org.nutz.java.tool;
 import static java.lang.System.*;
 
 import java.io.DataInputStream;
-import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
+import org.nutz.java.bytecode.info.CPInfo;
+import org.nutz.java.bytecode.info.ConstantPool;
 import org.nutz.lang.ExitLoop;
 import org.nutz.lang.Files;
 import org.nutz.lang.Lang;
@@ -56,7 +56,7 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 	private int read_count(String s) {
 		next(2);
 		int re = asInt();
-		dump(s + "(%d)", re);
+		dump(s + "_count(%d)", re);
 		return re;
 	}
 
@@ -66,7 +66,7 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 	 * @param count
 	 */
 	private void read_constant_pool(int count) {
-		br();
+		cp = new ConstantPool(count);
 		hr('=');
 		out.println("Constants: [" + count + "]");
 		for (int i = 1; i < count; i++) {
@@ -76,6 +76,8 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 		hr('=');
 	}
 
+	private ConstantPool cp;
+
 	private void read_constant_pool_info() {
 		byte tag = next();
 		bytes.clear();
@@ -83,6 +85,7 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 		// Class
 		case 7:
 			next(2);
+			cp.addClass(asInt());
 			dumps("class[%d]", asInt());
 			break;
 		// Fieldref
@@ -100,34 +103,42 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 		// String
 		case 8:
 			next(2);
+			cp.addString(asInt());
 			dumps("string[%d]", asInt());
 			break;
 		// Integer
 		case 3:
 			next(4);
+			cp.addInt(asInt4());
 			dump("int");
 			break;
 		// Float
 		case 4:
 			next(4);
 			dumps("float");
-			break;
-		// Long
+			/* break; */
+			throw Lang.noImplement();
+			// Long
 		case 5:
 			next(8);
 			dumps("long");
-			break;
-		// Double
+			/* break; */
+			throw Lang.noImplement();
+			// Double
 		case 6:
 			next(8);
 			dumps("double");
-			break;
-		// NameAndType
+			/* break; */
+			throw Lang.noImplement();
+			// NameAndType
 		case 12:
 			next(2);
+			int ni = asInt();
 			dumps("name");
 			next(2);
+			int di = asInt();
 			dumps("descriptor");
+			cp.addNameAndType(ni, di);
 			break;
 		// Utf8
 		case 1:
@@ -136,7 +147,10 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 			bytes.clear();
 			next(len);
 			String s = asString();
-			dumps("utf8[%d]: '%s'\n", len, s);
+			cp.addUtf8(s);
+			out.printf("utf8[%d]: '%s'\n", len, s);
+			bytes.clear();
+			// dumps("utf8[%d]: '%s'\n", len, s);
 			break;
 		default:
 			throw Lang.makeThrow("Unknown tag %d", tag);
@@ -148,7 +162,75 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 		int ci = asInt();
 		next(2);
 		int ni = asInt();
+		cp.addMember(ci, ni);
 		dumps(title + "[%d, %d]", ci, ni);
+	}
+
+	private void read_access_flags() {
+		next(2);
+		dump("access flags");
+	}
+
+	private void read_this_class() {
+		next(2);
+		dump("this_class[%d]", asInt());
+	}
+
+	private void read_super_class() {
+		next(2);
+		dump("super_class[%d]", asInt());
+	}
+
+	private void read_interfaces(int count) {
+		hr('=');
+		out.println("Interfaces: [" + count + "]");
+		for (int i = 0; i < count; i++) {
+			next(2);
+			dumps("[%d]", i);
+		}
+		hr('=');
+	}
+
+	private void read_field_and_method_infos(int count, String type) {
+		hr('=');
+		out.println(type + ": [" + count + "]");
+		for (int i = 0; i < count; i++) {
+			print("-[%d]-%s\n", i, Strings.dup('-', 37));
+			next(2);
+			dumps("ACC");
+
+			next(2);
+			int ni = asInt();
+			String name = cp.getInfo(ni).getText();
+			next(2);
+			int di = asInt();
+			String descriptor = cp.getInfo(di).getText();
+			dump("name-de");
+			print("%10s: %s", "[" + name + "]", descriptor);
+			br();
+
+			next(2);
+			int attLen = asInt();
+			print("<has %d attibutes>\n", attLen);
+
+			for (int x = 0; x < attLen; x++)
+				read_attribute_info(x);
+		}
+		hr('=');
+	}
+
+	private void read_attribute_info(int index) {
+		next(2);
+		int nameIndex = asInt();
+		bytes.clear();
+
+		next(4);
+		int len = asInt4();
+		dump("len");
+		bytes.clear();
+
+		next(len);
+		dump("%3d - '%s' :: %dbytes:\n", index, cp.getInfo(nameIndex).getText(), len);
 	}
 
 	/**
@@ -185,6 +267,16 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 				read_version("major");
 				count = read_count("constants");
 				read_constant_pool(count);
+				read_access_flags();
+				read_this_class();
+				read_super_class();
+				count = read_count("interface");
+				read_interfaces(count);
+				count = read_count("field");
+				read_field_and_method_infos(count, "Fields");
+				count = read_count("method");
+				read_field_and_method_infos(count, "Methods");
+				hr('~');
 				while (true)
 					next();
 			} catch (ExitLoop exit) {
@@ -195,6 +287,8 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 		} catch (FileNotFoundException e) {
 			throw Lang.wrapThrow(e);
 		}
+		// hr('*');
+		// out.println(cp.toString());
 	}
 
 }

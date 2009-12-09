@@ -39,7 +39,21 @@ public class ByteCodeSupport {
 	protected int asInt() {
 		if (bytes.size() < 2)
 			throw Lang.makeThrow("You can not evalute %d byte[] to int!", bytes.size());
-		return bytes.get(bytes.size() - 2) * 255 + bytes.last();
+		int last = bytes.size() - 1;
+		byte low = (byte) (bytes.get(last--) & 255);
+		byte high = (byte) (bytes.get(last) & 255);
+		return low + (high << 8);
+	}
+
+	protected int asInt4() {
+		if (bytes.size() < 4)
+			throw Lang.makeThrow("You can not evalute %d byte[] to int!", bytes.size());
+		int last = bytes.size() - 1;
+		byte low = (byte) (bytes.get(last--) & 255);
+		byte lowh = (byte) (bytes.get(last--) & 255);
+		byte higl = (byte) (bytes.get(last--) & 255);
+		byte high = (byte) (bytes.get(last) & 255);
+		return low + (lowh << 8) + (higl << 16) + (high << 24);
 	}
 
 	protected String asString() {
@@ -47,6 +61,11 @@ public class ByteCodeSupport {
 		for (int i = 0; i < bytes.size(); i++)
 			sb.append((char) bytes.get(i));
 		return sb.toString();
+	}
+
+	protected void print(String fmt, Object... args) {
+		out.printf(fmt, args);
+		bytes.clear();
 	}
 
 	protected void dump() {
@@ -65,13 +84,18 @@ public class ByteCodeSupport {
 		if (!Strings.isBlank(fmt)) {
 			String s = String.format(fmt, args);
 			out.print(Strings.alignRight(s, width, ' '));
-			out.print(": ");
+			if (!s.endsWith("\n") && !s.endsWith(":"))
+				out.print(": ");
 		}
-		for (int i = 0; i < bytes.size(); i++) {
-			if (i > 0)
-				if (i % 16 == 0)
-					br();
-			out.printf("%s ", Strings.toHex(bytes.get(i), 2));
+		if (bytes.isEmpty()) {
+			out.println("<!empty>");
+		} else {
+			for (int i = 0; i < bytes.size(); i++) {
+				if (i > 0)
+					if (i % 16 == 0)
+						br();
+				out.printf("%s ", Strings.toHex(bytes.get(i), 2));
+			}
 		}
 		bytes.clear();
 		br();
