@@ -1,18 +1,22 @@
 package org.nutz.aop.asm;
 
-import junit.framework.TestCase;
+import static junit.framework.TestCase.*;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.nutz.aop.AbstractMethodInterceptor;
 import org.nutz.aop.ClassAgent;
 import org.nutz.aop.RegexMethodMatcher;
 import org.nutz.aop.asm.test.Aop1;
+import org.nutz.aop.asm.test.Aop4;
+import org.nutz.aop.asm.test.Aop5;
 import org.nutz.lang.Mirror;
 
-public class ClassXTest extends TestCase{
+public class ClassXTest{
 	
 	ClassAgent classAgent;
 	
+	@Before
 	public void setUp(){
 		classAgent = new AsmClassAgent();
 		classAgent.addListener(new RegexMethodMatcher(".*")	, new AbstractMethodInterceptor(){});
@@ -24,14 +28,9 @@ public class ClassXTest extends TestCase{
 		classAgent.define(getClass());
 	}
 	
-	@Test
+	@Test(expected=RuntimeException.class)
 	public void testInterface(){
-		try{
-			classAgent.define(Runnable.class);
-		    fail();
-		}catch (Throwable e) {
-			assertTrue(true);
-		}
+	    classAgent.define(Runnable.class);
 	}
 	
 	@Test
@@ -40,7 +39,6 @@ public class ClassXTest extends TestCase{
 		for (int i = 0; i < 10000; i++) {
 			klass = classAgent.define(klass);
 		}
-		System.out.println(klass);
 		assertFalse(Aop1.class == klass);
 	}
 	
@@ -102,15 +100,10 @@ public class ClassXTest extends TestCase{
 		a1.getEnum();
 	}
 	
-	@Test
+	@Test(expected=RuntimeException.class)
 	public void testThrowError() throws Throwable{
 		Aop1 a1 = getNewInstance(Aop1.class);
-		try{
-			a1.throwError();
-		    fail();
-		}catch (Throwable e) {
-			assertTrue(true);
-		}
+		a1.throwError();
 	}
 	
 	@Test
@@ -132,4 +125,13 @@ public class ClassXTest extends TestCase{
 		return  mirror.born("Nutz");
 	}
 
+	@Test(expected=RuntimeException.class)
+	public void testFinalClass(){
+		classAgent.define(Aop4.class);
+	}
+	
+	@Test(expected=RuntimeException.class)
+	public void testAbstractClass(){
+		classAgent.define(Aop5.class);
+	}
 }

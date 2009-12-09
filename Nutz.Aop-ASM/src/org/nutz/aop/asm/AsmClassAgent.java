@@ -33,7 +33,8 @@ public class AsmClassAgent implements ClassAgent {
 				|| klass.isEnum() || klass.isPrimitive()
 				|| klass.isMemberClass() )
 			throw Lang.makeThrow("需要拦截的%s不是一个顶层类!创建失败!",klass_name);
-		if(Modifier.isFinal(klass.getModifiers()))
+		if(Modifier.isFinal(klass.getModifiers())
+				|| Modifier.isAbstract(klass.getModifiers()))
 			throw Lang.makeThrow("需要拦截的类:%s是final的!创建失败!",klass_name);
 		if(klass.getName().endsWith(CLASSNAME_SUFFIX))
 			return klass;
