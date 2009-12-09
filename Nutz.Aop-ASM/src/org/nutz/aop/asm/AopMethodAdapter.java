@@ -124,7 +124,7 @@ final class AopMethodAdapter extends NullMethodAdapter {
 		if(i < 6){
 			mv.visitInsn(i + ICONST_0);
 		}else{
-			mv.visitIntInsn(BIPUSH, i);
+			mv.visitIntInsn(BIPUSH, i+ ICONST_0);
 		}
 	}
 	
