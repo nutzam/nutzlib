@@ -11,13 +11,16 @@ import org.nutz.lang.Mirror;
 
 /**
  * 提供ClassAgent的基础实现,拦截不可能插入Aop代码的Class
- * <p/>并防止重新定义已经插入Aop代码的类
+ * <p/>传入的Class对象需要满足的条件
+ * <li>不能是final或者abstract的
+ * <li>必须有非private的构造函数
+ * </p>被拦截的方法需要满足的条件
+ * <li>不能是final或者abstract的
+ * <li>不是private的
  * @author wendal(wendal1985@gmail.com)
  *
  */
 public abstract class AbstractClassAgent implements ClassAgent {
-
-	protected static GeneratorClassLoader generatorClassLoader = new GeneratorClassLoader();
 
 	private ArrayList<Pair> pairs = new ArrayList<Pair>();
 
@@ -63,14 +66,14 @@ public abstract class AbstractClassAgent implements ClassAgent {
 		if (klass == null)
 			return false;
 		String klass_name = klass.getName();
+		if (klass_name.endsWith(CLASSNAME_SUFFIX))
+			return false;
 		if (klass.isInterface() || klass.isArray() 
 				|| klass.isEnum() || klass.isPrimitive() 
 				|| klass.isMemberClass())
 			throw Lang.makeThrow("需要拦截的%s不是一个顶层类!创建失败!", klass_name);
 		if (Modifier.isFinal(klass.getModifiers()) || Modifier.isAbstract(klass.getModifiers()))
-			throw Lang.makeThrow("需要拦截的类:%s是final的!创建失败!", klass_name);
-		if (klass.getName().endsWith(CLASSNAME_SUFFIX))
-			return false;
+			throw Lang.makeThrow("需要拦截的类:%s是final或abstract的!创建失败!", klass_name);
 		return true;
 	}
 	
@@ -86,17 +89,12 @@ public abstract class AbstractClassAgent implements ClassAgent {
 				try {
 					return (Class<T>) classLoader.loadClass(newName);
 				} catch (ClassNotFoundException e) {
-					try {
-						return (Class<T>) generatorClassLoader.loadClass(newName);
-					} catch (ClassNotFoundException e3) {
-					}
 				}
 			}
 		}
 		return null;
 	}
 	
-
 	private <T> Pair2[] findMatchedMethod(Class<T> klass) {
 		Method[] all = Mirror.me(klass).getAllDeclaredMethodsWithoutTop();
 		List<Pair2> p2 = new ArrayList<Pair2>();
@@ -133,12 +131,5 @@ public abstract class AbstractClassAgent implements ClassAgent {
 
 		public Method method;
 		public ArrayList<MethodInterceptor> listeners;
-	}
-	
-	protected  static class GeneratorClassLoader extends ClassLoader {
-		
-		public Class<?> defineClassFromClassFile(String className, byte[] classFile) throws ClassFormatError {
-			return defineClass(className, classFile, 0, classFile.length);
-		}
 	}
 }
