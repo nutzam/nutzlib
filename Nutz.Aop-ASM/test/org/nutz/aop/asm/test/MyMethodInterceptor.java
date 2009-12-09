@@ -8,11 +8,11 @@ import org.nutz.castor.Castors;
 public class MyMethodInterceptor implements MethodInterceptor {
 
 	@Override
-	public Object afterInvoke(Object arg0, Object arg1, Method arg2,
+	public Object afterInvoke(Object obj, Object result, Method arg2,
 			Object... objs) {
 		System.out.println("After..... " + arg2.getName());
 		printArgs(objs);
-		return arg1;
+		return result;
 	}
 
 	@Override
