@@ -24,9 +24,14 @@ public class ClassXTest extends TestCase{
 		classAgent.define(getClass());
 	}
 	
-	@Test(expected=RuntimeException.class)
+	@Test
 	public void testInterface(){
-		classAgent.define(Runnable.class);
+		try{
+			classAgent.define(Runnable.class);
+		    fail();
+		}catch (Throwable e) {
+			assertTrue(true);
+		}
 	}
 	
 	@Test
@@ -97,10 +102,15 @@ public class ClassXTest extends TestCase{
 		a1.getEnum();
 	}
 	
-	@Test(expected=Throwable.class)
+	@Test
 	public void testThrowError() throws Throwable{
 		Aop1 a1 = getNewInstance(Aop1.class);
-		a1.throwError();
+		try{
+			a1.throwError();
+		    fail();
+		}catch (Throwable e) {
+			assertTrue(true);
+		}
 	}
 	
 	@Test
@@ -121,4 +131,5 @@ public class ClassXTest extends TestCase{
 		Mirror<T> mirror = Mirror.me(newClass);
 		return  mirror.born("Nutz");
 	}
+
 }

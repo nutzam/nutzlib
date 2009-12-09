@@ -28,7 +28,7 @@ public class MyMethodInterceptor implements MethodInterceptor {
 			Object... objs) {
 		System.out.println("抛出了Throwable "+e);
 		printArgs(objs);
-		return false;
+		return true;
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class MyMethodInterceptor implements MethodInterceptor {
 			Object... objs) {
 		System.out.println("抛出了Exception "+e);
 		printArgs(objs);
-		return false;
+		return true;
 	}
 	
 	void printArgs(Object...objs){
