@@ -10,6 +10,7 @@ import org.nutz.aop.RegexMethodMatcher;
 import org.nutz.aop.asm.test.Aop1;
 import org.nutz.aop.asm.test.Aop4;
 import org.nutz.aop.asm.test.Aop5;
+import org.nutz.aop.asm.test.MyMethodInterceptor;
 import org.nutz.lang.Mirror;
 
 public class ClassXTest{
@@ -19,6 +20,9 @@ public class ClassXTest{
 	@Before
 	public void setUp(){
 		classAgent = new AsmClassAgent();
+		classAgent.addListener(new RegexMethodMatcher(".*")	, new AbstractMethodInterceptor(){});
+		classAgent.addListener(new RegexMethodMatcher(".*")	, new MyMethodInterceptor());
+		classAgent.addListener(new RegexMethodMatcher(".*")	, new MyMethodInterceptor());
 		classAgent.addListener(new RegexMethodMatcher(".*")	, new AbstractMethodInterceptor(){});
 	}
 	

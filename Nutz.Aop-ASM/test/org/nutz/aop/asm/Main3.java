@@ -10,7 +10,7 @@ public class Main3 {
 
 	public static void main(String[] args) throws Throwable{
 		String newName = Aop1.class.getName().replace('1', '2');
-		byte [] data = ClassX.enhandClass(Aop1.class, newName, Aop1.class.getMethods());
+		byte [] data = ClassX.enhandClass(Aop1.class, newName, Aop1.class.getMethods(),Aop1.class.getConstructors());
 		printClass(newName, data);
 	}
 	
