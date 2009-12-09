@@ -8,6 +8,7 @@ import org.nutz.aop.Aop;
 import org.nutz.aop.ClassAgent;
 import org.nutz.aop.asm.test.Aop1;
 import org.nutz.aop.asm.test.MyMethodInterceptor;
+import org.nutz.aop.javassist.JavassistClassAgent;
 import org.nutz.castor.Castors;
 import org.nutz.lang.Mirror;
 
@@ -15,7 +16,7 @@ public class Main2 {
 
 	public static void main(String[] args) throws Throwable {
 
-		ClassAgent agent = new AsmClassAgent();
+		ClassAgent agent = new JavassistClassAgent();
 		agent.addListener(Aop.matcher(".*"), new MyMethodInterceptor());
 		Class<Aop1> classZ = agent.define(Aop1.class);
 		System.out.println(classZ);
