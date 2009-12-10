@@ -32,10 +32,6 @@ public class ByteCodeSupport {
 	protected byte b;
 	protected LinkedIntArray bytes;
 
-	public ByteCodeSupport() {
-		super();
-	}
-
 	protected int asInt() {
 		if (bytes.size() < 2)
 			throw Lang.makeThrow("You can not evalute %d byte[] to int!", bytes.size());
@@ -56,7 +52,7 @@ public class ByteCodeSupport {
 		return low | (lowh << 8) | (higl << 16) | (high << 24);
 	}
 
-	protected String asString() {
+	protected String asUtf8() {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < bytes.size(); i++)
 			sb.append((char) bytes.get(i));

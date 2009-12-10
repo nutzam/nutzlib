@@ -1,6 +1,6 @@
 package org.nutz.java.bytecode.cp;
 
-public class MemberInfo implements CPInfo {
+public class MemberInfo extends AbstractCPInfo {
 
 	private CP pool;
 	private int ci;
@@ -13,7 +13,11 @@ public class MemberInfo implements CPInfo {
 	}
 
 	public String getText() {
-		return String.format("%s.%s", pool.getInfo(ci).getText(), pool.getInfo(ni).getText());
+		String klass = pool.getInfoText(ci);
+		String name = pool.getInfoText(ni);
+		if (null == klass || null == name)
+			return null;
+		return String.format("%s.%s", klass, name);
 	}
 
 }

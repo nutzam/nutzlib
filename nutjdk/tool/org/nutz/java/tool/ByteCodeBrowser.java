@@ -6,6 +6,8 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.nutz.java.bytecode.cp.CP;
 import org.nutz.lang.ExitLoop;
@@ -37,9 +39,12 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 		bcb.parse();
 	}
 
+	private Map<String, AttributeBrowser> attrs = new HashMap<String, AttributeBrowser>();
+
 	private ByteCodeBrowser(File f) {
 		this.file = f;
 		bytes = new LinkedIntArray();
+		attrs.put("Code", new CodeAttributeBrowser());
 	}
 
 	private void read_magic() {
@@ -145,7 +150,7 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 			int len = asInt();
 			bytes.clear();
 			next(len);
-			String s = asString();
+			String s = asUtf8();
 			cp.addUtf8(s);
 			out.printf("utf8[%d]: '%s'\n", len, s);
 			bytes.clear();
@@ -196,8 +201,8 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 		for (int i = 0; i < count; i++) {
 			print("-[%d]-%s\n", i, Strings.dup('-', 37));
 			next(2);
-			//dumps("ACC");
-			print("ACC:0x%X",asInt());
+			// dumps("ACC");
+			print("** ACC:0x%X\n", asInt());
 
 			next(2);
 			int ni = asInt();
@@ -205,7 +210,7 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 			next(2);
 			int di = asInt();
 			String descriptor = cp.getInfo(di).getText();
-			//dump("name-de");
+			// dump("name-de");
 			print("%10s: %s", "[" + name + "]", descriptor);
 			br();
 
@@ -221,21 +226,29 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 
 	private void read_attribute_info(int index) {
 		next(2);
-		int nameIndex = asInt();
+		int attNameIndex = asInt();
 		bytes.clear();
+		String attName = cp.getInfo(attNameIndex).getText();
 
 		next(4);
 		int len = asInt4();
-		//dump("len");
+		// dump("len");
 		bytes.clear();
 
 		next(len);
-		dump("%3d - '%s' :: %dbytes:\n", index, cp.getInfo(nameIndex).getText(), len);
+
+		AttributeBrowser ab = attrs.get(attName);
+		if (null != ab) {
+			ab.load(bytes.toArray());
+			bytes.clear();
+		} else {
+			dump("%3d - '%s' :: %dbytes:\n", index, attName, len);
+		}
 	}
-	
+
 	private void read_class_attributes(int count) {
 		hr('~');
-		for(int i=0;i<count;i++){
+		for (int i = 0; i < count; i++) {
 			this.read_attribute_info(i);
 		}
 		hr('=');
@@ -300,7 +313,5 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 		// hr('*');
 		// out.println(cp.toString());
 	}
-
-	
 
 }

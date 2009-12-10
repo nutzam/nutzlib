@@ -1,7 +1,7 @@
 package org.nutz.java.bytecode.cp;
 
 
-public class Utf8Info implements CPInfo {
+public class Utf8Info extends AbstractCPInfo {
 
 	private String str;
 

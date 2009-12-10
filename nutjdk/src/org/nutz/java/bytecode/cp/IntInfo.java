@@ -1,6 +1,6 @@
 package org.nutz.java.bytecode.cp;
 
-public class IntInfo implements CPInfo {
+public class IntInfo extends AbstractCPInfo {
 
 	private int num;
 
@@ -9,7 +9,7 @@ public class IntInfo implements CPInfo {
 	}
 
 	public String getText() {
-		return "" + num;
+		return "int:" + num;
 	}
 
 }

@@ -1,6 +1,6 @@
 package org.nutz.java.bytecode.cp;
 
-public class StringInfo implements CPInfo {
+public class StringInfo extends AbstractCPInfo {
 
 	private CP pool;
 	private int index;
@@ -11,7 +11,7 @@ public class StringInfo implements CPInfo {
 	}
 
 	public String getText() {
-		return pool.getInfo(index).getText();
+		return pool.getInfoText(index);
 	}
 
 }
