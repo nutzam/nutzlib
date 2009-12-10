@@ -40,20 +40,20 @@ public class ByteCodeSupport {
 		if (bytes.size() < 2)
 			throw Lang.makeThrow("You can not evalute %d byte[] to int!", bytes.size());
 		int last = bytes.size() - 1;
-		byte low = (byte) (bytes.get(last--) & 255);
-		byte high = (byte) (bytes.get(last) & 255);
-		return low + (high << 8);
+		int low = (bytes.get(last--) & 0xFF);
+		int high = (bytes.get(last) & 0xFF);
+		return low | (high << 8);
 	}
 
 	protected int asInt4() {
 		if (bytes.size() < 4)
 			throw Lang.makeThrow("You can not evalute %d byte[] to int!", bytes.size());
 		int last = bytes.size() - 1;
-		byte low = (byte) (bytes.get(last--) & 255);
-		byte lowh = (byte) (bytes.get(last--) & 255);
-		byte higl = (byte) (bytes.get(last--) & 255);
-		byte high = (byte) (bytes.get(last) & 255);
-		return low + (lowh << 8) + (higl << 16) + (high << 24);
+		int low = (bytes.get(last--) & 0xFF);
+		int lowh = (bytes.get(last--) & 0xFF);
+		int higl = (bytes.get(last--) & 0xFF);
+		int high = (bytes.get(last) & 0xFF);
+		return low | (lowh << 8) | (higl << 16) | (high << 24);
 	}
 
 	protected String asString() {
