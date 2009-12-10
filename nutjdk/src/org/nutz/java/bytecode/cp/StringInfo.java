@@ -1,11 +1,11 @@
-package org.nutz.java.bytecode.info;
+package org.nutz.java.bytecode.cp;
 
 public class StringInfo implements CPInfo {
 
-	private ConstantPool pool;
+	private CP pool;
 	private int index;
 
-	StringInfo(ConstantPool pool, int index) {
+	StringInfo(CP pool, int index) {
 		this.pool = pool;
 		this.index = index;
 	}

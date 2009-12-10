@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import org.nutz.java.bytecode.info.ConstantPool;
+import org.nutz.java.bytecode.cp.CP;
 import org.nutz.lang.ExitLoop;
 import org.nutz.lang.Files;
 import org.nutz.lang.Lang;
@@ -65,7 +65,7 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 	 * @param count
 	 */
 	private void read_constant_pool(int count) {
-		cp = new ConstantPool(count);
+		cp = new CP(count);
 		hr('=');
 		out.println("Constants: [" + count + "]");
 		for (int i = 1; i < count; i++) {
@@ -75,7 +75,7 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 		hr('=');
 	}
 
-	private ConstantPool cp;
+	private CP cp;
 
 	private void read_constant_pool_info() {
 		byte tag = next();

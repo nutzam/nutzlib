@@ -1,12 +1,12 @@
-package org.nutz.java.bytecode.info;
+package org.nutz.java.bytecode.cp;
 
 public class NameTypeInfo implements CPInfo {
 
-	private ConstantPool pool;
+	private CP pool;
 	private int ni;
 	private int di;
 
-	NameTypeInfo(ConstantPool pool, int ni, int di) {
+	NameTypeInfo(CP pool, int ni, int di) {
 		this.pool = pool;
 		this.ni = ni;
 		this.di = di;

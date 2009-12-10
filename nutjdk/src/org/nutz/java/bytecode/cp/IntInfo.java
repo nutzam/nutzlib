@@ -1,4 +1,4 @@
-package org.nutz.java.bytecode.info;
+package org.nutz.java.bytecode.cp;
 
 public class IntInfo implements CPInfo {
 

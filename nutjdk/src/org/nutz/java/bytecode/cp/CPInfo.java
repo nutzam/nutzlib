@@ -1,4 +1,4 @@
-package org.nutz.java.bytecode.info;
+package org.nutz.java.bytecode.cp;
 
 /**
  * constant_pool_info

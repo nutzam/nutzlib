@@ -1,12 +1,12 @@
-package org.nutz.java.bytecode.info;
+package org.nutz.java.bytecode.cp;
 
 
 public class ClassInfo implements CPInfo {
 
-	private ConstantPool pool;
+	private CP pool;
 	private int index;
 
-	ClassInfo(ConstantPool pool, int index) {
+	ClassInfo(CP pool, int index) {
 		this.pool = pool;
 		this.index = index;
 	}

@@ -1,13 +1,13 @@
-package org.nutz.java.bytecode.info;
+package org.nutz.java.bytecode.cp;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConstantPool {
+public class CP {
 
 	private List<CPInfo> infos;
 
-	public ConstantPool(int count) {
+	public CP(int count) {
 		infos = new ArrayList<CPInfo>(count);
 		infos.add(new HeadInfo());
 	}

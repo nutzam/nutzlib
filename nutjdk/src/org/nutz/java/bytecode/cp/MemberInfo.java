@@ -1,12 +1,12 @@
-package org.nutz.java.bytecode.info;
+package org.nutz.java.bytecode.cp;
 
 public class MemberInfo implements CPInfo {
 
-	private ConstantPool pool;
+	private CP pool;
 	private int ci;
 	private int ni;
 
-	MemberInfo(ConstantPool pool, int ci, int ni) {
+	MemberInfo(CP pool, int ci, int ni) {
 		this.pool = pool;
 		this.ci = ci;
 		this.ni = ni;
