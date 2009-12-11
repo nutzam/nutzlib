@@ -2,15 +2,15 @@ package org.nutz.java.tool;
 
 import static java.lang.System.*;
 
+import java.io.DataInput;
 import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.nutz.java.bytecode.cp.CP;
-import org.nutz.lang.ExitLoop;
 import org.nutz.lang.Files;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
@@ -22,7 +22,7 @@ import org.nutz.lang.util.LinkedIntArray;
  */
 public class ByteCodeBrowser extends ByteCodeSupport {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		if (args.length < 1) {
 			err.println("Lack file path");
 			System.exit(0);
@@ -35,15 +35,21 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 			System.exit(0);
 		}
 
-		ByteCodeBrowser bcb = new ByteCodeBrowser(f);
+		DataInput input = new DataInputStream(new FileInputStream(f));
+		LinkedIntArray bytes = new LinkedIntArray();
+		try {
+			while (true)
+				bytes.push(input.readUnsignedByte());
+		} catch (EOFException e) {}
+
+		ByteCodeBrowser bcb = new ByteCodeBrowser(bytes.toArray());
 		bcb.parse();
 	}
 
 	private Map<String, AttributeBrowser> attrs = new HashMap<String, AttributeBrowser>();
 
-	private ByteCodeBrowser(File f) {
-		this.file = f;
-		bytes = new LinkedIntArray();
+	public ByteCodeBrowser(int[] bytes) {
+		super(bytes);
 		attrs.put("Code", new CodeAttributeBrowser());
 	}
 
@@ -59,7 +65,7 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 
 	private int read_count(String s) {
 		next(2);
-		int re = asInt();
+		int re = getInt2();
 		dump(s + "_count(%d)", re);
 		return re;
 	}
@@ -83,14 +89,14 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 	private CP cp;
 
 	private void read_constant_pool_info() {
-		byte tag = next();
-		bytes.clear();
+		int tag = this.next(1).getInt();
+		mark();
 		switch (tag) {
 		// Class
 		case 7:
 			next(2);
-			cp.addClass(asInt());
-			dumps("class[%d]", asInt());
+			cp.addClass(getInt2());
+			dumps("class[%d]", getInt2());
 			break;
 		// Fieldref
 		case 9:
@@ -107,13 +113,13 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 		// String
 		case 8:
 			next(2);
-			cp.addString(asInt());
-			dumps("string[%d]", asInt());
+			cp.addString(getInt2());
+			dumps("string[%d]", getInt2());
 			break;
 		// Integer
 		case 3:
 			next(4);
-			cp.addInt(asInt4());
+			cp.addInt(getInt4());
 			dump("int");
 			break;
 		// Float
@@ -137,23 +143,23 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 			// NameAndType
 		case 12:
 			next(2);
-			int ni = asInt();
+			int ni = getInt2();
 			dumps("name");
 			next(2);
-			int di = asInt();
+			int di = getInt2();
 			dumps("descriptor");
 			cp.addNameAndType(ni, di);
 			break;
 		// Utf8
 		case 1:
 			next(2);
-			int len = asInt();
-			bytes.clear();
+			int len = getInt2();
+			mark();
 			next(len);
-			String s = asUtf8();
+			String s = getUtf8();
 			cp.addUtf8(s);
 			out.printf("utf8[%d]: '%s'\n", len, s);
-			bytes.clear();
+			mark();
 			// dumps("utf8[%d]: '%s'\n", len, s);
 			break;
 		default:
@@ -163,9 +169,9 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 
 	private void read_method_field_info(String title) {
 		next(2);
-		int ci = asInt();
+		int ci = getInt2();
 		next(2);
-		int ni = asInt();
+		int ni = getInt2();
 		cp.addMember(ci, ni);
 		dumps(title + "[%d, %d]", ci, ni);
 	}
@@ -177,12 +183,12 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 
 	private void read_this_class() {
 		next(2);
-		dump("this_class[%d]", asInt());
+		dump("this_class[%d]", getInt2());
 	}
 
 	private void read_super_class() {
 		next(2);
-		dump("super_class[%d]", asInt());
+		dump("super_class[%d]", getInt2());
 	}
 
 	private void read_interfaces(int count) {
@@ -202,20 +208,20 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 			print("-[%d]-%s\n", i, Strings.dup('-', 37));
 			next(2);
 			// dumps("ACC");
-			print("** ACC:0x%X\n", asInt());
+			print("** ACC:0x%X\n", getInt2());
 
 			next(2);
-			int ni = asInt();
+			int ni = getInt2();
 			String name = cp.getInfo(ni).getText();
 			next(2);
-			int di = asInt();
+			int di = getInt2();
 			String descriptor = cp.getInfo(di).getText();
 			// dump("name-de");
 			print("%10s: %s", "[" + name + "]", descriptor);
 			br();
 
 			next(2);
-			int attLen = asInt();
+			int attLen = getInt2();
 			print("<has %d attibutes>\n", attLen);
 
 			for (int x = 0; x < attLen; x++)
@@ -226,21 +232,21 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 
 	private void read_attribute_info(int index) {
 		next(2);
-		int attNameIndex = asInt();
-		bytes.clear();
+		int attNameIndex = getInt2();
+		mark();
 		String attName = cp.getInfo(attNameIndex).getText();
 
 		next(4);
-		int len = asInt4();
+		int len = getInt4();
 		// dump("len");
-		bytes.clear();
+		mark();
 
 		next(len);
 
 		AttributeBrowser ab = attrs.get(attName);
 		if (null != ab) {
-			ab.load(bytes.toArray());
-			bytes.clear();
+			ab.load(this.getBytes());
+			mark();
 		} else {
 			dump("%3d - '%s' :: %dbytes:\n", index, attName, len);
 		}
@@ -277,41 +283,30 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 	 * </pre>
 	 */
 	public void parse() {
-		try {
-			input = new DataInputStream(new FileInputStream(file));
-			out.print(file.getName());
-			br();
-			try {
-				int count;
-				read_magic();
-				read_version("minor");
-				read_version("major");
-				count = read_count("constants");
-				read_constant_pool(count);
-				read_access_flags();
-				read_this_class();
-				read_super_class();
-				count = read_count("interface");
-				read_interfaces(count);
-				count = read_count("field");
-				read_field_and_method_infos(count, "Fields");
-				count = read_count("method");
-				read_field_and_method_infos(count, "Methods");
-				count = read_count("attribute");
-				read_class_attributes(count);
-				hr('~');
-				while (true)
-					next();
-			} catch (ExitLoop exit) {
-				dump();
-				hr();
-				out.println("Done");
-			}
-		} catch (FileNotFoundException e) {
-			throw Lang.wrapThrow(e);
-		}
+		int count;
+		read_magic();
+		read_version("minor");
+		read_version("major");
+		count = read_count("constants");
+		read_constant_pool(count);
+		read_access_flags();
+		read_this_class();
+		read_super_class();
+		count = read_count("interface");
+		read_interfaces(count);
+		count = read_count("field");
+		read_field_and_method_infos(count, "Fields");
+		count = read_count("method");
+		read_field_and_method_infos(count, "Methods");
+		count = read_count("attribute");
+		read_class_attributes(count);
+		hr('~');
+		while (null != next(1)) {}
+		dump();
+		hr();
+		out.println("Done");
+
 		// hr('*');
 		// out.println(cp.toString());
 	}
-
 }

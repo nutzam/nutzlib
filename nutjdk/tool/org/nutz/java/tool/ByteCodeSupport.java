@@ -2,17 +2,16 @@ package org.nutz.java.tool;
 
 import static java.lang.System.out;
 
-import java.io.DataInput;
-import java.io.EOFException;
 import java.io.File;
-import java.io.IOException;
 
-import org.nutz.lang.ExitLoop;
-import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
-import org.nutz.lang.util.LinkedIntArray;
+import org.nutz.lang.util.ByteReading;
 
-public class ByteCodeSupport {
+public class ByteCodeSupport extends ByteReading{
+
+	public ByteCodeSupport(int[] bytes) {
+		super(bytes);
+	}
 
 	protected File file;
 
@@ -28,40 +27,9 @@ public class ByteCodeSupport {
 		hr('-');
 	}
 
-	protected DataInput input;
-	protected byte b;
-	protected LinkedIntArray bytes;
-
-	protected int asInt() {
-		if (bytes.size() < 2)
-			throw Lang.makeThrow("You can not evalute %d byte[] to int!", bytes.size());
-		int last = bytes.size() - 1;
-		int low = (bytes.get(last--) & 0xFF);
-		int high = (bytes.get(last) & 0xFF);
-		return low | (high << 8);
-	}
-
-	protected int asInt4() {
-		if (bytes.size() < 4)
-			throw Lang.makeThrow("You can not evalute %d byte[] to int!", bytes.size());
-		int last = bytes.size() - 1;
-		int low = (bytes.get(last--) & 0xFF);
-		int lowh = (bytes.get(last--) & 0xFF);
-		int higl = (bytes.get(last--) & 0xFF);
-		int high = (bytes.get(last) & 0xFF);
-		return low | (lowh << 8) | (higl << 16) | (high << 24);
-	}
-
-	protected String asUtf8() {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < bytes.size(); i++)
-			sb.append((char) bytes.get(i));
-		return sb.toString();
-	}
-
 	protected void print(String fmt, Object... args) {
 		out.printf(fmt, args);
-		bytes.clear();
+		mark();
 	}
 
 	protected void dump() {
@@ -83,35 +51,9 @@ public class ByteCodeSupport {
 			if (!s.endsWith("\n") && !s.endsWith(":"))
 				out.print(": ");
 		}
-		if (bytes.isEmpty()) {
-			out.println("<!empty>");
-		} else {
-			for (int i = 0; i < bytes.size(); i++) {
-				if (i > 0)
-					if (i % 16 == 0)
-						br();
-				out.printf("%s ", Strings.toHex(bytes.get(i), 2));
-			}
-		}
-		bytes.clear();
+		out.print(this.toHexString(16));
 		br();
-	}
-
-	protected void next(int num) {
-		for (int i = 0; i < num; i++)
-			next();
-	}
-
-	protected byte next() {
-		try {
-			b = input.readByte();
-			bytes.push(b);
-			return b;
-		} catch (EOFException e) {
-			throw new ExitLoop();
-		} catch (IOException e) {
-			throw Lang.wrapThrow(e);
-		}
+		mark();
 	}
 
 }
