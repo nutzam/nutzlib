@@ -18,15 +18,15 @@ public class NutzTestingServlet extends HttpServlet {
 		String className = req.getParameter("class");
 		if(className != null){
 			try {
+				Class<?> testClass = Class.forName(className);
 				new TestRunner(new PrintStream(resp.getOutputStream()))
-					.doRun(new JUnit4TestAdapter(Class.forName(className)));
+					.doRun(new JUnit4TestAdapter(testClass));
 			} catch (ClassNotFoundException e) {
 				resp.getWriter().println("ClassNotFound: "+className);
 			}catch (Throwable e) {
 				e.printStackTrace(resp.getWriter());
 			}
 		}else{
-			
 			resp.getWriter().println("Using : http://wendalx999.appspot.com/check?class= + className");
 		}
 	}
