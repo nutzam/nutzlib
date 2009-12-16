@@ -39,6 +39,7 @@ public class TryMeta {
 		/* ========================================================= */
 		// rsDetail(conn);
 		DatabaseMetaData dmd = conn.getMetaData();
+		out.printf("%s\n%s\n\n", dmd.getDatabaseProductName(), dmd.getDatabaseProductVersion());
 		ResultSet rs = dmd.getPrimaryKeys(null, null, "t_pet");
 		printRS(rs);
 		out.println(Strings.dup('~', 110));
@@ -97,6 +98,13 @@ public class TryMeta {
 		/*-----------------------------------------------------------*/
 		rs.close();
 		stat.close();
+	}
+
+	static void h2(BasicDataSource ds) {
+		ds.setDriverClassName("org.h2.Driver");
+		ds.setUrl("jdbc:h2:tcp://localhost/~/zzhtest");
+		ds.setUsername("sa");
+		ds.setPassword("");
 	}
 
 	static void oracle(BasicDataSource ds) {
