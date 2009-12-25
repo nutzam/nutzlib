@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+
+	<xs:element name="nutzconfig" type="t_nutzconfig"></xs:element>
+
+	<xs:attribute name="id" type="xs:string"></xs:attribute>
+
+	<xs:attribute name="type" type="xs:string"></xs:attribute>
+
+	<xs:attribute name="value" type="xs:string"></xs:attribute>
+
+	<xs:attribute name="name" type="xs:string"></xs:attribute>
+
+	<xs:attribute name="singleton" type="xs:boolean"></xs:attribute>
+
+	<xs:complexType name="t_nutzconfig">
+		<xs:sequence>
+			<xs:element name="ioc" type="t_ioc" maxOccurs="1" minOccurs="0"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="t_ioc">
+		<xs:sequence>
+			<xs:element name="bean" type="t_bean" maxOccurs="unbounded" minOccurs="1"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="t_bean">
+		<xs:sequence>
+			<xs:element name="args" type="t_args" maxOccurs="1" minOccurs="0"></xs:element>
+			<xs:element name="fields" type="t_fields" maxOccurs="1" minOccurs="0"></xs:element>
+			<xs:element name="events" type="t_events" maxOccurs="1" minOccurs="0"></xs:element>
+		</xs:sequence>
+		<xs:attribute ref="id" use="required"></xs:attribute>
+		<xs:attribute ref="type"></xs:attribute>
+		<xs:attribute ref="singleton"></xs:attribute>
+		<xs:attribute ref="scope"></xs:attribute>
+	</xs:complexType>
+
+	<xs:complexType name="t_args">
+		<xs:sequence>
+			<xs:element name="arg" type="t_arg" maxOccurs="unbounded" minOccurs="0"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="t_arg">
+		<xs:attribute ref="type"></xs:attribute>
+		<xs:attribute ref="value" use="required"></xs:attribute>
+	</xs:complexType>
+
+	<xs:complexType name="t_events">
+		<xs:sequence>
+			<xs:element name="create" type="t_create" maxOccurs="1" minOccurs="0"></xs:element>
+				<xs:element name="depose" type="t_depose" maxOccurs="1" minOccurs="0"></xs:element>
+					<xs:element name="fetch" type="t_fetch" maxOccurs="1" minOccurs="0"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+    
+	<xs:complexType name="t_fields">
+		<xs:sequence>
+			<xs:element name="field" type="t_field" maxOccurs="unbounded" minOccurs="1"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+    
+
+
+
+	<xs:attribute name="scope" type="xs:string"></xs:attribute>
+
+	<xs:complexType name="t_create">
+		<xs:attribute ref="value" use="required"></xs:attribute>
+	</xs:complexType>
+    
+	<xs:complexType name="t_depose">
+		<xs:attribute ref="value" use="required"></xs:attribute>
+	</xs:complexType>
+    
+	<xs:complexType name="t_fetch">
+		<xs:attribute ref="value" use="required"></xs:attribute>
+	</xs:complexType>
+
+
+	<xs:complexType name="t_field">
+		<xs:attribute ref="name" use="required"></xs:attribute>
+		<xs:attribute ref="type"></xs:attribute>
+		<xs:attribute ref="value" use="required"></xs:attribute>
+	</xs:complexType>
+</xs:schema>

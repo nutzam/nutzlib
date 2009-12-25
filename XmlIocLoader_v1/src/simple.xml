@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nutzconfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="nutz.ioc-1.0.xsd">
+	<ioc>
+		<bean id="myBean" type="java.lang.Object">
+			<args>
+				<arg type="refer" value="sb"></arg>
+			</args>
+			<fields>
+				<field name="Field2" type="java.lang.Long" value="10"></field>
+			</fields>
+			<events>
+				<create value="create"></create>
+				<depose value="depose"></depose>
+				<fetch value="fetch"></fetch>
+			</events>
+		</bean>
+		<bean id="sb" type="java.lang.Object"/>
+		<bean id="fox" />
+	</ioc>
+</nutzconfig>
