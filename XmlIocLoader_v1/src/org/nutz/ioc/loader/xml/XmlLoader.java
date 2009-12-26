@@ -33,20 +33,21 @@ import org.w3c.dom.NodeList;
  */
 public class XmlLoader implements IocLoader {
 
-	protected Document document;
-
 	private static final Log LOG = Logs.getLog(XmlLoader.class);
 
-	private Map<String, IocObject> iocMap;
+	private Map<String, String> iocMap;
 
 	public XmlLoader(String... fileNames) {
+		iocMap = new HashMap<String, String>();
 		try {
 			DocumentBuilder builder = Lang.xmls();
+			Document document;
 			for (String fileName : fileNames) {
 				document = builder.parse(Files.findFile(fileName));
 				document.normalize();
-				scanBeans();
-				document = null;
+				NodeList nodeList = document.getDocumentElement().getElementsByTagName("ioc");
+				if (nodeList.getLength() > 0)
+					scanBeans((Element) nodeList.item(0));
 			}
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -63,21 +64,18 @@ public class XmlLoader implements IocLoader {
 	}
 
 	public IocObject load(String name) throws ObjectLoadException {
-		return iocMap.get(name);
+		String iobjData = iocMap.get(name);
+		if(iobjData == null)
+			return null;
+		return Json.fromJson(IocObject.class, iobjData);
 	}
 
-	void scanBeans() throws Throwable {
-		Element element = document.getDocumentElement();
-		NodeList nodeList = element.getElementsByTagName("ioc");
-		if (nodeList.getLength() > 0) {
-			Element iocElement = (Element) nodeList.item(0);
-			NodeList beansNode = iocElement.getElementsByTagName("bean");
-			if (beansNode.getLength() > 0) {
-				int len = beansNode.getLength();
-				iocMap = new HashMap<String, IocObject>(len);
-				for (int i = 0; i < len; i++)
+	void scanBeans(Element iocElement) throws Throwable {
+		NodeList beansNode = iocElement.getElementsByTagName("bean");
+		int len = beansNode.getLength();
+		if (len > 0) {
+			for (int i = 0; i < len; i++)
 					paserBean((Element) beansNode.item(i));
-			}
 		}
 	}
 
@@ -94,13 +92,11 @@ public class XmlLoader implements IocLoader {
 		String beanScope = beanElement.getAttribute("scope");
 		if (!Strings.isBlank(beanScope))
 			iocObject.setScope(beanScope);
-		if ("false".equals(beanElement.getAttribute("singleton")))
-			iocObject.setSingleton(false);
 		parseArgs(beanElement, beanId, iocObject);
 		parseFields(beanElement, beanId, iocObject);
 		parseEvents(beanElement, beanId, iocObject);
 
-		iocMap.put(beanId, iocObject);
+		iocMap.put(beanId, Json.toJson(iocObject));
 		if (LOG.isDebugEnabled())
 			LOG.debug("处理完一个bean: " + beanId);
 	}
@@ -110,8 +106,8 @@ public class XmlLoader implements IocLoader {
 		if (argsNodeList.getLength() > 0) {
 			Element argsElement = (Element) argsNodeList.item(0);
 			NodeList argNodeList = argsElement.getElementsByTagName("arg");
-			if (argNodeList.getLength() > 0) {
-				int len = argNodeList.getLength();
+			int len = argNodeList.getLength();
+			if (len > 0) {
 				for (int i = 0; i < len; i++) {
 					Element argElement = (Element) argNodeList.item(i);
 					IocValue iocValue = new IocValue();
@@ -164,6 +160,7 @@ public class XmlLoader implements IocLoader {
 
 	public static void main(String[] args) throws Throwable {
 		XmlLoader loader = new XmlLoader("simple.xml");
-		System.out.println(Json.toJson(loader.iocMap));
+		for (String string : loader.iocMap.values())
+			System.out.println(string);
 	}
 }
