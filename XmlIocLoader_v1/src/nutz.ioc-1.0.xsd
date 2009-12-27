@@ -27,13 +27,21 @@
 
 	<xs:complexType name="t_bean">
 		<xs:sequence>
-			<xs:element name="args" type="t_args" maxOccurs="1" minOccurs="0"></xs:element>
-			<xs:element name="fields" type="t_fields" maxOccurs="1" minOccurs="0"></xs:element>
-			<xs:element name="events" type="t_events" maxOccurs="1" minOccurs="0"></xs:element>
+			<xs:element name="args" type="t_args" maxOccurs="1"
+				minOccurs="0">
+			</xs:element>
+			<xs:element name="fields" type="t_fields" maxOccurs="1"
+				minOccurs="0">
+			</xs:element>
+			<xs:element name="events" type="t_events" maxOccurs="1"
+				minOccurs="0">
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute ref="id" use="required"></xs:attribute>
-		<xs:attribute ref="type"></xs:attribute>
+		<xs:attribute ref="type"></xs:attribute>
+
 		<xs:attribute ref="scope"></xs:attribute>
+		<xs:attribute ref="parent"></xs:attribute>
 	</xs:complexType>
 
 	<xs:complexType name="t_args">
@@ -84,4 +92,6 @@
 		<xs:attribute ref="type"></xs:attribute>
 		<xs:attribute ref="value" use="required"></xs:attribute>
 	</xs:complexType>
+
+    <xs:attribute name="parent" type="xs:string"></xs:attribute>
 </xs:schema>

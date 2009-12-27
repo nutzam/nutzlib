@@ -17,5 +17,26 @@
 		</bean>
 		<bean id="sb" type="java.lang.Object"/>
 		<bean id="fox" />
+		<bean id="nutz" parent="fox">
+		</bean>
+		
+		<bean id="op" type="java.lang.String">
+			<args>
+				<arg value="Wendal"/>
+			</args>
+		</bean>
+		<bean id="op2" parent="op"></bean>
+		
+		<bean id="sb2">
+			<events>
+				<create value="toString"/>
+			</events>
+		</bean>
+		
+		<!-- 循环依赖 -->
+<!--		<bean id="p1" parent="p2"></bean>-->
+<!--		<bean id="p2" parent="p1"></bean>-->
+		<!-- 依赖自身 -->
+<!--		<bean id="p3" parent="p3"></bean>-->
 	</ioc>
 </nutzconfig>
