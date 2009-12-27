@@ -176,17 +176,15 @@ public class XmlLoader implements IocLoader {
 	
 	private void handleParent(){
 		//检查parentId是否都存在.
-		for (String parentId : parentMap.values()) {
+		for (String parentId : parentMap.values())
 			if(! iocMap.containsKey(parentId))
 				throw Lang.makeThrow("发现无效的parent=%s", parentId);
-		}
 		//检查循环依赖
+		List<String> parentList = new ArrayList<String>();
 		for (Entry<String, String> entry : parentMap.entrySet()) {
-			List<String> parentList = new ArrayList<String>();
-			if(entry.getKey().equals(entry.getValue()))
-				throw Lang.makeThrow("发现循环依赖! bean id=%s", entry.getKey());
 			if(! check(parentList, entry.getKey()))
 				throw Lang.makeThrow("发现循环依赖! bean id=%s", entry.getKey());
+			parentList.clear();
 		}
 		while(parentMap.size() != 0){
 			Iterator<Entry<String, String>> it = parentMap.entrySet().iterator();
@@ -197,12 +195,10 @@ public class XmlLoader implements IocLoader {
 				if(parentMap.get(parentId) == null){
 					IocObject newIocObject = Iocs.mergeWith(iocMap.get(beanId), iocMap.get(parentId));
 					iocMap.put(beanId, newIocObject);
-					parentMap.remove(beanId);
-					break;
+					it.remove();
 				}
 			}
 		}
-		parentMap = null;
 	}
 	
 	private boolean check(List<String> parentList,String currentBeanId){
