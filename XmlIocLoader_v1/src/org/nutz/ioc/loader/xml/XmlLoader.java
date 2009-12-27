@@ -205,8 +205,9 @@ public class XmlLoader implements IocLoader {
 		if(parentList.contains(currentBeanId))
 			return false;
 		String parentBeanId = parentMap.get(currentBeanId);
-		if(parentBeanId == null)
+		if(parentBeanId == null){
 			return true;
+		}
 		parentList.add(currentBeanId);
 		return check(parentList, parentBeanId);
 	}

@@ -25,7 +25,25 @@
 				<arg value="Wendal"/>
 			</args>
 		</bean>
-		<bean id="op2" parent="op"></bean>
+		<bean id="op2" parent="op">
+			<fields>
+				<field name="xx" value="yy"/>
+			</fields>
+		</bean>
+		
+		<bean id="op3" parent="op2">
+			<events>
+				<depose value="depose"/>
+			</events>
+		</bean>
+		
+		<bean id="op4" parent="op3"></bean>
+		
+		<bean id="op5" parent="op2">
+			<events>
+				<create value="ct"/>
+			</events>
+		</bean>
 		
 		<bean id="sb2">
 			<events>
