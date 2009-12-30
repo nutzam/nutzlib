@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ioc>
-	<obj name="obj" type="com.you.app.YourClass" singleton="true"
+	<obj name="obj" type="com.you.app.YourClass"
+		singleton="true"
+		scope="app"
+		parent="XXX"
 		fetch="com.you.app.OnFetchObject" depose="depose" create="onCreate">
 		<args>
 			<str>Tasdfadf</str>
