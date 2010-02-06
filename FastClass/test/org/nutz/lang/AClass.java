@@ -21,7 +21,7 @@ public class AClass{
 	}
 	
 public void xx3 (int[] xx){
-		
+	System.out.println("到这里了!");
 	}
 public void xx311 (int[][][][][] xx){
 	
@@ -50,4 +50,13 @@ public void ppxxxx(double x){}
 public void ppxxxxx(byte x){}
 public void ppxxxxxx(char x){}
 public void ppxxxxxxx(boolean x){}
+
+public static final void xxxxyyy(){
+	System.out.println("打印出来啊!");
+}
+
+//public String toString(){
+//	System.out.println("到这里了!");
+//	return super.toString();
+//}
 }

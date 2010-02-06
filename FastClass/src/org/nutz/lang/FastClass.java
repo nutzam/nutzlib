@@ -92,14 +92,18 @@ public class FastClass extends AbstractInvoker implements Opcodes{
 			int modify = method.getModifiers();
 			if (Modifier.isPrivate(modify))
 				continue;
-			if ( (! Modifier.isStatic(modify)) && "void".equals(method.getReturnType().toString())){
+			boolean isStatic = Modifier.isStatic(modify);
+			boolean needReturn = "void".equals(method.getReturnType().toString());
+//			if ( (! Modifier.isStatic(modify)) && "void".equals(method.getReturnType().toString())){
 				mv.visitFieldInsn(GETSTATIC, proxyClassName, "_method_"+i, "Ljava/lang/reflect/Method;");
 				mv.visitVarInsn(ALOAD, 2);
 				mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/reflect/Method", "equals", "(Ljava/lang/Object;)Z");
 				Label l0 = new Label();
 				mv.visitJumpInsn(IFEQ, l0);
-				mv.visitVarInsn(ALOAD, 1);
-				mv.visitTypeInsn(CHECKCAST, klass.getName().replace('.', '/'));
+				if (! isStatic){
+					mv.visitVarInsn(ALOAD, 1);
+					mv.visitTypeInsn(CHECKCAST, klass.getName().replace('.', '/'));
+				}
 				{
 					Type argumentTypes [] = Type.getArgumentTypes(Type.getMethodDescriptor(method));
 					if (argumentTypes.length > 0){
@@ -141,10 +145,12 @@ public class FastClass extends AbstractInvoker implements Opcodes{
 						}
 					}
 				}
-				mv.visitMethodInsn(INVOKEVIRTUAL, klass.getName().replace('.', '/'), method.getName(), Type.getMethodDescriptor(method));
+				if (isStatic){
+					mv.visitMethodInsn(INVOKESTATIC, klass.getName().replace('.', '/'), method.getName(), Type.getMethodDescriptor(method));
+				}else
+					mv.visitMethodInsn(INVOKEVIRTUAL, klass.getName().replace('.', '/'), method.getName(), Type.getMethodDescriptor(method));
 				mv.visitLabel(l0);
-//				mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-			}
+//			}
 		}
 		mv.visitInsn(RETURN);
 		mv.visitMaxs(0, 4);
