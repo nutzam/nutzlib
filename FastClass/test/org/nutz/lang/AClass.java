@@ -5,6 +5,7 @@ import java.util.Date;
 public class AClass{
 	
 	public void pp(){
+		System.currentTimeMillis();
 //		System.out.println("I am here");
 	}
 	
