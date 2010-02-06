@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 
 import org.nutz.aop.ClassDefiner;
 import org.nutz.aop.DefaultClassDefiner;
@@ -67,7 +68,14 @@ public class FastClass extends AbstractInvoker implements Opcodes{
 	}
 	
 	private void createMethodField(){
-		this.methods = Mirror.me(klass).getAllDeclaredMethodsWithoutTop();
+		ArrayList<Method> methodList = new ArrayList<Method>();
+		for (Method method : klass.getDeclaredMethods()) {
+			int modify = method.getModifiers();
+			if ( Modifier.isPrivate(modify))
+				continue;
+			methodList.add(method);
+		}
+		this.methods = methodList.toArray(new Method[methodList.size()]);
 		for (int i = 0; i < methods.length; i++) {
 			FieldVisitor fv = cw.visitField(ACC_PUBLIC + ACC_STATIC, "_method_"+i, "Ljava/lang/reflect/Method;", null, null);
 			fv.visitEnd();
@@ -92,73 +100,69 @@ public class FastClass extends AbstractInvoker implements Opcodes{
 			int modify = method.getModifiers();
 			if (Modifier.isPrivate(modify))
 				continue;
+			if (! "void".equals(method.getReturnType().toString()))
+				continue;
 			boolean isStatic = Modifier.isStatic(modify);
-			boolean needReturn = "void".equals(method.getReturnType().toString());
-//			if ( (! Modifier.isStatic(modify)) && "void".equals(method.getReturnType().toString())){
-				mv.visitFieldInsn(GETSTATIC, proxyClassName, "_method_"+i, "Ljava/lang/reflect/Method;");
-				mv.visitVarInsn(ALOAD, 2);
-				mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/reflect/Method", "equals", "(Ljava/lang/Object;)Z");
-				Label l0 = new Label();
-				mv.visitJumpInsn(IFEQ, l0);
-				if (! isStatic){
-					mv.visitVarInsn(ALOAD, 1);
-					mv.visitTypeInsn(CHECKCAST, klass.getName().replace('.', '/'));
+			mv.visitFieldInsn(GETSTATIC, proxyClassName, "_method_"+i, "Ljava/lang/reflect/Method;");
+			mv.visitVarInsn(ALOAD, 2);
+			mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/reflect/Method", "equals", "(Ljava/lang/Object;)Z");
+			Label l0 = new Label();
+			mv.visitJumpInsn(IFEQ, l0);
+			if (! isStatic){
+				mv.visitVarInsn(ALOAD, 1);
+				mv.visitTypeInsn(CHECKCAST, klass.getName().replace('.', '/'));
+			}
+			Type argumentTypes [] = Type.getArgumentTypes(Type.getMethodDescriptor(method));
+			if (argumentTypes.length > 0){
+				//加载参数数组
+				for (int x = 0; x < argumentTypes.length; ++x) {
+					mv.visitVarInsn(ALOAD, 3);
+					visitX(mv, x);
+					mv.visitInsn(AALOAD);
+					Type type = argumentTypes[x];
+					String desc = type.getDescriptor();
+					if(type.equals(Type.BOOLEAN_TYPE)){
+						mv.visitTypeInsn(CHECKCAST, "java/lang/Boolean");
+						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue", "()Z");
+					}else if(type.equals(Type.BYTE_TYPE)){
+						mv.visitTypeInsn(CHECKCAST, "java/lang/Byte");
+						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Byte", "byteValue", "()B");
+					}else if(type.equals(Type.CHAR_TYPE)){
+						mv.visitTypeInsn(CHECKCAST, "java/lang/Character");
+						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Character", "charValue", "()C");
+					}else if(type.equals(Type.SHORT_TYPE)){
+						mv.visitTypeInsn(CHECKCAST, "java/lang/Short");
+						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Short", "shortValue", "()S");
+					}else if(type.equals(Type.INT_TYPE)){
+						mv.visitTypeInsn(CHECKCAST, "java/lang/Integer");
+						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Integer", "intValue", "()I");
+					}else if(type.equals(Type.LONG_TYPE)){
+						mv.visitTypeInsn(CHECKCAST, "java/lang/Long");
+						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J");
+					}else if(type.equals(Type.FLOAT_TYPE)){
+						mv.visitTypeInsn(CHECKCAST, "java/lang/Float");
+						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Float", "floatValue", "()F");
+					}else if(type.equals(Type.DOUBLE_TYPE)){
+						mv.visitTypeInsn(CHECKCAST, "java/lang/Double");
+						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Double", "doubleValue", "()D");
+					}else if (desc.startsWith("L"))
+							mv.visitTypeInsn(CHECKCAST, desc.substring(1,desc.length() - 1));
+						else
+							mv.visitTypeInsn(CHECKCAST, desc);
 				}
-				{
-					Type argumentTypes [] = Type.getArgumentTypes(Type.getMethodDescriptor(method));
-					if (argumentTypes.length > 0){
-						//加载参数数组
-						for (int x = 0; x < argumentTypes.length; ++x) {
-							mv.visitVarInsn(ALOAD, 3);
-							visitX(mv, x);
-							mv.visitInsn(AALOAD);
-							Type type = argumentTypes[x];
-							String desc = type.getDescriptor();
-							if(type.equals(Type.BOOLEAN_TYPE)){
-								mv.visitTypeInsn(CHECKCAST, "java/lang/Boolean");
-								mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue", "()Z");
-							}else if(type.equals(Type.BYTE_TYPE)){
-								mv.visitTypeInsn(CHECKCAST, "java/lang/Byte");
-								mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Byte", "byteValue", "()B");
-							}else if(type.equals(Type.CHAR_TYPE)){
-								mv.visitTypeInsn(CHECKCAST, "java/lang/Character");
-								mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Character", "charValue", "()C");
-							}else if(type.equals(Type.SHORT_TYPE)){
-								mv.visitTypeInsn(CHECKCAST, "java/lang/Short");
-								mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Short", "shortValue", "()S");
-							}else if(type.equals(Type.INT_TYPE)){
-								mv.visitTypeInsn(CHECKCAST, "java/lang/Integer");
-								mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Integer", "intValue", "()I");
-							}else if(type.equals(Type.LONG_TYPE)){
-								mv.visitTypeInsn(CHECKCAST, "java/lang/Long");
-								mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J");
-							}else if(type.equals(Type.FLOAT_TYPE)){
-								mv.visitTypeInsn(CHECKCAST, "java/lang/Float");
-								mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Float", "floatValue", "()F");
-							}else if(type.equals(Type.DOUBLE_TYPE)){
-								mv.visitTypeInsn(CHECKCAST, "java/lang/Double");
-								mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Double", "doubleValue", "()D");
-							}else if (desc.startsWith("L"))
-								mv.visitTypeInsn(CHECKCAST, desc.substring(1,desc.length() - 1));
-							else
-								mv.visitTypeInsn(CHECKCAST, desc);
-						}
-					}
-				}
-				if (isStatic){
-					mv.visitMethodInsn(INVOKESTATIC, klass.getName().replace('.', '/'), method.getName(), Type.getMethodDescriptor(method));
-				}else
-					mv.visitMethodInsn(INVOKEVIRTUAL, klass.getName().replace('.', '/'), method.getName(), Type.getMethodDescriptor(method));
-				mv.visitLabel(l0);
-//			}
+			}
+			int invokeOpCode = INVOKEVIRTUAL;
+			if (isStatic)
+				invokeOpCode = INVOKESTATIC;
+			else if (klass.isInterface())
+				invokeOpCode = INVOKEINTERFACE;
+			mv.visitMethodInsn(invokeOpCode, klass.getName().replace('.', '/'), method.getName(), Type.getMethodDescriptor(method));
+			mv.visitInsn(RETURN);
+			mv.visitLabel(l0);
 		}
 		mv.visitInsn(RETURN);
-		mv.visitMaxs(0, 4);
+		mv.visitMaxs(0, 0);
 		mv.visitEnd();
-	}
-	
-	static void create1(){
-		
 	}
 	
 	static void visitX(MethodVisitor mv,int i){

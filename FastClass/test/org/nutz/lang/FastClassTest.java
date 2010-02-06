@@ -2,6 +2,8 @@ package org.nutz.lang;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.Method;
+
 import org.junit.Test;
 
 @SuppressWarnings("unused")
@@ -21,4 +23,24 @@ public class FastClassTest {
 		Object.class.equals(null);
 	}
 
+	@Test
+	public void test_time() throws Throwable{
+		FastClass fastClass = FastClass.create(AClass.class);
+		AClass classZ = new AClass();
+		Method method = AClass.class.getMethod("pp");
+		System.out.println(System.currentTimeMillis());
+		for (int i = 0; i < 10000000; i++) {
+			method.invoke(classZ);
+		}
+		System.out.println(System.currentTimeMillis());
+		for (int i = 0; i < 10000000; i++) {
+			fastClass.invoke_return_Object(classZ, method);
+		}
+		System.out.println(System.currentTimeMillis());
+		for (int i = 0; i < 10000000; i++) {
+			method.invoke(classZ);
+		}
+		System.out.println(System.currentTimeMillis());
+
+	}
 }

@@ -5,7 +5,7 @@ import java.util.Date;
 public class AClass{
 	
 	public void pp(){
-		System.out.println("I am here");
+//		System.out.println("I am here");
 	}
 	
 	public void xxx (){
@@ -55,8 +55,8 @@ public static final void xxxxyyy(){
 	System.out.println("打印出来啊!");
 }
 
-//public String toString(){
-//	System.out.println("到这里了!");
-//	return super.toString();
-//}
+public String toString(){
+	System.out.println("到这里了!");
+	return super.toString();
+}
 }
