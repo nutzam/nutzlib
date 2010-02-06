@@ -1,8 +1,5 @@
 package org.nutz.lang;
 
-import static org.nutz.aop.asm.org.asm.Opcodes.BIPUSH;
-import static org.nutz.aop.asm.org.asm.Opcodes.ICONST_0;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -31,21 +28,11 @@ public class FastClass extends AbstractInvoker implements Opcodes{
 	
 	private String proxyClassName;
 	
-//	private Class<?> proxyClass;
-	
 	private AbstractInvoker invoker;
 	
 	private FastClass(Class<?> klass){
 		this.klass = klass;
 		proxyClassName = SUPERCLASS_NAME+"$$"+klass.getName().replace('.', '$');
-	}
-	
-	public static void main(String[] args) throws Throwable{
-		FastClass fastClass = FastClass.create(AClass.class);
-		fastClass.invoke_instant_void(new AClass(), AClass.class.getMethod("pp"));
-		fastClass.invoke_instant_void(new AClass(), AClass.class.getMethod("xxx"));
-		fastClass.invoke_instant_void(new AClass(), AClass.class.getMethod("yy",Object.class),"Wendal");
-		fastClass.invoke_instant_void(new AClass(), AClass.class.getMethod("yy",Object.class),new Object());
 	}
 	
 	public static final FastClass create(Class<?> klass) throws Throwable{
@@ -98,9 +85,8 @@ public class FastClass extends AbstractInvoker implements Opcodes{
 	}
 	
 	private void createMethods(){
-		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC + ACC_VARARGS, "invoke_instant_void", "(Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/Object;)V", null, new String[] { "java/lang/Throwable" });
+		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC + ACC_VARARGS, "invoke_return_void", "(Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/Object;)V", null, new String[] { "java/lang/Throwable" });
 		mv.visitCode();
-//		System.out.println(methods.length);
 		for (int i = 0; i < methods.length; i++) {
 			Method method = methods[i];
 			int modify = method.getModifiers();
@@ -120,22 +106,53 @@ public class FastClass extends AbstractInvoker implements Opcodes{
 						//加载参数数组
 						for (int x = 0; x < argumentTypes.length; ++x) {
 							mv.visitVarInsn(ALOAD, 3);
-							visitX(mv, i);
+							visitX(mv, x);
 							mv.visitInsn(AALOAD);
-							Type type = argumentTypes[i];
-							System.out.println(type.getClassName());
-							mv.visitTypeInsn(CHECKCAST, type.getClassName().replace('.', '/'));
+							Type type = argumentTypes[x];
+							String desc = type.getDescriptor();
+							if(type.equals(Type.BOOLEAN_TYPE)){
+								mv.visitTypeInsn(CHECKCAST, "java/lang/Boolean");
+								mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue", "()Z");
+							}else if(type.equals(Type.BYTE_TYPE)){
+								mv.visitTypeInsn(CHECKCAST, "java/lang/Byte");
+								mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Byte", "byteValue", "()B");
+							}else if(type.equals(Type.CHAR_TYPE)){
+								mv.visitTypeInsn(CHECKCAST, "java/lang/Character");
+								mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Character", "charValue", "()C");
+							}else if(type.equals(Type.SHORT_TYPE)){
+								mv.visitTypeInsn(CHECKCAST, "java/lang/Short");
+								mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Short", "shortValue", "()S");
+							}else if(type.equals(Type.INT_TYPE)){
+								mv.visitTypeInsn(CHECKCAST, "java/lang/Integer");
+								mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Integer", "intValue", "()I");
+							}else if(type.equals(Type.LONG_TYPE)){
+								mv.visitTypeInsn(CHECKCAST, "java/lang/Long");
+								mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J");
+							}else if(type.equals(Type.FLOAT_TYPE)){
+								mv.visitTypeInsn(CHECKCAST, "java/lang/Float");
+								mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Float", "floatValue", "()F");
+							}else if(type.equals(Type.DOUBLE_TYPE)){
+								mv.visitTypeInsn(CHECKCAST, "java/lang/Double");
+								mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Double", "doubleValue", "()D");
+							}else if (desc.startsWith("L"))
+								mv.visitTypeInsn(CHECKCAST, desc.substring(1,desc.length() - 1));
+							else
+								mv.visitTypeInsn(CHECKCAST, desc);
 						}
 					}
 				}
 				mv.visitMethodInsn(INVOKEVIRTUAL, klass.getName().replace('.', '/'), method.getName(), Type.getMethodDescriptor(method));
 				mv.visitLabel(l0);
-				mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+//				mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
 			}
 		}
 		mv.visitInsn(RETURN);
 		mv.visitMaxs(0, 4);
 		mv.visitEnd();
+	}
+	
+	static void create1(){
+		
 	}
 	
 	static void visitX(MethodVisitor mv,int i){
@@ -151,8 +168,8 @@ public class FastClass extends AbstractInvoker implements Opcodes{
 	}
 	
 	@Override
-	public void invoke_instant_void(Object obj, Method method, Object... args)
+	public void invoke_return_void(Object obj, Method method, Object... args)
 			throws Throwable {
-		invoker.invoke_instant_void(obj, method, args);
+		invoker.invoke_return_void(obj, method, args);
 	}
 }
