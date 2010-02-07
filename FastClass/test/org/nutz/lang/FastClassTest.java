@@ -18,13 +18,16 @@ public class FastClassTest {
 		fastClass.invoke_return_void(obj, AClass.class.getMethod("yy",Object.class),"Wendal");
 		fastClass.invoke_return_void(obj, AClass.class.getMethod("yy",Object.class),new Object());
 		fastClass.invoke_return_void(obj, AClass.class.getMethod("xxxxyyy"));
-		fastClass.invoke_return_void(obj, AClass.class.getMethod("toString"));
-		fastClass.invoke_return_void(obj, AClass.class.getMethod("hashCode"));
+		Object hashCode = fastClass.invoke_return_Object(obj, AClass.class.getMethod("hashCode"));
+		System.out.println("HashCode = " + hashCode);
+		Object x = fastClass.invoke_return_Object(obj, AClass.class.getMethod("toString"));
+		System.out.println("½á¹ûÊÇ"+x);
 		fastClass.invoke_return_void(obj, AClass.class.getMethod("equals",Object.class),new AClass());
 		fastClass.invoke_return_void(obj, AClass.class.getMethod("finalize"));
+		fastClass.invoke(obj, "toString");
 	}
 	
-	@Test
+//	@Test
 	public void testZ() throws Throwable{
 		FastClass<Runnable> fastClass = FastClass.create(Runnable.class);
 		fastClass.invoke_return_void(new AClass(), Runnable.class.getMethod("run"));

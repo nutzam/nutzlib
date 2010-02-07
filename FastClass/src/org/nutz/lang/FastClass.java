@@ -58,7 +58,8 @@ public class  FastClass<T> extends AbstractInvoker<T> implements Opcodes{
 		createMethodField();
 		addConstructor();
 		createSetMethods();
-		createMethods();
+		createMethods_A();
+		createMethods_B();
 		endClass();
 	}
 	
@@ -79,7 +80,7 @@ public class  FastClass<T> extends AbstractInvoker<T> implements Opcodes{
 		ArrayList<Method> methodList = new ArrayList<Method>();
 		for (Method method : klass.getDeclaredMethods()) {
 			int modify = method.getModifiers();
-			if ( ! Modifier.isPublic(modify))
+			if ( ! Modifier.isPublic(modify)) // 只允许访问public方法
 				continue;
 			if (method.isVarArgs()) //暂时不支持可变参数的方法
 				continue;
@@ -116,71 +117,14 @@ public class  FastClass<T> extends AbstractInvoker<T> implements Opcodes{
 		mv.visitEnd();
 	}
 	
-	private void createMethods(){
+	private void createMethods_A(){
 		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC + ACC_VARARGS, "invoke_return_void", "(Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/Object;)V", null, new String[] { "java/lang/Throwable" });
 		mv.visitCode();
 		for (int i = 0; i < methods.length; i++) {
 			Method method = methods[i];
-			int modify = method.getModifiers();
-			if (Modifier.isPrivate(modify))
-				continue;
 			if (! "void".equals(method.getReturnType().toString()))
 				continue;
-			boolean isStatic = Modifier.isStatic(modify);
-			mv.visitFieldInsn(GETSTATIC, proxyClassName, "_method_"+i, "Ljava/lang/reflect/Method;");
-			mv.visitVarInsn(ALOAD, 2);
-			mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/reflect/Method", "equals", "(Ljava/lang/Object;)Z");
-			Label l0 = new Label();
-			mv.visitJumpInsn(IFEQ, l0);
-			if (! isStatic){
-				mv.visitVarInsn(ALOAD, 1);
-				mv.visitTypeInsn(CHECKCAST, klass.getName().replace('.', '/'));
-			}
-			Type argumentTypes [] = Type.getArgumentTypes(Type.getMethodDescriptor(method));
-			if (argumentTypes.length > 0){
-				//加载参数数组
-				for (int x = 0; x < argumentTypes.length; ++x) {
-					mv.visitVarInsn(ALOAD, 3);
-					visitX(mv, x);
-					mv.visitInsn(AALOAD);
-					Type type = argumentTypes[x];
-					String desc = type.getDescriptor();
-					if(type.equals(Type.BOOLEAN_TYPE)){
-						mv.visitTypeInsn(CHECKCAST, "java/lang/Boolean");
-						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue", "()Z");
-					}else if(type.equals(Type.BYTE_TYPE)){
-						mv.visitTypeInsn(CHECKCAST, "java/lang/Byte");
-						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Byte", "byteValue", "()B");
-					}else if(type.equals(Type.CHAR_TYPE)){
-						mv.visitTypeInsn(CHECKCAST, "java/lang/Character");
-						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Character", "charValue", "()C");
-					}else if(type.equals(Type.SHORT_TYPE)){
-						mv.visitTypeInsn(CHECKCAST, "java/lang/Short");
-						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Short", "shortValue", "()S");
-					}else if(type.equals(Type.INT_TYPE)){
-						mv.visitTypeInsn(CHECKCAST, "java/lang/Integer");
-						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Integer", "intValue", "()I");
-					}else if(type.equals(Type.LONG_TYPE)){
-						mv.visitTypeInsn(CHECKCAST, "java/lang/Long");
-						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J");
-					}else if(type.equals(Type.FLOAT_TYPE)){
-						mv.visitTypeInsn(CHECKCAST, "java/lang/Float");
-						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Float", "floatValue", "()F");
-					}else if(type.equals(Type.DOUBLE_TYPE)){
-						mv.visitTypeInsn(CHECKCAST, "java/lang/Double");
-						mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Double", "doubleValue", "()D");
-					}else if (desc.startsWith("L"))
-							mv.visitTypeInsn(CHECKCAST, desc.substring(1,desc.length() - 1));
-						else
-							mv.visitTypeInsn(CHECKCAST, desc);
-				}
-			}
-			int invokeOpCode = INVOKEVIRTUAL;
-			if (isStatic)
-				invokeOpCode = INVOKESTATIC;
-			else if (klass.isInterface())
-				invokeOpCode = INVOKEINTERFACE;
-			mv.visitMethodInsn(invokeOpCode, klass.getName().replace('.', '/'), method.getName(), Type.getMethodDescriptor(method));
+			Label l0 = commandPart(method,mv,i);
 			mv.visitInsn(RETURN);
 			mv.visitLabel(l0);
 		}
@@ -188,7 +132,101 @@ public class  FastClass<T> extends AbstractInvoker<T> implements Opcodes{
 		mv.visitMaxs(0, 0);
 		mv.visitEnd();
 	}
+	
+	private void createMethods_B(){
+		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC + ACC_VARARGS, "invoke_return_Object", "(Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/Object;)Ljava/lang/Object;", null, new String[] { "java/lang/Throwable" });
+		mv.visitCode();
+		for (int i = 0; i < methods.length; i++) {
+			Method method = methods[i];
+			if ("void".equals(method.getReturnType().toString()))
+				continue;
+			Label l0 = commandPart(method,mv,i);
+			//封装基本类型
+			Type type = Type.getReturnType(method);
+			if(type.equals(Type.BOOLEAN_TYPE)){
+				mv.visitMethodInsn(INVOKESTATIC, "java/lang/Boolean", "valueOf", "(Z)Ljava/lang/Boolean;");
+			}else if(type.equals(Type.BYTE_TYPE)){
+				mv.visitMethodInsn(INVOKESTATIC, "java/lang/Byte", "valueOf", "(B)Ljava/lang/Byte;");
+			}else if(type.equals(Type.CHAR_TYPE)){
+				mv.visitMethodInsn(INVOKESTATIC, "java/lang/Character", "valueOf", "(C)Ljava/lang/Character;");
+			}else if(type.equals(Type.SHORT_TYPE)){
+				mv.visitMethodInsn(INVOKESTATIC, "java/lang/Short", "valueOf", "(S)Ljava/lang/Short;");
+			}else if(type.equals(Type.INT_TYPE)){
+				mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;");
+			}else if(type.equals(Type.LONG_TYPE)){
+				mv.visitMethodInsn(INVOKESTATIC, "java/lang/Long", "valueOf", "(J)Ljava/lang/Long;");
+			}else if(type.equals(Type.FLOAT_TYPE)){
+				mv.visitMethodInsn(INVOKESTATIC, "java/lang/Float", "valueOf", "(F)Ljava/lang/Float;");
+			}else if(type.equals(Type.DOUBLE_TYPE)){
+				mv.visitMethodInsn(INVOKESTATIC, "java/lang/Double", "valueOf", "(D)Ljava/lang/Double;");
+			}
+			mv.visitInsn(ARETURN);
+			mv.visitLabel(l0);
+		}
+		mv.visitInsn(ACONST_NULL);
+		mv.visitInsn(ARETURN);
+		mv.visitMaxs(0, 0);
+		mv.visitEnd();
+	}
 
+	private Label commandPart(Method method, MethodVisitor mv, int i){
+		boolean isStatic = Modifier.isStatic(method.getModifiers());
+		mv.visitFieldInsn(GETSTATIC, proxyClassName, "_method_"+i, "Ljava/lang/reflect/Method;");
+		mv.visitVarInsn(ALOAD, 2);
+		mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/reflect/Method", "equals", "(Ljava/lang/Object;)Z");
+		Label l0 = new Label();
+		mv.visitJumpInsn(IFEQ, l0);
+		if (! isStatic){
+			mv.visitVarInsn(ALOAD, 1);
+			mv.visitTypeInsn(CHECKCAST, klass.getName().replace('.', '/'));
+		}
+		Type argumentTypes [] = Type.getArgumentTypes(Type.getMethodDescriptor(method));
+		if (argumentTypes.length > 0){
+			//加载参数数组
+			for (int x = 0; x < argumentTypes.length; ++x) {
+				mv.visitVarInsn(ALOAD, 3);
+				visitX(mv, x);
+				mv.visitInsn(AALOAD);
+				Type type = argumentTypes[x];
+				String desc = type.getDescriptor();
+				if(type.equals(Type.BOOLEAN_TYPE)){
+					mv.visitTypeInsn(CHECKCAST, "java/lang/Boolean");
+					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue", "()Z");
+				}else if(type.equals(Type.BYTE_TYPE)){
+					mv.visitTypeInsn(CHECKCAST, "java/lang/Byte");
+					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Byte", "byteValue", "()B");
+				}else if(type.equals(Type.CHAR_TYPE)){
+					mv.visitTypeInsn(CHECKCAST, "java/lang/Character");
+					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Character", "charValue", "()C");
+				}else if(type.equals(Type.SHORT_TYPE)){
+					mv.visitTypeInsn(CHECKCAST, "java/lang/Short");
+					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Short", "shortValue", "()S");
+				}else if(type.equals(Type.INT_TYPE)){
+					mv.visitTypeInsn(CHECKCAST, "java/lang/Integer");
+					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Integer", "intValue", "()I");
+				}else if(type.equals(Type.LONG_TYPE)){
+					mv.visitTypeInsn(CHECKCAST, "java/lang/Long");
+					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J");
+				}else if(type.equals(Type.FLOAT_TYPE)){
+					mv.visitTypeInsn(CHECKCAST, "java/lang/Float");
+					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Float", "floatValue", "()F");
+				}else if(type.equals(Type.DOUBLE_TYPE)){
+					mv.visitTypeInsn(CHECKCAST, "java/lang/Double");
+					mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Double", "doubleValue", "()D");
+				}else if (desc.startsWith("L"))
+						mv.visitTypeInsn(CHECKCAST, desc.substring(1,desc.length() - 1));
+					else
+						mv.visitTypeInsn(CHECKCAST, desc);
+			}
+		}
+		int invokeOpCode = INVOKEVIRTUAL;
+		if (isStatic)
+			invokeOpCode = INVOKESTATIC;
+		else if (klass.isInterface())
+			invokeOpCode = INVOKEINTERFACE;
+		mv.visitMethodInsn(invokeOpCode, klass.getName().replace('.', '/'), method.getName(), Type.getMethodDescriptor(method));
+		return l0;
+	}
 	
 	static void visitX(MethodVisitor mv,int i){
 		if(i < 6){
@@ -230,6 +268,7 @@ public class  FastClass<T> extends AbstractInvoker<T> implements Opcodes{
 			invoker.invoke_return_void(obj, methodZ, args);
 			return null;
 		}else {
+			System.out.println("I am here");
 			return invoker.invoke_return_Object(obj, methodZ, args);
 		}
 	}

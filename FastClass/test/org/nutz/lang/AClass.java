@@ -78,7 +78,7 @@ public class AClass implements Runnable{
 	}
 
 	public String toString() {
-		System.out.println("到这里了!");
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!到这里了!");
 		return super.toString();
 	}
 
@@ -89,5 +89,11 @@ public class AClass implements Runnable{
 	
 	public void run(){
 		System.out.println("I am running");
+	}
+	
+	@Override
+	public int hashCode() {
+		System.out.println("跑到这里了");
+		return super.hashCode();
 	}
 }
