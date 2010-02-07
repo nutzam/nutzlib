@@ -1,7 +1,6 @@
 package org.nutz.lang;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
-public class FastClass extends AbstractInvoker implements Opcodes{
+public class  FastClass<T> extends AbstractInvoker<T> implements Opcodes{
 	
 	private static final String SUPERCLASS_NAME = AbstractInvoker.class.getName().replace('.', '/');
 	
@@ -23,7 +22,7 @@ public class FastClass extends AbstractInvoker implements Opcodes{
 	
 	private static long ID;
 	
-	private Class<?> klass;
+	private Class<T> klass;
 	
 	private ClassWriter cw;
 	
@@ -31,9 +30,9 @@ public class FastClass extends AbstractInvoker implements Opcodes{
 	
 	private String proxyClassName;
 	
-	private AbstractInvoker invoker;
+	private AbstractInvoker<T> invoker;
 	
-	private FastClass(Class<?> klass){
+	private FastClass(Class<T> klass){
 		this.klass = klass;
 		proxyClassName = SUPERCLASS_NAME+"_"+getNewId();
 	}
@@ -47,8 +46,8 @@ public class FastClass extends AbstractInvoker implements Opcodes{
 		return ID;
 	}
 	
-	public static final FastClass create(Class<?> klass) throws Throwable{
-		FastClass fastClass = new FastClass(klass);
+	public static final <T> FastClass<T> create(Class<T> klass) throws Throwable{
+		FastClass<T> fastClass = new FastClass<T>(klass);
 		fastClass.init();
 		fastClass.preper();
 		return fastClass;
@@ -58,19 +57,17 @@ public class FastClass extends AbstractInvoker implements Opcodes{
 		createClass();
 		createMethodField();
 		addConstructor();
+		createSetMethods();
 		createMethods();
 		endClass();
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void preper() throws Throwable{
 		Constructor<?> constructor = cd.define(this.proxyClassName.replace('/', '.'), this.cw.toByteArray()).getConstructor();
 		constructor.setAccessible(true);
 		invoker = (AbstractInvoker) constructor.newInstance();
-		for (int i = 0; i < methods.length; i++) {
-			Field field = invoker.getClass().getField("_method_"+i);
-			field.setAccessible(true);
-			field.set(invoker, methods[i]);
-		}
+		invoker.setMethods(methods);
 	}
 	
 	private void createClass(){
@@ -82,7 +79,7 @@ public class FastClass extends AbstractInvoker implements Opcodes{
 		ArrayList<Method> methodList = new ArrayList<Method>();
 		for (Method method : klass.getDeclaredMethods()) {
 			int modify = method.getModifiers();
-			if ( Modifier.isPrivate(modify))
+			if ( ! Modifier.isPublic(modify))
 				continue;
 			if (method.isVarArgs()) //暂时不支持可变参数的方法
 				continue;
@@ -103,6 +100,20 @@ public class FastClass extends AbstractInvoker implements Opcodes{
         mv.visitInsn(RETURN);
         mv.visitMaxs(1, 1);
         mv.visitEnd();
+	}
+	
+	private void createSetMethods(){
+		MethodVisitor mv = cw.visitMethod(ACC_PROTECTED, "setMethods", "([Ljava/lang/reflect/Method;)V", null, null);
+		mv.visitCode();
+		for (int i = 0; i < methods.length; i++) {
+			mv.visitVarInsn(ALOAD, 1);
+			visitX(mv, i);
+			mv.visitInsn(AALOAD);
+			mv.visitFieldInsn(PUTSTATIC, proxyClassName, "_method_"+i, "Ljava/lang/reflect/Method;");
+		}
+		mv.visitInsn(RETURN);
+		mv.visitMaxs(0, 0);
+		mv.visitEnd();
 	}
 	
 	private void createMethods(){
@@ -177,6 +188,7 @@ public class FastClass extends AbstractInvoker implements Opcodes{
 		mv.visitMaxs(0, 0);
 		mv.visitEnd();
 	}
+
 	
 	static void visitX(MethodVisitor mv,int i){
 		if(i < 6){
@@ -191,8 +203,34 @@ public class FastClass extends AbstractInvoker implements Opcodes{
 	}
 	
 	@Override
-	public void invoke_return_void(Object obj, Method method, Object... args)
+	public void invoke_return_void(T obj, Method method, Object... args)
 			throws Throwable {
 		invoker.invoke_return_void(obj, method, args);
+	}
+	
+	public Object invoke_return_Object(T obj, Method method, Object...args) throws Throwable {
+		return invoker.invoke_return_Object(obj, method, args);
+	}
+	
+	/**
+	 * 只允许调用public方法
+	 * @param obj
+	 * @param methodName
+	 * @param args
+	 * @return
+	 * @throws Throwable
+	 */
+	public Object invoke(T obj,String methodName,Object...args) throws Throwable{
+		Class<?> ts [] = new Class<?>[args.length];
+		for (int i = 0; i < ts.length; i++) {
+			ts[i] = args[i].getClass();
+		}
+		Method methodZ = obj.getClass().getMethod(methodName, ts);
+		if ("void".equals(methodZ.getReturnType().toString())){
+			invoker.invoke_return_void(obj, methodZ, args);
+			return null;
+		}else {
+			return invoker.invoke_return_Object(obj, methodZ, args);
+		}
 	}
 }

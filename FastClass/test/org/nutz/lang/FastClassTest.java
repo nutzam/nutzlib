@@ -11,8 +11,8 @@ public class FastClassTest {
 
 	@Test
 	public void testInvoke_instant_void() throws Throwable{
-		FastClass fastClass = FastClass.create(AClass.class);
-		Object obj = new AClass();
+		FastClass<AClass> fastClass = FastClass.create(AClass.class);
+		AClass obj = new AClass();
 		fastClass.invoke_return_void(obj, AClass.class.getMethod("pp"));
 		fastClass.invoke_return_void(obj, AClass.class.getMethod("xxx"));
 		fastClass.invoke_return_void(obj, AClass.class.getMethod("yy",Object.class),"Wendal");
@@ -21,11 +21,19 @@ public class FastClassTest {
 		fastClass.invoke_return_void(obj, AClass.class.getMethod("toString"));
 		fastClass.invoke_return_void(obj, AClass.class.getMethod("hashCode"));
 		fastClass.invoke_return_void(obj, AClass.class.getMethod("equals",Object.class),new AClass());
+		fastClass.invoke_return_void(obj, AClass.class.getMethod("finalize"));
+	}
+	
+	@Test
+	public void testZ() throws Throwable{
+		FastClass<Runnable> fastClass = FastClass.create(Runnable.class);
+		fastClass.invoke_return_void(new AClass(), Runnable.class.getMethod("run"));
+		fastClass.invoke_return_void(new AClass(), AClass.class.getMethod("run"));
 	}
 
 	@Test
 	public void test_time() throws Throwable{
-		FastClass fastClass = FastClass.create(AClass.class);
+		FastClass<AClass> fastClass = FastClass.create(AClass.class);
 		AClass classZ = new AClass();
 		Method method = AClass.class.getMethod("pp");
 		Stopwatch stopwatch = Stopwatch.begin();

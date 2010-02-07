@@ -41,4 +41,15 @@ public class XX extends AbstractInvoker {
 	public Object pp(){
 		return "XXX";
 	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return super.toString();
+	}
+	
+	protected void setMethods(Method[] methods) {
+		_method_0 = methods[0];
+		_method_1 = methods[1];
+	}
 }
