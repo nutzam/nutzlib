@@ -27,11 +27,18 @@ public class FastClassTest {
 		fastClass.invoke(obj, "toString");
 	}
 	
-//	@Test
+	@Test
 	public void testZ() throws Throwable{
 		FastClass<Runnable> fastClass = FastClass.create(Runnable.class);
-		fastClass.invoke_return_void(new AClass(), Runnable.class.getMethod("run"));
-		fastClass.invoke_return_void(new AClass(), AClass.class.getMethod("run"));
+		fastClass.invoke(new AClass(), "run");
+		fastClass.invoke(new Thread(), "wait",100);
+	}
+	
+	@Test
+	public void testB() throws Throwable{
+		FastClass<Object> fastClass = FastClass.create(Object.class);
+		fastClass.invoke(new StringBuilder(), "toString");
+		fastClass.invoke(new StringBuffer(), "hashCode");
 	}
 
 	@Test

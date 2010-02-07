@@ -124,7 +124,7 @@ public class  FastClass<T> extends AbstractInvoker<T> implements Opcodes{
 			Method method = methods[i];
 			if (! "void".equals(method.getReturnType().toString()))
 				continue;
-			Label l0 = commandPart(method,mv,i);
+			Label l0 = commondPart(method,mv,i);
 			mv.visitInsn(RETURN);
 			mv.visitLabel(l0);
 		}
@@ -140,7 +140,7 @@ public class  FastClass<T> extends AbstractInvoker<T> implements Opcodes{
 			Method method = methods[i];
 			if ("void".equals(method.getReturnType().toString()))
 				continue;
-			Label l0 = commandPart(method,mv,i);
+			Label l0 = commondPart(method,mv,i);
 			//封装基本类型
 			Type type = Type.getReturnType(method);
 			if(type.equals(Type.BOOLEAN_TYPE)){
@@ -169,7 +169,7 @@ public class  FastClass<T> extends AbstractInvoker<T> implements Opcodes{
 		mv.visitEnd();
 	}
 
-	private Label commandPart(Method method, MethodVisitor mv, int i){
+	private Label commondPart(Method method, MethodVisitor mv, int i){
 		boolean isStatic = Modifier.isStatic(method.getModifiers());
 		mv.visitFieldInsn(GETSTATIC, proxyClassName, "_method_"+i, "Ljava/lang/reflect/Method;");
 		mv.visitVarInsn(ALOAD, 2);
@@ -263,7 +263,7 @@ public class  FastClass<T> extends AbstractInvoker<T> implements Opcodes{
 		for (int i = 0; i < ts.length; i++) {
 			ts[i] = args[i].getClass();
 		}
-		Method methodZ = obj.getClass().getMethod(methodName, ts);
+		Method methodZ = klass.getMethod(methodName, ts);
 		if ("void".equals(methodZ.getReturnType().toString())){
 			invoker.invoke_return_void(obj, methodZ, args);
 			return null;

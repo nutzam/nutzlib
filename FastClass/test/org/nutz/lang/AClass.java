@@ -83,7 +83,7 @@ public class AClass implements Runnable{
 	}
 
 	public void finalize() throws Throwable {
-		System.out.println("我是被继承的无返回的方法");
+//		System.out.println("我是被继承的无返回的方法");
 		super.finalize();
 	}
 	
