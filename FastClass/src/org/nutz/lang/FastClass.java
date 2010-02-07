@@ -19,7 +19,9 @@ public class FastClass extends AbstractInvoker implements Opcodes{
 	
 	private static final String SUPERCLASS_NAME = AbstractInvoker.class.getName().replace('.', '/');
 	
-	private static final ClassDefiner cd = new DefaultClassDefiner();
+	private static ClassDefiner cd = new DefaultClassDefiner();
+	
+	private static long ID;
 	
 	private Class<?> klass;
 	
@@ -33,7 +35,16 @@ public class FastClass extends AbstractInvoker implements Opcodes{
 	
 	private FastClass(Class<?> klass){
 		this.klass = klass;
-		proxyClassName = SUPERCLASS_NAME+"$$"+klass.getName().replace('.', '$');
+		proxyClassName = SUPERCLASS_NAME+"_"+getNewId();
+	}
+	
+	private synchronized static long getNewId(){
+		if (ID == Long.MAX_VALUE){
+			ID = 0;
+			cd = new DefaultClassDefiner();
+		}else
+			ID ++;
+		return ID;
 	}
 	
 	public static final FastClass create(Class<?> klass) throws Throwable{
@@ -72,6 +83,8 @@ public class FastClass extends AbstractInvoker implements Opcodes{
 		for (Method method : klass.getDeclaredMethods()) {
 			int modify = method.getModifiers();
 			if ( Modifier.isPrivate(modify))
+				continue;
+			if (method.isVarArgs()) //暂时不支持可变参数的方法
 				continue;
 			methodList.add(method);
 		}

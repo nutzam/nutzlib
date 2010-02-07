@@ -47,5 +47,11 @@ public class FastClassTest {
 		stopwatch.stop();
 		System.out.println(stopwatch.getDuration());
 
+		stopwatch.start();
+		for (int i = 0; i < 10000000; i++) {
+			System.currentTimeMillis();
+		}
+		stopwatch.stop();
+		System.out.println(stopwatch.getDuration());
 	}
 }
