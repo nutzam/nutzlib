@@ -12,49 +12,45 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * 简单实现Nutz.IoC-Spring桥
- * <p/>Need Spring 2.0
- * @author wendal chen(wendal1985@gmail.com)
- *
+ * <p/>
+ * Need Spring 2.0 or later
+ * 
+ * @author wendal(wendal1985@gmail.com)
+ * 
  */
-public class SpringIocProvider implements IocProvider{
-	
-	ApplicationContext applicationContext;
+public class SpringIocProvider implements IocProvider, Ioc {
 
-	@Override
+	protected ApplicationContext applicationContext;
+
 	public Ioc create(ServletConfig config, String[] args) {
-		if(config == null)
+		if (config == null)
 			applicationContext = new ClassPathXmlApplicationContext(args);
 		else
-			applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
-		return new Ioc(){
-			
-			private ApplicationContext applicationContext = SpringIocProvider.this.applicationContext;
-			
-			@Override
-			public void depose() {
-				applicationContext.publishEvent(new ContextClosedEvent(applicationContext));
-			}
+			applicationContext = WebApplicationContextUtils
+					.getWebApplicationContext(config.getServletContext());
+		return this;
+	}
 
-			@SuppressWarnings("unchecked")
-			@Override
-			public <T> T get(Class<T> type, String name) {
-				return (T) applicationContext.getBean(name, type);
-			}
+	public void depose() {
+		applicationContext.publishEvent(new ContextClosedEvent(
+				applicationContext));
+	}
 
-			@Override
-			public String[] getName() {
-				return applicationContext.getBeanDefinitionNames();
-			}
+	@SuppressWarnings("unchecked")
+	public <T> T get(Class<T> type, String name) {
+		return (T) applicationContext.getBean(name, type);
+	}
 
-			@Override
-			public boolean has(String name) {
-				return applicationContext.containsBean(name);
-			}
+	public String[] getNames() {
+		return applicationContext.getBeanDefinitionNames();
+	}
 
-			@Override
-			public void reset() {
-				applicationContext.publishEvent(new ContextRefreshedEvent(applicationContext));
-			}
-		};
+	public boolean has(String name) {
+		return applicationContext.containsBean(name);
+	}
+
+	public void reset() {
+		applicationContext.publishEvent(new ContextRefreshedEvent(
+				applicationContext));
 	}
 }
