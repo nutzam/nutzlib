@@ -3,6 +3,9 @@ package org.nutz.ioc.impl.spring;
 import javax.servlet.ServletConfig;
 
 import org.nutz.ioc.Ioc;
+import org.nutz.ioc.IocException;
+import org.nutz.ioc.annotation.InjectName;
+import org.nutz.lang.Strings;
 import org.nutz.mvc.IocProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.ContextClosedEvent;
@@ -52,5 +55,14 @@ public class SpringIocProvider implements IocProvider, Ioc {
 	public void reset() {
 		applicationContext.publishEvent(new ContextRefreshedEvent(
 				applicationContext));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T get(Class<T> classZ) throws IocException {
+		InjectName injectName = classZ.getAnnotation(InjectName.class);
+		if (injectName != null && !Strings.isBlank(injectName.value()))
+			return (T) applicationContext.getBean(injectName.value());
+		return (T) applicationContext.getBean(applicationContext.getBeanNamesForType(classZ)[0]);
 	}
 }
