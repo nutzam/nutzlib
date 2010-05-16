@@ -1,0 +1,6 @@
+我第一次用这个项目,不知道结构应该怎么组织...所以就这样放了.要是错了下次提醒一下哈....
+另外,因为对测试用例的写法不是很熟悉...虽然想写,但是还是没有写...测试基本上都是直接在项目中跑....
+我写的方式是直接写类覆盖nutz-1.a.27-jdk6.jar包里面对应该的类来实现的,所以最好是找到两个类做个对比
+
+至于详细的理论性的东西就去这里看吧.
+http://code.google.com/p/nutz/issues/detail?id=180&colspec=ID%20Summary%20Type%20Status%20Priority%20Milestone%20Owner
