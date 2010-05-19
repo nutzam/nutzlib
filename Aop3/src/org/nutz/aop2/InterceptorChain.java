@@ -1,0 +1,62 @@
+package org.nutz.aop2;
+
+import java.lang.reflect.Method;
+import java.util.List;
+
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
+
+public class InterceptorChain {
+
+	protected Method callingMethod;
+	
+	protected int methodIndex;
+	
+	protected Object args [];
+	
+	protected AopCallback callingObj;
+	
+	protected Object returnValue;
+	
+	protected List<MethodInterceptor> miList;
+	
+	private static Log LOG = Logs.getLog(InterceptorChain.class);
+	
+	private boolean invoked = false;
+	
+	public InterceptorChain(int methodIndex, Object obj , Method method , List<MethodInterceptor> miList ,Object [] args) {
+		this.methodIndex = methodIndex;
+		this.callingObj = (AopCallback) obj;
+		this.callingMethod = method;
+		this.args = args;
+		this.miList = miList;
+	}
+	
+	public InterceptorChain doChain() throws Throwable {
+		if (miList.size() <= 0)
+			invoke();
+		else
+			miList.remove(0).filter(this);
+		return this;
+		
+	}
+	
+	public void invoke() throws Throwable {
+		if (invoked)
+			LOG.warnf("!! Calling Method more than once! Method --> %s",callingMethod.toString());
+		this.returnValue = callingObj.invoke(methodIndex, args);
+		invoked = true;
+	}
+	
+	public Object getReturn(){
+		return returnValue;
+	}
+	
+	protected Method getCallingMethod() {
+		return callingMethod;
+	}
+	
+	protected Object[] getArgs() {
+		return args;
+	}
+}
