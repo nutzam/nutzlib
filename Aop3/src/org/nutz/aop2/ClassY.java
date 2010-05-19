@@ -119,7 +119,7 @@ public class ClassY implements Opcodes{
 	}
 
 	private void addAopMethods() {
-		new AopInvokeAdpter(methodArray,cw.visitMethod(ACC_PUBLIC, "invoke", "(I[Ljava/lang/Object;)Ljava/lang/Object;", null, null), ACC_PUBLIC, "invoke", "(I[Ljava/lang/Object;)Ljava/lang/Object;", 0, myName, enhancedSuperName).visitCode();
+		new AopInvokeAdpter(methodArray,cw.visitMethod(ACC_PUBLIC, "_aop_invoke", "(I[Ljava/lang/Object;)Ljava/lang/Object;", null, null), ACC_PUBLIC, "invoke", "(I[Ljava/lang/Object;)Ljava/lang/Object;", 0, myName, enhancedSuperName).visitCode();
 	}
 	
 	protected void visitX(int i,MethodVisitor mv) {

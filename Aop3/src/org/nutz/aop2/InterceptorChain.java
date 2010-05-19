@@ -44,7 +44,7 @@ public class InterceptorChain {
 	public void invoke() throws Throwable {
 		if (invoked)
 			LOG.warnf("!! Calling Method more than once! Method --> %s",callingMethod.toString());
-		this.returnValue = callingObj.invoke(methodIndex, args);
+		this.returnValue = callingObj._aop_invoke(methodIndex, args);
 		invoked = true;
 	}
 	
@@ -52,11 +52,29 @@ public class InterceptorChain {
 		return returnValue;
 	}
 	
-	protected Method getCallingMethod() {
+	public Method getCallingMethod() {
 		return callingMethod;
 	}
 	
-	protected Object[] getArgs() {
+	public Object[] getArgs() {
 		return args;
 	}
+
+	public Object getReturnValue() {
+		return returnValue;
+	}
+
+	public void setReturnValue(Object returnValue) {
+		this.returnValue = returnValue;
+	}
+
+	public AopCallback getCallingObj() {
+		return callingObj;
+	}
+
+	public boolean isInvoked() {
+		return invoked;
+	}
+	
+	
 }

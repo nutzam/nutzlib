@@ -23,7 +23,7 @@ public class Aop2Template extends Aop2TemplateP implements AopCallback{
 	}
 
 	@Override
-	public Object invoke(int methodIndex, Object[] args) {
+	public Object _aop_invoke(int methodIndex, Object[] args) {
 		if (methodIndex == 1){
 			super.mA((String)args[0],(Integer)args[1]);
 			return null;

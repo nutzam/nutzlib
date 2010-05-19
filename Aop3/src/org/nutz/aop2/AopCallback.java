@@ -2,6 +2,6 @@ package org.nutz.aop2;
 
 public interface AopCallback {
 	
-	Object invoke(int methodIndex,Object [] args);
+	Object _aop_invoke(int methodIndex,Object [] args);
 
 }
