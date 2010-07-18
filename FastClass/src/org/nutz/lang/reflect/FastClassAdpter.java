@@ -1,5 +1,6 @@
 package org.nutz.lang.reflect;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 
 import org.nutz.repo.org.objectweb.asm.Label;
@@ -14,30 +15,21 @@ public class FastClassAdpter implements Opcodes {
 	protected String enhancedSuperName;
 
 	protected Type returnType;
-	
-	protected String[] descs;
-	
-	protected String[] methodNames;
-	
-	protected int[] modifies;
-	
-	protected int [] invokeOps;
 
-	public FastClassAdpter(MethodVisitor mv,
-							String[] methodNames,
-							String[] descs,
-							int[] modifies,
-							int [] invokeOps,
-							String enhancedSuperName) {
+	protected String[] descs;
+
+	protected String[] methodNames;
+
+	protected int[] modifies;
+
+	protected int[] invokeOps;
+
+	private FastClassAdpter(MethodVisitor mv, String enhancedSuperName) {
 		this.mv = mv;
 		this.enhancedSuperName = enhancedSuperName;
-		this.descs = descs;
-		this.methodNames = methodNames;
-		this.modifies = modifies;
-		this.invokeOps = invokeOps;
 	}
 
-	public void visitCode() {
+	public void createInokeMethod() {
 		mv.visitCode();
 
 		for (int i = 0; i < methodNames.length; i++) {
@@ -45,7 +37,7 @@ public class FastClassAdpter implements Opcodes {
 			visitX(i);
 			Label l0 = new Label();
 			mv.visitJumpInsn(IF_ICMPNE, l0);
-			if (!Modifier.isStatic(modifies[i])){
+			if (!Modifier.isStatic(modifies[i])) {
 				mv.visitVarInsn(ALOAD, 1);
 				returnType = Type.getObjectType(enhancedSuperName);
 				checkCast();
@@ -61,7 +53,8 @@ public class FastClassAdpter implements Opcodes {
 			mv.visitMethodInsn(	invokeOps[i],
 								enhancedSuperName,
 								methodNames[i],
-								Type.getMethodDescriptor(Type.getReturnType(descs[i]),Type.getArgumentTypes(descs[i])));
+								Type.getMethodDescriptor(	Type.getReturnType(descs[i]),
+															Type.getArgumentTypes(descs[i])));
 			returnType = Type.getReturnType(descs[i]);
 			if (returnType.equals(Type.VOID_TYPE))
 				mv.visitInsn(ACONST_NULL);
@@ -71,6 +64,37 @@ public class FastClassAdpter implements Opcodes {
 			mv.visitLabel(l0);
 		}
 
+		mv.visitInsn(ACONST_NULL);
+		mv.visitInsn(ARETURN);
+		mv.visitMaxs(4, 3);
+		mv.visitEnd();
+	}
+
+	public void createInokeConstructor(Constructor<?>[] constructors) {
+		mv.visitCode();
+		for (int i = 0; i < constructors.length; i++) {
+			mv.visitVarInsn(ILOAD, 1);
+			visitX(i);
+			Label l0 = new Label();
+			mv.visitJumpInsn(IF_ICMPNE, l0);
+			mv.visitTypeInsn(NEW, enhancedSuperName);
+			mv.visitInsn(DUP);
+
+			Type args[] = Type.getArgumentTypes(Type.getConstructorDescriptor(constructors[i]));
+			for (int j = 0; j < args.length; j++) {
+				mv.visitVarInsn(ALOAD, 2);
+				visitX(j);
+				mv.visitInsn(AALOAD);
+				returnType = args[j];
+				checkCast();
+			}
+			mv.visitMethodInsn(	INVOKESPECIAL,
+								enhancedSuperName,
+								"<init>",
+								Type.getConstructorDescriptor(constructors[i]));
+			mv.visitInsn(ARETURN);
+			mv.visitLabel(l0);
+		}
 		mv.visitInsn(ACONST_NULL);
 		mv.visitInsn(ARETURN);
 		mv.visitMaxs(4, 3);
@@ -203,5 +227,26 @@ public class FastClassAdpter implements Opcodes {
 		} else if (returnType.equals(Type.DOUBLE_TYPE)) {
 			mv.visitTypeInsn(CHECKCAST, "java/lang/Double");
 		}
+	}
+
+	public final static void createInokeMethod(	MethodVisitor mv,
+												String[] methodNames,
+												String[] descs,
+												int[] modifies,
+												int[] invokeOps,
+												String enhancedSuperName) {
+		FastClassAdpter adpter = new FastClassAdpter(mv, enhancedSuperName);
+		adpter.descs = descs;
+		adpter.methodNames = methodNames;
+		adpter.modifies = modifies;
+		adpter.invokeOps = invokeOps;
+		adpter.createInokeMethod();
+	}
+
+	public final static void createInokeConstructor(MethodVisitor mv,
+													String enhancedSuperName,
+													Constructor<?>[] constructors) {
+		FastClassAdpter adpter = new FastClassAdpter(mv, enhancedSuperName);
+		adpter.createInokeConstructor(constructors);
 	}
 }

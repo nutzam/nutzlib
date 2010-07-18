@@ -1,37 +1,30 @@
 package org.nutz.lang.reflect;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import junit.framework.TestCase;
 
 import org.junit.Test;
-import org.nutz.aop.interceptor.AbstractMethodInterceptor;
-import org.nutz.lang.reflect.FastClass;
-import org.nutz.lang.reflect.FastClassFactory;
 
 public class FastClassFactoryTest extends TestCase{
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void test_MethodName() throws Throwable {
-		getFastClass(FastClassFactoryTest.class).invoke(new FastClassFactoryTest(), "xxx");
-		getFastClass(FastClassFactoryTest.class).invoke(new FastClassFactoryTest(), "getFastClass", Object.class);
-		getFastClass(FastClassFactoryTest.class).invoke(null, "yyy");
-		getFastClass(AbstractMethodInterceptor.class).invoke(new AbstractMethodInterceptor(){}, "toString");
-		getFastClass(Runnable.class).invoke(new Thread(), "run");
 		Object object = new Object();
 		assertEquals(object.hashCode(), getFastClass(Object.class).invoke(object, "hashCode"));
-		for (int i = 0; i < 1000; i++) {
-			getFastClass(FastClassFactoryTest.class).invoke(null, "yyy");
-		}
+		ArrayList<?> list = (ArrayList<?>) getFastClass(ArrayList.class).born(new HashSet<Object>());
+		list = (ArrayList<?>) getFastClass(ArrayList.class).born(1);
+		assertTrue(list != null);
+		getFastClass(ArrayList.class).invoke(list, "add", new Object());
+		assertTrue(list.size() == 1);
+		getFastClass(ArrayList.class).invoke(list, "remove", 0);
+		assertTrue(list.size() == 0);
+		getFastClass(ArrayList.class).born(new HashSet());
 	}
 	
-	public void xxx(){
-		System.out.println("XXXXXXXXXXX");
-	}
-	
-	public static void yyy(){
-//		System.out.println("YYYYYYYYYYY");
-	}
-	
-	public FastClass getFastClass(Class<?> classZ){
+	public static FastClass getFastClass(Class<?> classZ){
 		try{
 			return (FastClass) new FastClassFactory().create(classZ).newInstance();
 		}catch (Throwable e) {

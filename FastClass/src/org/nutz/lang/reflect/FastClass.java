@@ -15,4 +15,8 @@ public interface FastClass {
 
 	Object born(Object... args);
 
+	Object setField(Object obj, String fieldName, Object value);
+
+	Object getField(Object obj, String fieldName);
+
 }
