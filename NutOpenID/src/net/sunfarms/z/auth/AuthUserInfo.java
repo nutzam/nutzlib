@@ -1,4 +1,4 @@
-package com.nutz.mvc.auth;
+package net.sunfarms.z.auth;
 
 import org.nutz.dao.entity.annotation.Column;
 import org.nutz.dao.entity.annotation.Id;

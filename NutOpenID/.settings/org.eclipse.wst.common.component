@@ -4,6 +4,8 @@
         <wb-resource deploy-path="/" source-path="/WebContent"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/conf"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/forum"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/3rd"/>
         <property name="context-root" value="NutOpenID"/>
         <property name="java-output-path" value="/NutOpenID/bin"/>
     </wb-module>

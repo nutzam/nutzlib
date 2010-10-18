@@ -1,10 +1,14 @@
-package com.nutz.mvc.auth.jopenid;
+package net.sunfarms.z.auth.jopenid;
 
 import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import net.sunfarms.z.auth.AuthUserInfo;
 
 import org.expressme.openid.Association;
 import org.expressme.openid.Authentication;
@@ -17,12 +21,8 @@ import org.nutz.dao.Dao;
 import org.nutz.ioc.annotation.InjectName;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
-
-import com.nutz.mvc.auth.AuthConfig;
-import com.nutz.mvc.auth.AuthUserInfo;
 
 @IocBean(create="init")
 @InjectName
@@ -41,27 +41,26 @@ public class JOpenIDAuth {
 	
 	@At("/auth/jopenid/login")
 	@Ok(">>:${obj}")
-	public String login(HttpServletRequest request) {
+	public String login(HttpSession session) {
 		Endpoint endpoint = manager.lookupEndpoint(enpoint);
         Association association = manager.lookupAssociation(endpoint);
-        request.getSession().setAttribute(ATTR_MAC, association.getRawMacKey());
-        request.getSession().setAttribute(ATTR_ALIAS, endpoint.getAlias());
+        session.setAttribute(ATTR_MAC, association.getRawMacKey());
+        session.setAttribute(ATTR_ALIAS, endpoint.getAlias());
         return manager.getAuthenticationUrl(endpoint, association);
 	}
 	
-	public void logout(HttpServletRequest request) {
-		request.getSession().invalidate();
+	public void logout(HttpSession session) {
+		session.invalidate();
 	}
 	
 	public boolean isAuthed() {
 		return true;
 	}
 	
-	@Ok("jsp:auth.ok")
+	//@Ok("jsp:auth.ok")
+	@Ok("forward:/WEB-INF/auth/ok.ftl")
 	@At("/auth/jopenid/returnPoint")
 	public Object returnPoint(HttpServletRequest request) {
-		Logs.getLog(getClass()).info(request.getQueryString());
-		Logs.getLog(getClass()).info(request.getParameter("openid.ext1.type.language"));
 		checkNonce(request.getParameter("openid.response_nonce"));
         // get authentication:
         byte[] mac_key = (byte[]) request.getSession().getAttribute(ATTR_MAC);
@@ -75,12 +74,12 @@ public class JOpenIDAuth {
         	authUserInfo.setEmail(authentication.getEmail());
         	dao.insert(authUserInfo);
         	authUserInfo = dao.fetch(AuthUserInfo.class, identity);
+            request.getSession().setAttribute("AuthUserInfo_OBJ", authUserInfo);
         }
-        request.getSession().setAttribute("AuthUserInfo_OBJ", authUserInfo);
         return authUserInfo;
 	}
 	
-    void checkNonce(String nonce) {
+    private void checkNonce(String nonce) {
         // check response_nonce to prevent replay-attack:
         if (nonce==null || nonce.length()<20)
             throw new OpenIdException("Verify failed.");
@@ -95,19 +94,19 @@ public class JOpenIDAuth {
         storeNonce(nonce, nonceTime + TWO_HOUR);
     }
 
-    boolean isNonceExist(String nonce) {
-    	Cnd cnd = Cnd.where("nonceStr", "like", nonce).and("expireTime", ">", System.currentTimeMillis());
+    private boolean isNonceExist(String nonce) {
+    	Cnd cnd = Cnd.where("nonceStr", "=", nonce);
     	return null != dao.fetch(NonceInfo.class, cnd);
     }
 
-    void storeNonce(String nonce, long expires) {
+    private void storeNonce(String nonce, long expires) {
     	NonceInfo nonceInfo = new NonceInfo();
-    	nonceInfo.setExpireTime(System.currentTimeMillis()+expires);
     	nonceInfo.setNonceStr(nonce);
+    	nonceInfo.setExpireTime(expires);
     	dao.insert(nonceInfo);
     }
 	
-    long getNonceTime(String nonce) {
+    private static long getNonceTime(String nonce) {
         try {
             return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                     .parse(nonce.substring(0, 19) + "+0000")
@@ -124,7 +123,7 @@ public class JOpenIDAuth {
 	}
 	
 	@Inject
-	public void setAuthConfig(AuthConfig authConfig){
+	public void setAuthConfig(Map<String,String> authConfig){
 		manager.setReturnTo(authConfig.get("returnURL"));
 		manager.setRealm(authConfig.get("realm"));
 		enpoint = authConfig.get("enpoint");

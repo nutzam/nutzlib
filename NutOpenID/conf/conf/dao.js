@@ -6,9 +6,11 @@ var ioc = {
                 },
                 fields : {
                         driverClass : 'org.h2.Driver',
-                        jdbcUrl : 'jdbc:h2:nutzpan',
+                        jdbcUrl : 'jdbc:h2:ke;LOCK_MODE=0;AUTO_RECONNECT=TRUE;CACHE_SIZE=65536',
                         username : 'sa',
-                        password : ''
+                        password : '',
+                        minConnectionsPerPartition : 5 ,
+                        maxConnectionsPerPartition : 20
                 }
         },
         dao : {

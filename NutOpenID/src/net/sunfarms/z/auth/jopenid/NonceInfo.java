@@ -1,4 +1,4 @@
-package com.nutz.mvc.auth.jopenid;
+package net.sunfarms.z.auth.jopenid;
 
 import org.nutz.dao.entity.annotation.*;
 

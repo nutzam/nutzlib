@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<aop>
-	<class name="V" method=".*" interceptor="ioc:log"/>
+<aop xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:noNamespaceSchemaLocation="nutz-aop-0.1.xsd">
+	<class name="com.nutz.*" method=".*" interceptor="ioc:log"/>
+	<class name="net.sunfarms.z.*" method=".*" interceptor="ioc:log"/>
 </aop>
