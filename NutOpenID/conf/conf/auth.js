@@ -3,8 +3,8 @@ var ioc = {
 		type : 'java.util.HashMap',
 		args : [
 		        {
-		        	returnURL : 'http://localhost:8080/NutOpenID/auth/jopenid/returnPoint.nut',
-		        	realm : 'http://localhost:8080/',
+		        	returnURL : 'http://58.62.49.206:8080/NutOpenID/auth/jopenid/returnPoint.nut',
+		        	realm : 'http://58.62.49.206:8080/',
 		        	enpoint : 'Google'
 		        }
 		]

@@ -21,5 +21,8 @@ var ioc = {
 	},
 	log : {
 		type : "org.nutz.aop.interceptor.LoggingMethodInterceptor"
+	},
+	exeTime : {
+		type : 'net.sunfarms.z.ext.ExecutionTimeInterceptor'
 	}
 }

@@ -3,4 +3,7 @@
 	 xsi:noNamespaceSchemaLocation="nutz-aop-0.1.xsd">
 	<class name="com.nutz.*" method=".*" interceptor="ioc:log"/>
 	<class name="net.sunfarms.z.*" method=".*" interceptor="ioc:log"/>
+	
+	<class name="com.nutz.*" method=".*" interceptor="ioc:exeTime"/>
+	<class name="net.sunfarms.z.*" method=".*" interceptor="ioc:exeTime"/>
 </aop>

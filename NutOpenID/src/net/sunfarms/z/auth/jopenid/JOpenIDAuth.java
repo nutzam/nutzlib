@@ -49,16 +49,19 @@ public class JOpenIDAuth {
         return manager.getAuthenticationUrl(endpoint, association);
 	}
 	
+	@At("/auth/jopenid/logout")
+	@Ok("void")
 	public void logout(HttpSession session) {
 		session.invalidate();
 	}
 	
-	public boolean isAuthed() {
-		return true;
+	@At("/auth/jopenid/me")
+	@Ok("->:/WEB-INF/auth/me.ftl")
+	public Object me(HttpSession session) {
+		return session.getAttribute(AuthUserInfo.class.getName());
 	}
 	
-	//@Ok("jsp:auth.ok")
-	@Ok("forward:/WEB-INF/auth/ok.ftl")
+	@Ok(">>:/")
 	@At("/auth/jopenid/returnPoint")
 	public Object returnPoint(HttpServletRequest request) {
 		checkNonce(request.getParameter("openid.response_nonce"));
@@ -74,8 +77,8 @@ public class JOpenIDAuth {
         	authUserInfo.setEmail(authentication.getEmail());
         	dao.insert(authUserInfo);
         	authUserInfo = dao.fetch(AuthUserInfo.class, identity);
-            request.getSession().setAttribute("AuthUserInfo_OBJ", authUserInfo);
         }
+        request.getSession().setAttribute(AuthUserInfo.class.getName(), authUserInfo);
         return authUserInfo;
 	}
 	
