@@ -24,5 +24,17 @@ var ioc = {
 	},
 	exeTime : {
 		type : 'net.sunfarms.z.ext.ExecutionTimeInterceptor'
+	},
+	cacheManager : {
+		type : 'net.sf.ehcache.CacheManager',
+		events : {
+        	depose : 'shutdown'
+    	}
+	},
+	methodCacheInterceptor : {
+		type : 'net.sunfarms.z.ext.MethodCacheInterceptor',
+		fields : {
+			cacheManager : {refer : "cacheManager"}
+		}
 	}
 }
