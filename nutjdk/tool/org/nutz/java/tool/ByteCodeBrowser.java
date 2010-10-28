@@ -245,8 +245,9 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 
 		AttributeBrowser ab = attrs.get(attName);
 		if (null != ab) {
-			ab.load(this.getBytes());
+			ab.load(this.getBytes(),cp);
 			mark();
+			System.out.println("---->"+attName);
 		} else {
 			dump("%3d - '%s' :: %dbytes:\n", index, attName, len);
 		}
