@@ -51,6 +51,9 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 	public ByteCodeBrowser(int[] bytes) {
 		super(bytes);
 		attrs.put("Code", new CodeAttributeBrowser());
+		attrs.put("SourceFile", new SourceFileAttributeBrowser());
+		attrs.put("Deprecated", new DeprecatedAttributeBrowser());
+		attrs.put("Synthetic", new SyntheticAttributeBrowser());
 	}
 
 	private void read_magic() {
@@ -245,9 +248,9 @@ public class ByteCodeBrowser extends ByteCodeSupport {
 
 		AttributeBrowser ab = attrs.get(attName);
 		if (null != ab) {
+			System.out.println("---->"+attName);
 			ab.load(this.getBytes(),cp);
 			mark();
-			System.out.println("---->"+attName);
 		} else {
 			dump("%3d - '%s' :: %dbytes:\n", index, attName, len);
 		}
