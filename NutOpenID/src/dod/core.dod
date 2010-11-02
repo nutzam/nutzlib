@@ -1,0 +1,11 @@
+t_auth_user_info{
+uid BIGINT +PK,
+identity CHAR(255) NOT NULL ,
+email CHAR(255)
+}
+
+t_nonce_info{
+oid BIGINT +PK,
+nonceStr CHAR(255) NOT NULL ,
+expireTime BIGINT
+}

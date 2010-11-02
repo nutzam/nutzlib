@@ -1,6 +1,5 @@
 package net.sunfarms.z.forum;
 
-import java.sql.Connection;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -10,7 +9,6 @@ import net.sunfarms.z.forum.bean.ForumComment;
 import net.sunfarms.z.forum.bean.ForumTip;
 
 import org.nutz.dao.Cnd;
-import org.nutz.dao.ConnCallback;
 import org.nutz.dao.Dao;
 import org.nutz.dao.OrderBy;
 import org.nutz.ioc.annotation.InjectName;
@@ -93,38 +91,6 @@ public class ForumAction {
 	}
 	
 	public void init() {
-		if (!dao.exists(ForumTip.class)) {
-			dao.run(new ConnCallback() {
-				
-				@Override
-				public void invoke(Connection connection) throws Exception {
-					String sql = "CREATE Table t_forum_tip(" +
-							"id BIGINT IDENTITY PRIMARY KEY, " +
-							"content CHAR(3000) NOT NULL ," +
-							"createTime BIGINT NOT NULL ," +
-							"uid BIGINT NOT NULL ," +
-							")";
-					connection.prepareCall(sql).execute();
-					connection.commit();
-				}
-			});
-		}
-		if (!dao.exists(ForumComment.class)) {
-			dao.run(new ConnCallback() {
-				
-				@Override
-				public void invoke(Connection connection) throws Exception {
-					String sql = "CREATE Table t_forum_comment(" +
-							"id BIGINT IDENTITY PRIMARY KEY, " +
-							"content CHAR(3000) NOT NULL ," +
-							"createTime BIGINT NOT NULL ," +
-							"uid BIGINT NOT NULL ," +
-							"tipId BIGINT NOT NULL )";
-					connection.prepareCall(sql).execute();
-					connection.commit();
-				}
-			});
-		}
 		if (dao.count(ForumTip.class) < 1) {
 			ForumTip forumTip = new ForumTip();
 			forumTip.setUid(1);

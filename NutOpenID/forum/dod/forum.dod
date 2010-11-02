@@ -1,0 +1,14 @@
+t_forum_tip {
+id BIGINT +PK,
+content CHAR(3000) NOT NULL !UNIQUE,
+createTime BIGINT NOT NULL,
+uid BIGINT NOT NULL
+}
+
+t_forum_comment {
+id BIGINT +PK,
+content CHAR(3000) NOT NULL ,
+createTime BIGINT NOT NULL ,
+uid BIGINT NOT NULL ,
+tipId BIGINT NOT NULL
+}

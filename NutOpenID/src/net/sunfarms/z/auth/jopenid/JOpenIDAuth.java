@@ -1,6 +1,5 @@
 package net.sunfarms.z.auth.jopenid;
 
-import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Map;
@@ -16,7 +15,6 @@ import org.expressme.openid.Endpoint;
 import org.expressme.openid.OpenIdException;
 import org.expressme.openid.OpenIdManager;
 import org.nutz.dao.Cnd;
-import org.nutz.dao.ConnCallback;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.annotation.InjectName;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -24,7 +22,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 
-@IocBean(create="init")
+@IocBean
 @InjectName
 public class JOpenIDAuth {
 
@@ -133,35 +131,5 @@ public class JOpenIDAuth {
 		if (enpoint == null)
 			enpoint = "Google";
 	}
-	
-	public void init() {
-		if (!dao.exists(AuthUserInfo.class)) {
-			dao.run(new ConnCallback() {
-				
-				@Override
-				public void invoke(Connection connection) throws Exception {
-					String sql = "CREATE Table t_auth_user_info(" +
-							"uid BIGINT IDENTITY PRIMARY KEY, " +
-							"identity CHAR(255) NOT NULL ," +
-							"email CHAR(255))";
-					connection.prepareCall(sql).execute();
-					connection.commit();
-				}
-			});
-		}
-		if (!dao.exists(NonceInfo.class)) {
-			dao.run(new ConnCallback() {
-				
-				@Override
-				public void invoke(Connection connection) throws Exception {
-					String sql = "CREATE Table t_nonce_info(" +
-							"oid BIGINT IDENTITY PRIMARY KEY, " +
-							"nonceStr CHAR(255) NOT NULL ," +
-							"expireTime BIGINT)";
-					connection.prepareCall(sql).execute();
-					connection.commit();
-				}
-			});
-		}
-	}
+
 }

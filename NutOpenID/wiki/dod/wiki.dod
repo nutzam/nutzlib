@@ -1,0 +1,8 @@
+t_wiki_doc {
+	id BIGINT +PK,
+	name CHAR(500) !UNIQUE,
+	content CHAR(300000),
+	uid BIGINT,
+	version BIGINT,
+	createTime BIGINT
+}

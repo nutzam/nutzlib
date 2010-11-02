@@ -1,6 +1,7 @@
 package net.sunfarms.z;
 
 import net.sunfarms.z.init.ZLoading;
+import net.sunfarms.z.wiki.view.WikiViewMarker;
 
 import org.nutz.mvc.annotation.Encoding;
 import org.nutz.mvc.annotation.Fail;
@@ -9,6 +10,7 @@ import org.nutz.mvc.annotation.LoadingBy;
 import org.nutz.mvc.annotation.Localization;
 import org.nutz.mvc.annotation.Modules;
 import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.Views;
 import org.nutz.mvc.ioc.provider.ComboIocProvider;
 
 @IocBy(type=ComboIocProvider.class,args={"*org.nutz.ioc.loader.json.JsonLoader","conf",
@@ -19,5 +21,6 @@ import org.nutz.mvc.ioc.provider.ComboIocProvider;
 @Localization("msg")
 @Ok("json")
 @Fail("json")
+@Views(WikiViewMarker.class)
 public class MainModule {
 }
