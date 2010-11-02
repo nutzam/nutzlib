@@ -1,5 +1,10 @@
 package net.sunfarms.z.wiki;
 
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
+import net.sunfarms.z.auth.AuthUserInfo;
 import net.sunfarms.z.wiki.bean.WikiDoc;
 
 import org.nutz.dao.Cnd;
@@ -21,14 +26,22 @@ public class WikiAction {
 	
 	private static final Log log = Logs.getLog(WikiAction.class);
 	
+	@At("/wiki/list")
+	@Ok("->:/WEB-INF/wiki/list.ftl")
+	public Object list(){
+		List<WikiDoc> list = dao.query(WikiDoc.class, null, null);
+		return list;
+	}
+	
+	
 	@At("/wiki/*")
 	@Ok("zdoc")
 	public Object view(String name, @Param("version")long version){
 		Condition cnd = null;
 		if (version > 0)
-			cnd = Cnd.where("name", "=", name).and("version", "=", version);
+			cnd = Cnd.where("name", "like", name).and("version", "=", version);
 		else
-			cnd = Cnd.where("name", "=", name).desc("version");
+			cnd = Cnd.where("name", "like", name).desc("version");
 		WikiDoc wikiDoc = dao.fetch(WikiDoc.class, cnd);
 		if (wikiDoc == null) {
 			if (log.isInfoEnabled())
@@ -36,12 +49,30 @@ public class WikiAction {
 			return new ServerRedirectView("/404");
 		}
 		
-		return wikiDoc;
+		return wikiDoc.getContent();
 	}
 
 	@At("/wiki/change")
 	public void change(@Param("name")String name, @Param("content")String content){
 		
+	}
+	
+	@At("/wiki/create")
+	public void create(@Param("name")String name, @Param("content")String content, HttpSession session){
+		WikiDoc doc = dao.fetch(WikiDoc.class, name);
+		if (doc == null) {
+			AuthUserInfo authUserInfo = (AuthUserInfo) session.getAttribute(AuthUserInfo.class.getName());
+			if (authUserInfo == null)
+				return;
+			doc = new WikiDoc();
+			doc.setAuthUserInfo(authUserInfo);
+			doc.setContent(content);
+			doc.setName(name);
+			doc.setCreateTime(System.currentTimeMillis());
+			doc.setUid(authUserInfo.getUid());
+			doc.setVersion(0);
+			dao.insert(doc);
+		}
 	}
 	
 	@Inject

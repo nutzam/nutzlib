@@ -3,6 +3,7 @@ package net.sunfarms.z.wiki.bean;
 import net.sunfarms.z.auth.AuthUserInfo;
 
 import org.nutz.dao.entity.annotation.Id;
+import org.nutz.dao.entity.annotation.Name;
 import org.nutz.dao.entity.annotation.One;
 import org.nutz.dao.entity.annotation.Table;
 
@@ -11,6 +12,7 @@ public class WikiDoc {
 
 	@Id
 	private long id;
+	@Name
 	private String name;
 	private String content;
 	private long uid;

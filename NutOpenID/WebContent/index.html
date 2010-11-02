@@ -13,6 +13,7 @@
 			$('#login').button();
 			$('#logout').button();
 			Z.forum.loadTips();
+			Z.wiki.loadWikis();
 			$('#tabs').tabs({ fx: { opacity: 'toggle' } });
 		});
 		
@@ -70,6 +71,12 @@
 		Z.forum.addComment = function (comment) {
 			$.post("f/addComment.nut",{tipId : Z.forum.currentTipId , comment : comment}, function(){ Z.forum.viewTip(Z.forum.currentTipId); });
 		}
+
+		//Wiki
+		Z.wiki = new Object();
+		Z.wiki.loadWikis = function () {
+			$("#wikis").load("wiki/list.nut",{page : Z.forum.currentPage ,pageSize : Z.forum.currentPageSize });
+		}
 	</script>
 </head>
 <body>
@@ -79,7 +86,7 @@
 		<ul>
 			<li><a href="#mainInfo">帖子列表</a></li>
 			<li><a href="#viewTip">查看帖子</a></li>
-			<li><a href="#others">其他</a></li>
+			<li><a href="#wikis">Wiki</a></li>
 		</ul>
 		
 		<!-- 主体 罗列帖子 -->
@@ -87,7 +94,7 @@
 		<!-- 某条帖子的详细页 -->
 		<div id="viewTip"></div>
 		<!-- 其他未定 -->
-		<div id="others">暂无内容</div>
+		<div id="wikis"></div>
 	</div>
 	<!-- 页脚 -->
 	<div id="footInfo"></div>
