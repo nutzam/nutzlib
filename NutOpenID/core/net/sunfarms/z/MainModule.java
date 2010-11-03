@@ -1,7 +1,7 @@
 package net.sunfarms.z;
 
+import net.sunfarms.z.ext.ViewMakerProxy;
 import net.sunfarms.z.init.ZLoading;
-import net.sunfarms.z.wiki.view.WikiViewMarker;
 
 import org.nutz.mvc.annotation.Encoding;
 import org.nutz.mvc.annotation.Fail;
@@ -21,6 +21,6 @@ import org.nutz.mvc.ioc.provider.ComboIocProvider;
 @Localization("msg")
 @Ok("json")
 @Fail("json")
-@Views(WikiViewMarker.class)
+@Views(ViewMakerProxy.class)
 public class MainModule {
 }
