@@ -81,10 +81,4 @@ public class WikiAction {
 	public void setDao(Dao dao) {
 		this.dao = dao;
 	}
-	
-	public void init() {
-		if (!dao.exists(WikiDoc.class)) {
-			
-		}
-	}
 }

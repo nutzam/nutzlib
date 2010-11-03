@@ -20,7 +20,7 @@ import org.nutz.mvc.ioc.provider.ComboIocProvider;
 @LoadingBy(ZLoading.class)
 @Localization("msg")
 @Ok("json")
-@Fail("json")
+@Fail(">>:/50x.jsp")
 @Views(ViewMakerProxy.class)
 public class MainModule {
 }

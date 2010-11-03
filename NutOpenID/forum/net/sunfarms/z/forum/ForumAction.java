@@ -35,7 +35,6 @@ public class ForumAction {
 	}
 	
 	@At("/f/newTip")
-	@Ok("json")
 	public boolean newTip(@Param("content")String content, HttpSession session) {
 		if (Strings.isBlank(content))
 			return false;
@@ -63,7 +62,6 @@ public class ForumAction {
 	}
 	
 	@At("/f/addComment")
-	@Ok("json")
 	public boolean addComment(@Param("comment")String comment, @Param("tipId")long tipId, HttpSession session) {
 		if (Strings.isBlank(comment) || tipId < 0)
 			return false;
