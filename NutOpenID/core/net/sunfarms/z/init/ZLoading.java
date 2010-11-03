@@ -9,7 +9,6 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.dao.tools.DTable;
 import org.nutz.dao.tools.TableDefinition;
 import org.nutz.dao.tools.Tables;
-import org.nutz.ioc.Ioc;
 import org.nutz.lang.Streams;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -24,10 +23,8 @@ public class ZLoading extends DefaultLoading {
 	public void load(NutConfig config, Class<?> mainModule) {
 		super.load(config, mainModule);
 		
-		Ioc ioc = config.getIoc();
-		
 		//开始加载数据库定义文件,如果对应的表不存在的话就创建
-		Dao dao = ioc.get(Dao.class,"dao");
+		Dao dao = getIoc().get(Dao.class,"dao");
 		List<NutResource> dods = Scans.me().scan("dod",".+[.]dod");
 		Log log = Logs.getLog(getClass());
 		for (NutResource nutResource : dods) {
@@ -49,8 +46,8 @@ public class ZLoading extends DefaultLoading {
 			}
 		}
 		
-		/*提前初始化全部bean*/
-		for (String beanName : ioc.getNames())
-			ioc.get(null, beanName);
+		/*提前初始化全部bean,不过ViewMaker已经遍历过了.*/
+		//for (String beanName : getIoc().getNames())
+		//	getIoc().get(null, beanName);
 	}
 }

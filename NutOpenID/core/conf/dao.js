@@ -1,4 +1,5 @@
 var ioc = {
+		/*定义数据源,这里使用的是国产的优秀连接池BoneCP*/
         dataSource : {
                 type : "com.jolbox.bonecp.BoneCPDataSource",
                 events : {
@@ -13,6 +14,7 @@ var ioc = {
                         maxConnectionsPerPartition : 20
                 }
         },
+        /*定义NutDao*/
         dao : {
         		type : "org.nutz.dao.impl.NutDao",
         		fields : {

@@ -2,7 +2,6 @@ package net.sunfarms.z.forum.bean;
 
 import net.sunfarms.z.auth.AuthUserInfo;
 
-import org.nutz.dao.entity.annotation.Column;
 import org.nutz.dao.entity.annotation.Id;
 import org.nutz.dao.entity.annotation.One;
 import org.nutz.dao.entity.annotation.Table;
@@ -12,17 +11,9 @@ public class ForumComment {
 	
 	@Id
 	private long id;
-	
-	@Column
 	private String content;
-	
-	@Column
 	private long createTime;
-	
-	@Column
 	private long uid;
-	
-	@Column
 	private long tipId;
 	
 	@One(target=AuthUserInfo.class,field="uid")

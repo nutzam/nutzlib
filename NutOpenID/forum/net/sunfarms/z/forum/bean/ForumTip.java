@@ -4,7 +4,6 @@ import java.util.List;
 
 import net.sunfarms.z.auth.AuthUserInfo;
 
-import org.nutz.dao.entity.annotation.Column;
 import org.nutz.dao.entity.annotation.Id;
 import org.nutz.dao.entity.annotation.Many;
 import org.nutz.dao.entity.annotation.One;
@@ -15,14 +14,8 @@ public class ForumTip {
 
 	@Id
 	private long id;
-	
-	@Column
 	private String content;
-	
-	@Column
 	private long createTime;
-	
-	@Column
 	private long uid;
 	
 	@Many(target=ForumComment.class,field="tipId")

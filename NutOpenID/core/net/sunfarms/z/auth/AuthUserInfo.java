@@ -7,34 +7,32 @@ import org.nutz.dao.entity.annotation.Table;
 
 @Table("t_auth_user_info")
 public class AuthUserInfo {
-	
+
 	/**
 	 * 用户Id,自增
 	 */
-	@Column
 	@Id
 	private long uid;
-	
+
 	/**
 	 * 用户唯一标识符
 	 */
-	@Column
 	@Name
 	private String identity;
-	
+
 	/**
 	 * 电子邮件地址
 	 */
 	@Column
 	private String email;
 
-public long getUid() {
-	return uid;
-}
+	public long getUid() {
+		return uid;
+	}
 
-public void setUid(long uid) {
-	this.uid = uid;
-}
+	public void setUid(long uid) {
+		this.uid = uid;
+	}
 
 	public String getIdentity() {
 		return identity;
