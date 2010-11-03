@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import org.nutz.dao.Dao;
-import org.nutz.dao.sql.Sql;
 import org.nutz.dao.tools.DTable;
 import org.nutz.dao.tools.TableDefinition;
 import org.nutz.dao.tools.Tables;
@@ -34,11 +33,9 @@ public class ZLoading extends DefaultLoading {
 				List<DTable> tables = Tables.load(Streams.readAndClose(new InputStreamReader(nutResource.getInputStream())));
 				TableDefinition maker = Tables.newInstance(dao.meta());
 				for (DTable dt : tables) {
-					Sql sql;
 					if (dao.exists(dt.getName())) 
 						continue;
-					sql = maker.makeCreateSql(dt);
-					dao.execute(sql);
+					dao.execute(maker.makeCreateSql(dt));
 				}
 			} catch (IOException e) {
 				if (log.isWarnEnabled())
