@@ -24,7 +24,7 @@ import org.nutz.mvc.annotation.Param;
 public class ForumAction {
 	
 	@At("/f/list")
-	@Ok("->:/WEB-INF/forum/list.ftl")
+	@Ok("ftl:forum/list")
 	public Object list(String page , String pageSize){
 		OrderBy cnd = Cnd.orderBy().desc("createTime");
 		List<ForumTip> list = dao.query(ForumTip.class, cnd, null);
@@ -51,7 +51,7 @@ public class ForumAction {
 	}
 	
 	@At("/f/viewTip")
-	@Ok("->:/WEB-INF/forum/viewTip.ftl")
+	@Ok("ftl:forum/viewTip")
 	public Object viewTip(@Param("tipId")long tipId) {
 		if (tipId < 0)
 			return null;

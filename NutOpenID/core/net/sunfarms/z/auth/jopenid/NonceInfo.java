@@ -5,15 +5,12 @@ import org.nutz.dao.entity.annotation.*;
 @Table("t_nonce_info")
 public class NonceInfo {
 
-	@Column
 	@Id
 	private long oid;
 	
-	@Column
 	@Name
 	private String nonceStr;
 	
-	@Column
 	private long expireTime;
 
 	public long getOid() {

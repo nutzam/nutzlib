@@ -2,7 +2,7 @@
 <!-- 声明式Aop配置文件,仅能对Ioc bean进行声明 -->
 <aop xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	 xsi:noNamespaceSchemaLocation="nutz-aop-0.1.xsd">
-	<class name="org.nutz.*" method=".*" interceptor="ioc:log"/><!-- 对Nutz本身的ioc bean进行日志记录,一般只有NutDao -->
+	<!-- <class name="org.nutz.*" method=".*" interceptor="ioc:log"/> --><!-- 对Nutz本身的ioc bean进行日志记录,一般只有NutDao -->
 	<class name="net.sunfarms.z.*" method=".*" interceptor="ioc:log"/><!-- 对本项目的ioc bean -->
 	
 	<class name="net.sunfarms.z.*" method=".*" interceptor="ioc:exeTime"/><!-- 记录运行时间 -->
