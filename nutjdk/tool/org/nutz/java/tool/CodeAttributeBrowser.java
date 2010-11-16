@@ -2,6 +2,9 @@ package org.nutz.java.tool;
 
 import static java.lang.System.out;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.nutz.java.bytecode.cp.CP;
 
 public class CodeAttributeBrowser implements AttributeBrowser {
@@ -63,6 +66,7 @@ public class CodeAttributeBrowser implements AttributeBrowser {
 		bc.next(2);
 		len = bc.getInt2();
 		bc.dump("attributes_count");
+		List<String> vars = new ArrayList<String>();
 		for (int i = 0; i < len; i++) {
 			bc.next(2);
 			int index = bc.getInt2();
@@ -92,7 +96,11 @@ public class CodeAttributeBrowser implements AttributeBrowser {
 					bc.next(2);
 					bc.dump("length");
 					bc.next(2);
-					bc.dump("name_index [%s]",cp.getInfoText(bc.getInt2()));
+					String varName = cp.getInfoText(bc.getInt2());
+					bc.dump("name_index [%s]",varName);
+					if (!"this".equalsIgnoreCase(varName)){
+						vars.add(varName);
+					}
 					bc.next(2);
 					bc.dump("descriptor_index [%s]",cp.getInfoText(bc.getInt2()));
 					bc.next(2);
@@ -105,6 +113,7 @@ public class CodeAttributeBrowser implements AttributeBrowser {
 //				break;
 			}
 		}
+		System.out.println("Vars = " + vars);
 	}
 
 	
