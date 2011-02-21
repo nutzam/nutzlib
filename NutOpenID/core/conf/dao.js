@@ -7,7 +7,7 @@ var ioc = {
                 },
                 fields : {
                         driverClass : 'org.h2.Driver',
-                        jdbcUrl : 'jdbc:h2:ke;LOCK_MODE=0;AUTO_RECONNECT=TRUE;CACHE_SIZE=65536;TRACE_LEVEL_FILE=3',
+                        jdbcUrl : 'jdbc:h2:ke8',
                         username : 'sa',
                         password : '',
                         minConnectionsPerPartition : 5 ,

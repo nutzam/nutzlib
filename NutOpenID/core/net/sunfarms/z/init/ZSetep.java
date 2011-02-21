@@ -11,19 +11,17 @@ import org.nutz.dao.tools.Tables;
 import org.nutz.lang.Streams;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.nutz.mvc.init.DefaultLoading;
-import org.nutz.mvc.init.NutConfig;
+import org.nutz.mvc.Setup;
+import org.nutz.mvc.NutConfig;
 import org.nutz.resource.NutResource;
 import org.nutz.resource.Scans;
 
-public class ZLoading extends DefaultLoading {
+public class ZSetep implements Setup {
 
-	@Override
-	public void load(NutConfig config, Class<?> mainModule) {
-		super.load(config, mainModule);
-		
+
+	public void init(NutConfig config) {
 		//开始加载数据库定义文件,如果对应的表不存在的话就创建
-		Dao dao = getIoc().get(Dao.class,"dao");
+		Dao dao = config.getIoc().get(Dao.class,"dao");
 		List<NutResource> dods = Scans.me().scan("dod",".+[.]dod");
 		Log log = Logs.getLog(getClass());
 		for (NutResource nutResource : dods) {
@@ -43,8 +41,8 @@ public class ZLoading extends DefaultLoading {
 			}
 		}
 		
-		/*提前初始化全部bean,不过ViewMaker已经遍历过了.*/
-		//for (String beanName : getIoc().getNames())
-		//	getIoc().get(null, beanName);
+	}
+
+	public void destroy(org.nutz.mvc.NutConfig config) {
 	}
 }

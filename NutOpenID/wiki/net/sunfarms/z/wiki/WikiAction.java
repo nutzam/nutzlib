@@ -15,6 +15,8 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.mvc.adaptor.JsonAdaptor;
+import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
@@ -34,7 +36,7 @@ public class WikiAction {
 	}
 	
 	
-	@At("/wiki/*")
+//	@At("/wiki/*")
 	@Ok("zdoc")
 	public Object view(String name, @Param("version")long version){
 		Condition cnd = null;
@@ -58,16 +60,12 @@ public class WikiAction {
 	}
 	
 	@At("/wiki/create")
-	public void create(@Param("name")String name, @Param("content")String content, HttpSession session){
-		WikiDoc doc = dao.fetch(WikiDoc.class, name);
-		if (doc == null) {
+	@AdaptBy(type=JsonAdaptor.class)
+	public void create(WikiDoc doc, HttpSession session){
+		if (dao.fetch(WikiDoc.class, doc.getName()) == null) {
 			AuthUserInfo authUserInfo = (AuthUserInfo) session.getAttribute(AuthUserInfo.class.getName());
 			if (authUserInfo == null)
 				return;
-			doc = new WikiDoc();
-			doc.setAuthUserInfo(authUserInfo);
-			doc.setContent(content);
-			doc.setName(name);
 			doc.setCreateTime(System.currentTimeMillis());
 			doc.setUid(authUserInfo.getUid());
 			doc.setVersion(0);

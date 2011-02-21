@@ -3,31 +3,27 @@
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	
-	<filter>
-        <filter-name>msgs</filter-name>
-        <filter-class>org.nutz.mvc.NutFilter</filter-class>
-	</filter>
+	<resource-ref>
+ <description>H2</description>
+ <res-ref-name>jdbc/dataSource</res-ref-name>
+ <res-type>javax.sql.DataSource</res-type>
+ <res-auth>Container</res-auth>
+</resource-ref>
 
-	<filter-mapping>
-        <filter-name>msgs</filter-name>
-        <url-pattern>*.jsp</url-pattern>
-	</filter-mapping>
 	
-
-	<!-- Nutz -->
-	<servlet>
-		<servlet-name>nutz</servlet-name>
-		<servlet-class>org.nutz.mvc.NutServlet</servlet-class>
+	<filter>
+        <filter-name>nutz</filter-name>
+        <filter-class>org.nutz.mvc.NutFilter</filter-class>
 		<init-param>
 			<param-name>modules</param-name>
 			<param-value>net.sunfarms.z.MainModule</param-value>
 		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>nutz</servlet-name>
-		<url-pattern>*.nut</url-pattern>
-	</servlet-mapping>
+	</filter>
+
+	<filter-mapping>
+        <filter-name>nutz</filter-name>
+        <url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<!-- FreeMaker -->
 	<servlet>

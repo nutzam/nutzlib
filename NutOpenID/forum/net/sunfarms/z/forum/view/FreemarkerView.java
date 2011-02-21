@@ -16,6 +16,7 @@ public class FreemarkerView implements View {
 	@Override
 	public void render(HttpServletRequest req, HttpServletResponse resp,
 			Object obj) throws Throwable {
+		req.setAttribute("obj", obj);
 		req.getRequestDispatcher(value).forward(req, resp);
 	}
 

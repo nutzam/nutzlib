@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>List of ${zTable.className}</title>
+<script type="text/javascript" src="../js/jquery-1.4.3.min.js"></script>
+<script type="text/javascript" src="../js/jquery.jqGrid.min.js"></script>
+<script type="text/javascript">
+$(function() {
+	$("#list3").jqGrid({  
+		datatype: "local", 
+		height: 250,
+		colNames:[
+		  		<#list zTable.fields as zField>
+		  		'${zField.fieldName?cap_first}',
+				</#list>
+		  		], 
+		colModel:[ 
+				<#list zTable.fields as zField>
+				{name:'${zField.fieldName}',index:'${zField.fieldName}', width:60},
+				</#list>
+				], 
+		caption: "Load Once Example" });
+	$.post("../${zTable.className?lower_case}/list.nut",function (data){
+		for(var i=0;i<=data.length;i++) 
+			$("#list3").jqGrid('addRowData',i+1,data[i]); 
+		},"json");
+} );
+</script>
+</head>
+<body>
+
+<div id="header"></div>
+<div id="list">
+<table id="list3"></table>
+<div id="pager3"></div> 
+</div>
+<!-- 页脚 -->
+<div id="footer"></div>
+</body>
+</html>

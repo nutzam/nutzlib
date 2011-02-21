@@ -31,6 +31,7 @@ public class ForumAction {
 		for (ForumTip forumTip : list) {
 			dao.fetchLinks(forumTip, null);
 		}
+		System.out.println(list.size());
 		return list;
 	}
 	

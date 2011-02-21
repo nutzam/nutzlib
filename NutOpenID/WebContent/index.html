@@ -77,6 +77,12 @@
 		Z.wiki.loadWikis = function () {
 			$("#wikis").load("wiki/list.nut",{page : Z.forum.currentPage ,pageSize : Z.forum.currentPageSize });
 		}
+
+		Z.wiki.create = function (form) {
+			$.post("wiki/create",$(form).serialize(),function(data){
+				$("#wikis").load("wiki/list.nut",{page : Z.forum.currentPage ,pageSize : Z.forum.currentPageSize });
+			   });
+		}
 	</script>
 </head>
 <body>
