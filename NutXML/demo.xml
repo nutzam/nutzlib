@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<http authBy="xxxUserSeriver">
+	<url pattern="/login.jsp" filters='none'/>
+	<url pattern="/user/login*" filters='none'/>
+	<url pattern="/.+[.](css|js|html)" filters='none'/>
+	<url pattern="/image/*" filters='none'/>
+	<url pattern="/admin/*" access="ROLE_ADMIN" />
+	<url pattern="/**" access="ROLE_USER" />
+	<form-login login-page='/login.jsp'/>
+	<other>abc</other>
+</http>
