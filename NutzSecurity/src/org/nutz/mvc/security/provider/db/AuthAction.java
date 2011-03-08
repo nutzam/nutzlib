@@ -9,7 +9,6 @@ import org.nutz.dao.Dao;
 import org.nutz.ioc.annotation.InjectName;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.lang.Strings;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Fail;
 import org.nutz.mvc.annotation.Ok;
@@ -27,8 +26,8 @@ public class AuthAction {
 	@Fail(">>:/index.html")
 	@At
 	public boolean login(String name, String password, HttpServletRequest req){
-		if (Strings.isBlank(name) || Strings.isBlank(password))
-			return false;
+		Assert.isNotEmpty(name, "用户名不能为空");
+		Assert.isNotEmpty(password, "密码不能为空");
 		User user = dao.fetch(User.class, Cnd.where("name", "like", name).and("password","like",password));
 		if(user == null)
 			return false;
@@ -50,20 +49,25 @@ public class AuthAction {
 	public void userOpt(UserOpt method, 
 			@Param("name")String name, @Param("password")String password,
 			@Param("role")String role){
+		Assert.isNotEmpty(name, "用户名不能为空");
 		switch (method) {
 		case user_add:
+			Assert.isNotEmpty(password, "密码不能为空");
 			dao.insert(User.class, Chain.make("name", name).add("password", password));
 			break;
 		case user_del:
 			dao.delete(User.class, name);
 			break;
 		case user_update:
+			Assert.isNotEmpty(password, "密码不能为空");
 			dao.update(User.class, Chain.make("password", password), Cnd.where("name", "LIKE", name));
 			break;
 		case role_assign:
+			Assert.isNotEmpty(role, "权限不能为空");
 			
 			break;
 		case role_cacel:
+			Assert.isNotEmpty(role, "权限不能为空");
 			
 			break;
 
