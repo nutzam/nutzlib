@@ -25,4 +25,13 @@ public class Role {
 		this.name = name;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj != null && obj instanceof Role) {
+			Role out = (Role)obj;
+			if (this.name.equalsIgnoreCase(out.name))
+				return true;
+		}
+		return false;
+	}
 }
